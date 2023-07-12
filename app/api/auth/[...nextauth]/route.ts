@@ -4,6 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
 import prisma from '../../../lib/prismadb';
+import { webUser } from '@prisma/client';
 
 const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),
@@ -18,11 +19,11 @@ const authOptions: AuthOptions = {
                     throw new Error('Invalid Credentials')
                 }
 
-                const user: any = prisma.webUser.findUnique({
+                const user: webUser | null = await prisma.webUser.findUnique({
                     where: {
-                        email: credentials.email
-                    }
-                })
+                        email: credentials.email,
+                    },
+                });
 
                 // Now checking if the user exists or not
                 if (!user) {
@@ -31,7 +32,7 @@ const authOptions: AuthOptions = {
                 }
 
                 // Now comparing the password of the user
-                const isCorrect = await bcrypt.compare(credentials.password, user?.hashedPassword);
+                const isCorrect = await bcrypt.compare(credentials.password, user.hashedPassword);
 
                 if (!isCorrect) {
                     console.log('not correct password')
