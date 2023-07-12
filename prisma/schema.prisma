@@ -16,7 +16,7 @@ model webUser{
   email String? @unique
   phone String?
   admin Boolean?
-  accountType Boolean?
+  accountType String?
   Balance BigInt?
   hashedPassword String?
   createdAt DateTime @default(now())
