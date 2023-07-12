@@ -1,6 +1,10 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function Hero() {
+    const router = useRouter();
     return (
         <section className="text-gray-600 body-font">
             <div className="container mx-auto flex justify-center px-5 py-24 md:flex-row flex-col items-center">
@@ -8,10 +12,12 @@ export default function Hero() {
                     <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
                        Banking Management System
                     </h1>
-                    <p className="mb-8 leading-relaxed">A small management system, for the sake of practice in NextJS with MongoDB, Prisma, React and React Libraries</p>
+                    <p className="mb-8 leading-relaxed">A small management system in NextJS with MongoDB, Prisma, React and React Libraries.
+                    This system consists of a simple user menu where user can perform transactions and on the other hand it consists of an admin dashboard menu where administrator can perform
+                    all the CURD operations.</p>
                     <div className="flex justify-center">
-                        <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" control-id="ControlID-93">Login</button>
-                        <button className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Register</button>
+                        <button onClick={() => router.push('/sign-in')} className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" control-id="ControlID-93">Login</button>
+                        <button onClick={() => router.push('/sign-up')} className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Register</button>
                     </div>
                 </div>
                 <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">

@@ -1,7 +1,8 @@
 'use client'
 
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { MouseEvent } from 'react';
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Navbar } from '../navbar/Navbar'
 import { toast } from 'react-hot-toast';
@@ -34,6 +35,13 @@ export default function page() {
         }
 
     }
+
+    // Had to use it to make changes on account settings
+    const handleAccountTypeChange = (accountType: string) => {
+        setAccountType(accountType);
+    };
+
+
     return (
         <>
             <Navbar />
@@ -50,8 +58,25 @@ export default function page() {
                     </div>
                 </div>
                 <div className='container gap-10 flex flex-row w-full mx-auto mb-5 '>
-                    <button onClick={() => setAccountType('Current')} type="button" className="py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Current Account</button>
-                    <button onClick={() => setAccountType('Savings')} type="button" className="py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Savings Account</button>
+                    {/* Somehow I had to use this mouse event to make it work and also an extra function for some reason */}
+                    <button
+                        onClick={(event: MouseEvent<HTMLButtonElement>) => handleAccountTypeChange('Current')}
+                        type="button"
+                        className={`py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200
+                        ${account === 'Current' ? 'bg-gray-200 text-blue-700 hover:bg-gray-200 hover:text-blue-700 active:bg-gray-100 active:text-blue-700'
+                                : 'hover:bg-gray-200 hover:text-blue-700'
+                            } focus:z-10 focus:ring-4 focus:ring-gray-200 dark:bg-gray-200 dark:text-gray-200 dark:border-gray-200 dark:hover:text-white dark:hover:bg-gray-200`} >
+                        Current Account
+                    </button>
+                    <button
+                        onClick={(event: MouseEvent<HTMLButtonElement>) => handleAccountTypeChange('Saving')}
+                        type="button"
+                        className={`py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200
+                        ${account === 'Saving' ? 'bg-gray-200 text-blue-700 hover:bg-gray-200 hover:text-blue-700 active:bg-gray-100 active:text-blue-700'
+                                : 'hover:bg-gray-200 hover:text-blue-700'
+                            } focus:z-10 focus:ring-4 focus:ring-gray-200 dark:bg-gray-200 dark:text-gray-200 dark:border-gray-200 dark:hover:text-white dark:hover:bg-gray-200`} >
+                        Savings Account
+                    </button>
                 </div>
                 <div className="mb-6">
                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
