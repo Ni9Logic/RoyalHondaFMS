@@ -26,6 +26,7 @@ const authOptions: AuthOptions = {
 
                 // Now checking if the user exists or not
                 if (!user) {
+                    console.log('Doesnt exists');
                     throw new Error('Invalid Credentials')
                 }
 
@@ -33,6 +34,7 @@ const authOptions: AuthOptions = {
                 const isCorrect = await bcrypt.compare(credentials.password, user?.hashedPassword);
 
                 if (!isCorrect) {
+                    console.log('not correct password')
                     throw new Error('Invalid Credentials')
                 }
 
