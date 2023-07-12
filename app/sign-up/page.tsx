@@ -1,11 +1,14 @@
 'use client'
 
 import axios from 'axios'
-import React from 'react'
+import React, { useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Navbar } from '../navbar/Navbar'
+import { toast } from 'react-hot-toast';
 
 export default function page() {
+    const [account, setAccountType] = useState('Current');
+
     const {
         register,
         handleSubmit,
@@ -18,12 +21,18 @@ export default function page() {
             password: '',
             email: '',
             phone: '',
-            accountType: "Current",
+            accountType: account,
         }
     })
-    const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        console.log(data.fullname)
-        axios.post('./api/register', data)
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        const response = axios.post('./api/register', data)
+        if ((await response).data) {
+            toast.success('Account Successfully Created')
+        }
+        else {
+            toast.error('Some Error Occured')
+        }
+
     }
     return (
         <>
@@ -41,18 +50,12 @@ export default function page() {
                     </div>
                 </div>
                 <div className='container gap-10 flex flex-row w-full mx-auto mb-5 '>
-                    <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700 w-full">
-                        <input id="bordered-radio-1" type="radio" value="" name="bordered-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                        <label htmlFor="bordered-radio-1" className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Current Account</label>
-                    </div>
-                    <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700 w-full">
-                        <input checked id="bordered-radio-2" type="radio" value="" name="bordered-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                        <label htmlFor="bordered-radio-2" className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Savings Account</label>
-                    </div>
+                    <button onClick={() => setAccountType('Current')} type="button" className="py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Current Account</button>
+                    <button onClick={() => setAccountType('Savings')} type="button" className="py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Savings Account</button>
                 </div>
                 <div className="mb-6">
                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
-                    <input type="email" id="email" {...register('email')}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@email.com" required />
+                    <input type="email" id="email" {...register('email')} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@email.com" required />
                 </div>
                 <div className="mb-6">
                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>

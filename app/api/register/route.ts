@@ -10,7 +10,7 @@ export async function POST(request: Request) {
             fullname,
             password,
             email,
-            phone, 
+            phone,
             accountType,
         } = body;
 
@@ -32,6 +32,6 @@ export async function POST(request: Request) {
         return NextResponse.json(user);
     } catch (error: any) {
         console.log(error, "Error in registration");
-        return new NextResponse('Registration Error', { status: 500 });
+        return new NextResponse('Internal Error', { status: 500 });
     }
 }

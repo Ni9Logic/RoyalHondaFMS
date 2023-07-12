@@ -8,3 +8,4 @@ const ToasterContext = () => {
   )
 }
 
+export default ToasterContext;
