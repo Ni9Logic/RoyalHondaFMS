@@ -19,7 +19,7 @@ const authOptions: AuthOptions = {
                     throw new Error('Invalid Credentials')
                 }
 
-                const user: webUser | null = await prisma.webUser.findUnique({
+                const user: any = await prisma.webUser.findUnique({
                     where: {
                         email: credentials.email,
                     },
@@ -27,15 +27,13 @@ const authOptions: AuthOptions = {
 
                 // Now checking if the user exists or not
                 if (!user) {
-                    console.log('Doesnt exists');
                     throw new Error('Invalid Credentials')
                 }
 
                 // Now comparing the password of the user
-                const isCorrect = await bcrypt.compare(credentials.password, user.hashedPassword);
+                const isCorrect = bcrypt.compare(credentials.password, user?.hashedPassword);
 
                 if (!isCorrect) {
-                    console.log('not correct password')
                     throw new Error('Invalid Credentials')
                 }
 
