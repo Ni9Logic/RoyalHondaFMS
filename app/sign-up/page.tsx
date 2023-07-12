@@ -1,12 +1,34 @@
+'use client'
+
+import axios from 'axios'
 import React from 'react'
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Navbar } from '../navbar/Navbar'
 
 export default function page() {
+    const {
+        register,
+        handleSubmit,
+        formState: {
+            errors
+        }
+    } = useForm<FieldValues>({
+        defaultValues: {
+            name: '',
+            hashedPassword: '',
+            email: '',
+            phone: '',
+            accountType: 'Current',
+        }
+    })
+    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+        axios.post('./api/register', data)
+    }
     return (
         <>
             <Navbar />
 
-            <form className='mx-auto container justify-center items-center my-20'>
+            <form onSubmit={handleSubmit(onSubmit)} className='mx-auto container justify-center items-center my-20'>
                 <div className="grid gap-6 mb-6 md:grid-cols-2">
                     <div>
                         <label htmlFor="full_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
@@ -14,7 +36,7 @@ export default function page() {
                     </div>
                     <div>
                         <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone number</label>
-                        <input type="tel" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="+92-330-0000000" pattern="[+][0-9]{3}-[0-9]{3}-[0-9]{7}" required />
+                        <input type="tel" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="+92-330-0000000" pattern="[+][0-9]{2}-[0-9]{3}-[0-9]{7}" required />
                     </div>
                 </div>
                 <div className='container gap-10 flex flex-row w-full mx-auto mb-5 '>
