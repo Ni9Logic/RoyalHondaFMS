@@ -15,9 +15,9 @@ model webUser{
   fullname String?
   email String? @unique
   phone String?
-  admin Boolean?
+  admin Boolean? @default(false)
   accountType String?
-  Balance BigInt?
+  Balance Float? @default(5000)
   hashedPassword String?
   createdAt DateTime @default(now())
 }

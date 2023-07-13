@@ -73,12 +73,11 @@ export default function page() {
 
                 toast.success('Account Successfully Created');
                 toast.success('Logged in!');
-                setLoading(false);
             })
             .catch(() => {
                 toast.error('Email Address Already Exists!');
-                setLoading(false);
-            });
+            })
+            .finally(() => setLoading(false));
     }
 
     // Had to use it to make changes on account settings
@@ -117,7 +116,7 @@ export default function page() {
                         }}
                         type="button"
                         className={`py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200
-                        ${isButton === 'Current' ? 'bg-black text-white' : 'hover:bg-gray-300'} focus:z-10 dark:bg-gray-200 dark:text-gray-200`} >
+                        ${isButton === 'Current' ? 'bg-gray-900 text-white' : 'hover:bg-gray-300'} focus:z-10 dark:bg-gray-200 dark:text-gray-200`} >
                         Current Account
                     </button>
                     <button
@@ -127,7 +126,7 @@ export default function page() {
                         }}
                         type="button"
                         className={`py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200
-                        ${isButton === 'Saving' ? 'bg-black text-white' : 'hover:bg-gray-300'} focus:z-10 dark:bg-gray-200 dark:text-gray-200`} >
+                        ${isButton === 'Saving' ? 'bg-gray-900 text-white' : 'hover:bg-gray-300'} focus:z-10 dark:bg-gray-200 dark:text-gray-200`} >
                         Savings Account
                     </button>
                 </div>

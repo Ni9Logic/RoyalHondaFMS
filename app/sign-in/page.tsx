@@ -16,7 +16,7 @@ export default function Page() {
         if (session?.status === 'authenticated') {
             router.push('/users');
         }
-        
+
 
     }, [session?.status, router]);
 
@@ -41,14 +41,13 @@ export default function Page() {
             .then((callback) => {
                 if (callback?.error) {
                     toast.error('Invalid Credentials');
-                    setLoading(false);
                 }
 
                 if (callback?.ok && !callback?.error) {
                     toast.success('Logged In')
-                    setLoading(false);
                 }
             })
+            .finally(() => setLoading(false));
     }
     return (
         <>
