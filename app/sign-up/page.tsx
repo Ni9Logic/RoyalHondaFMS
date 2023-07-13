@@ -41,12 +41,28 @@ export default function page() {
     }, [session?.status, router, account, setValue]);
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+
+        // If both passwords are incorrect
+        if (data.password !== data.cpassword) {
+            return toast.error('Unmatched Passwords!');
+        }
+        
+        // If passwords length are less than 8
+        if (data.password.length < 8) {
+            return toast.error('Password must be greater than 8 characters');
+        }
+
+        // If full name length is less than 4
+        if (data.fullname.length < 4){
+            return toast.error('Fullname shall have at least 4 characters')
+        }
         axios.post('./api/register', data)
             .then(() => {
                 signIn('credentials', {
                     ...data,
                     redirect: false,
                 });
+
                 toast.success('Account Successfully Created');
                 toast.success('Logged in!')
             })
@@ -108,7 +124,7 @@ export default function page() {
                 </div>
                 <div className="mb-6">
                     <label htmlFor="confirm_password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-                    <input type="password" id="confirm_password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required />
+                    <input type="password" id="confirm_password" {...register('cpassword')} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required />
                 </div>
                 <div className="flex items-start mb-6">
                     <div className="flex items-center h-5">
