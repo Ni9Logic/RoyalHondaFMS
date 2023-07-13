@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar } from '../navbar/Navbar';
 import { signIn, useSession } from "next-auth/react"
-import { FieldValues, SubmitHandler, set, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 

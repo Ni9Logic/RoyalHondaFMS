@@ -16,14 +16,13 @@ const getCurrentUser = async () => {
         })
 
         // If user doesn't exist
-        if (!currentUser){
+        if (!currentUser) {
             return null;
         }
 
         return currentUser;
     } catch (error: any) {
         return null;
-    }
+    };
 }
-
 export default getCurrentUser;
