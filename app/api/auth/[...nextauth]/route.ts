@@ -31,12 +31,11 @@ const authOptions: AuthOptions = {
                 }
 
                 // Now comparing the password of the user
-                const isCorrect = bcrypt.compare(credentials.password, user?.hashedPassword);
-
+                const isCorrect = await bcrypt.compare(credentials.password, user.hashedPassword);
+                
                 if (!isCorrect) {
                     throw new Error('Invalid Credentials')
                 }
-
 
                 // If all of the above cases are true then lets return user
                 return user;
