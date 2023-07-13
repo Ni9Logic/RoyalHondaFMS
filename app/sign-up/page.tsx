@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 
 export default function page() {
     const [account, setAccountType] = useState('Current');
+    const [isButton, setButton] = useState('Current');
     const session = useSession();
     const router = useRouter();
 
@@ -46,14 +47,14 @@ export default function page() {
         if (data.password !== data.cpassword) {
             return toast.error('Unmatched Passwords!');
         }
-        
+
         // If passwords length are less than 8
         if (data.password.length < 8) {
             return toast.error('Password must be greater than 8 characters');
         }
 
         // If full name length is less than 4
-        if (data.fullname.length < 4){
+        if (data.fullname.length < 4) {
             return toast.error('Fullname shall have at least 4 characters')
         }
         axios.post('./api/register', data)
@@ -72,6 +73,11 @@ export default function page() {
     // Had to use it to make changes on account settings
     const handleAccountTypeChange = (accountType: string) => {
         setAccountType(accountType);
+    };
+
+    // We are using one seprately because it dynamically keeps changing the value of it self so it doesn't get rendered
+    const handleIsButton = (isButtonValue: string) => {
+        setButton(isButtonValue);
     };
 
 
@@ -93,21 +99,28 @@ export default function page() {
                 <div className='container gap-10 flex flex-row w-full mx-auto mb-5 '>
                     {/* Somehow I had to use this mouse event to make it work and also an extra function for some reason */}
                     <button
-                        onClick={(event: MouseEvent<HTMLButtonElement>) => handleAccountTypeChange('Current')}
+                        onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                            handleAccountTypeChange('Current');
+                            handleIsButton('Current');
+                            console.log(isButton);
+                        }}
                         type="button"
                         className={`py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200
-                        ${account === 'Current' ? 'dark:bg-gray-200 text-blue-700 hover:text-blue-700 bg-gray-200 active:text-blue-700'
+                        ${isButton === 'Current' ? 'bg-gray-300 text-blue-'
                                 : 'hover:bg-gray-200 hover:text-blue-700'
-                            } focus:z-10 focus:ring-4 focus:ring-gray-200 dark:bg-gray-200 dark:text-gray-200 dark:border-gray-200 dark:hover:text-white dark:hover:bg-gray-200`} >
+                            } focus:z-10 focus:ring-4 focus:ring-gray-200 dark:bg-gray-200 dark:text-gray-200`} >
                         Current Account
                     </button>
                     <button
-                        onClick={(event: MouseEvent<HTMLButtonElement>) => handleAccountTypeChange('Saving')}
+                        onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                            handleAccountTypeChange('Saving')
+                            handleIsButton('Saving');
+                        }}
                         type="button"
                         className={`py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200
-                        ${account === 'Saving' ? 'bg-gray-200 text-blue-700 hover:bg-gray-200 hover:text-blue-700 active:bg-gray-100 active:text-blue-700'
+                        ${isButton === 'Saving' ? 'bg-gray-300 text-blue-'
                                 : 'hover:bg-gray-200 hover:text-blue-700'
-                            } focus:z-10 focus:ring-4 focus:ring-gray-200 dark:bg-gray-200 dark:text-gray-200 dark:border-gray-200 dark:hover:text-white dark:hover:bg-gray-200`} >
+                            } focus:z-10 focus:ring-4 focus:ring-gray-200 dark:bg-gray-200 dark:text-gray-200`} >
                         Savings Account
                     </button>
                 </div>
