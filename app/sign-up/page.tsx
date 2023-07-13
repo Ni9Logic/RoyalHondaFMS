@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast';
 
 export default function page() {
     const [account, setAccountType] = useState('Current');
-
+    
     const {
         register,
         handleSubmit,
@@ -27,7 +27,7 @@ export default function page() {
         }
     })
 
-    // We are using useEffect as well because our value is dynamic and just like it gets updated in rendering once the value is stored in object it needs to be reflected.
+    // We are using useEffect as well because our value is dynamic and just like it gets updated in rendering once the value is stored in object it needs to be
     useEffect(() => {
         setValue('accountType', account); // Update the value of the accountType field
     }, [account, setValue]);
@@ -70,7 +70,7 @@ export default function page() {
                         onClick={(event: MouseEvent<HTMLButtonElement>) => handleAccountTypeChange('Current')}
                         type="button"
                         className={`py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200
-                        ${account === 'Current' ? 'bg-gray-200 text-blue-700 hover:bg-gray-200 hover:text-blue-700 active:bg-gray-100 active:text-blue-700'
+                        ${account === 'Current' ? 'dark:bg-gray-200 text-blue-700 hover:text-blue-700 bg-gray-200 active:text-blue-700'
                                 : 'hover:bg-gray-200 hover:text-blue-700'
                             } focus:z-10 focus:ring-4 focus:ring-gray-200 dark:bg-gray-200 dark:text-gray-200 dark:border-gray-200 dark:hover:text-white dark:hover:bg-gray-200`} >
                         Current Account
@@ -94,7 +94,7 @@ export default function page() {
                 </div>
                 <div className="mb-6">
                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                    <input type="password" id="password" {...register('password')} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required />
+                    <input type="password" id="password" {...register('password') }  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required />
                 </div>
                 <div className="mb-6">
                     <label htmlFor="confirm_password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
