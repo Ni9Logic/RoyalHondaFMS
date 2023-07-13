@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 export default function page() {
     const [account, setAccountType] = useState('Current');
     const [isButton, setButton] = useState('Current');
+    const [isLoading, setLoading] = useState(false);
     const session = useSession();
     const router = useRouter();
 
@@ -42,21 +43,27 @@ export default function page() {
     }, [session?.status, router, account, setValue]);
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        // Setting Loading state of button
+        setLoading(true);
 
         // If both passwords are incorrect
         if (data.password !== data.cpassword) {
+            setLoading(false);
             return toast.error('Unmatched Passwords!');
         }
 
         // If passwords length are less than 8
         if (data.password.length < 8) {
+            setLoading(false);
             return toast.error('Password must be greater than 8 characters');
         }
 
         // If full name length is less than 4
         if (data.fullname.length < 4) {
+            setLoading(false);
             return toast.error('Fullname shall have at least 4 characters')
         }
+
         axios.post('./api/register', data)
             .then(() => {
                 signIn('credentials', {
@@ -65,9 +72,13 @@ export default function page() {
                 });
 
                 toast.success('Account Successfully Created');
-                toast.success('Logged in!')
+                toast.success('Logged in!');
+                setLoading(false);
             })
-            .catch(() => toast.error('Something went wrong!'));
+            .catch(() => {
+                toast.error('Email Address Already Exists!');
+                setLoading(false);
+            });
     }
 
     // Had to use it to make changes on account settings
@@ -106,7 +117,7 @@ export default function page() {
                         }}
                         type="button"
                         className={`py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200
-                        ${isButton === 'Current' ? 'bg-gray-300' : 'hover:bg-gray-300'} focus:z-10 dark:bg-gray-200 dark:text-gray-200`} >
+                        ${isButton === 'Current' ? 'bg-black text-white' : 'hover:bg-gray-300'} focus:z-10 dark:bg-gray-200 dark:text-gray-200`} >
                         Current Account
                     </button>
                     <button
@@ -116,7 +127,7 @@ export default function page() {
                         }}
                         type="button"
                         className={`py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200
-                        ${isButton === 'Saving' ? 'bg-gray-300' : 'hover:bg-gray-300'} focus:z-10 dark:bg-gray-200 dark:text-gray-200`} >
+                        ${isButton === 'Saving' ? 'bg-black text-white' : 'hover:bg-gray-300'} focus:z-10 dark:bg-gray-200 dark:text-gray-200`} >
                         Savings Account
                     </button>
                 </div>
@@ -141,7 +152,7 @@ export default function page() {
                     </div>
                     <label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <a href="#" className="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a>.</label>
                 </div>
-                <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                <button type="submit" className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg ${isLoading ? "cursor-not-allowed opacity-25" : ""} text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`} disabled={isLoading}>Submit</button>
             </form>
 
         </>

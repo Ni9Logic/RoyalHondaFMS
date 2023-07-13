@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Footer() {
     return (
-        <footer className="text-gray-600 body-font">
+        <footer className="text-gray-600 body-font align-bottom">
             <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
             <a className="flex items-center cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="60" height="60" viewBox="0 0 100 100">
