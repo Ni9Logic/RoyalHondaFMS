@@ -32,7 +32,6 @@ const authOptions: AuthOptions = {
 
                 // Now comparing the password of the user
                 const isCorrect = await bcrypt.compare(credentials.password, user.hashedPassword);
-                
                 if (!isCorrect) {
                     throw new Error('Invalid Credentials')
                 }
@@ -45,7 +44,7 @@ const authOptions: AuthOptions = {
     session: {
         strategy: "jwt",
     },
-    secret: process.env.SECRET
+    secret: process.env.NEXTAUTH_SECRET
 };
 
 const handler = NextAuth(authOptions);

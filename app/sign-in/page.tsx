@@ -1,12 +1,20 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navbar } from '../navbar/Navbar';
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+    const session = useSession();
+    const router = useRouter();
+    useEffect(() => {
+        if (session?.status === 'authenticated') {
+            router.push('/users');
+        }
+    }, [session?.status, router]);
     const {
         register,
         handleSubmit,

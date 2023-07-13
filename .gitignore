@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+/*.env
+*.env
 
 # testing
 /coverage
@@ -18,7 +20,7 @@
 # misc
 .DS_Store
 *.pem
-*.env
+.env
 
 # debug
 npm-debug.log*
@@ -34,3 +36,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.env
+.env

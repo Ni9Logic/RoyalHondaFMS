@@ -6,9 +6,13 @@ import { MouseEvent } from 'react';
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Navbar } from '../navbar/Navbar'
 import { toast } from 'react-hot-toast';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function page() {
     const [account, setAccountType] = useState('Current');
+    const session = useSession();
+    const router = useRouter();
 
     const {
         register,
@@ -30,17 +34,23 @@ export default function page() {
     // We are using useEffect as well because our value is dynamic and just like it gets updated in rendering once the value is stored in object it needs to be
     useEffect(() => {
         setValue('accountType', account); // Update the value of the accountType field
-    }, [account, setValue]);
+
+        if (session?.status === 'authenticated') {
+            router.push('/users')
+        }
+    }, [session?.status, router, account, setValue]);
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        const response = axios.post('./api/register', data)
-        if ((await response).data) {
-            toast.success('Account Successfully Created')
-        }
-        else {
-            toast.error('Some Error Occured')
-        }
-
+        axios.post('./api/register', data)
+            .then(() => {
+                signIn('credentials', {
+                    ...data,
+                    redirect: false,
+                });
+                toast.success('Account Successfully Created');
+                toast.success('Logged in!')
+            })
+            .catch(() => toast.error('Something went wrong!'));
     }
 
     // Had to use it to make changes on account settings
