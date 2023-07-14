@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../Navbar";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import Withdraw from "./Withdraw";
+import Withdraw from "./Withdraws";
 import Footer from "../Footer";
 
 
