@@ -1,4 +1,4 @@
-import getCurrentUser from '@/actions/getCurrentUser'
+import getCurrentUser from '../../actions/getCurrentUser'
 import React from 'react'
 import Link from 'next/link';
 import Navbar from '../Navbar';

@@ -1,11 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import getCurrentUser from '@/actions/getCurrentUser';
+import getCurrentUser from '../actions/getCurrentUser';
 
-let inSessionUser: any;
 export default async function UserMenu() {
     const user = await getCurrentUser();
-    inSessionUser = user;
     return (
         <section className="flex flex-col text-gray-600 body-font h-[75vh] justify-center items-center">
             <div className="px-5 py-24 mx-auto flex flex-col">
@@ -57,8 +55,4 @@ export default async function UserMenu() {
             </div>
         </section>
     )
-}
-
-export function getInSessionUser(){
-    return inSessionUser;
 }

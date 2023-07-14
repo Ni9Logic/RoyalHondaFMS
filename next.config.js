@@ -1,8 +1,11 @@
-const withMDX = require('@next/mdx')({
-    extension: /\.mdx?$/
-  });
-  
-  module.exports = withMDX({
-    // Other Next.js configuration options...
-  });
-  
+// next.config.js
+module.exports = { 
+    webpack: (config, { isServer }) => {
+        if (!isServer) {
+          config.resolve.fallback.fs = false;
+          config.resolve.fallback.module = false;
+        }
+    
+        return config;
+      },
+};
