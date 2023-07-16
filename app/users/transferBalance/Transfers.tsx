@@ -79,7 +79,9 @@ const Transfers: React.FC<transferProps> = ({currentUser}) => {
 
             if (isTransfer) {
                 toast.success('Transfer Balance Successfully')
-
+                setTimeout(function () {
+                    window.location.reload();
+                }, 3000);
                 setLoading(false);
             }
 
