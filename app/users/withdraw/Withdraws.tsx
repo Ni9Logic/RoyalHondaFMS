@@ -54,10 +54,11 @@ const Withdraws: React.FC<WithdrawProps> = ({currentUser}) => {
             if (data.amount <= 0) {
                 toast.error('Invalid Amount');
                 setLoading(false);
+                return null;
             } else if (data.amount > currentUser?.Balance) {
                 toast.error('Insufficient Balance');
                 setLoading(false);
-
+                return null;
             }
 
             const update = await withdraw(data.amount, currentUser?.email as string);
@@ -99,8 +100,9 @@ const Withdraws: React.FC<WithdrawProps> = ({currentUser}) => {
                 <div>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <label htmlFor="input-group-1"
-                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Amount To
-                            Withdraw</label>
+                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Enter Amount To Withdraw
+                        </label>
                         <div className="relative mb-6">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-6.5 pointer-events-none">
                                 <svg className='w-10 h-10' xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
@@ -163,7 +165,7 @@ const Withdraws: React.FC<WithdrawProps> = ({currentUser}) => {
                             </div>
                             <input type="text" id="input-group-1" {...register('amount')}
                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   pattern='[1-9]*' placeholder="Amount > 0"/>
+                                   pattern='[1-10]*' placeholder="Amount > 0"/>
                         </div>
                         {/* Buttons */}
                         <div className='flex flex-row gap-10 mb-10'>
