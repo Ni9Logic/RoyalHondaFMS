@@ -8,6 +8,8 @@ import Footer from "../Footer";
 
 export default async function page() {
     const user = await getCurrentUser();
+
+    if (!user) return null;
     return (
         <div>
             <Navbar/>
