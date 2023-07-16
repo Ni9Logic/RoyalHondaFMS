@@ -6,6 +6,7 @@ import React, {useState} from 'react'
 export default function Hero() {
     const router = useRouter();
     const [isLoading, setLoading] = useState(false);
+
     return (
         <section className="text-gray-600 body-font">
             <div className="container mx-auto flex justify-center px-5 py-24 md:flex-row flex-col items-center">
@@ -23,7 +24,6 @@ export default function Hero() {
                         <button onClick={() => {
                             setLoading(true);
                             router.push('/sign-in')
-                            setLoading(false);
                         }}
                                 className={`inline-flex text-white bg-indigo-500 ${isLoading ? 'opacity-25 cursor-not-allowed' : ''} border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg`}>
                             Login
@@ -31,7 +31,6 @@ export default function Hero() {
                         <button onClick={() => {
                             setLoading(true);
                             router.push('/sign-up')
-                            setLoading(false);
                         }}
                                 className={`ml-4 inline-flex text-gray-700 bg-gray-100 ${isLoading ? 'opacity-25 cursor-not-allowed' : ''} border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg`}>
                             Register
