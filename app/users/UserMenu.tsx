@@ -13,12 +13,14 @@ export default async function UserMenu() {
                             <div className="flex flex-col items-center text-center justify-center">
                                 <h2 className="font-medium title-font mt-4 text-gray-900 text-lg">Hi {user?.fullname}</h2>
                                 <div className="w-12 h-1 bg-indigo-500 rounded mt-2 mb-4"></div>
-                                <p className="text-base ">Welcome back, in the system you can view your profile, transfer balance, withdraw balance as well as deposit balance.</p>
+                                <p className="text-base ">Welcome back, in the system you can view your profile,
+                                    transfer balance, withdraw balance as well as deposit balance.</p>
                             </div>
                         </div>
 
                         {/* Seperated by line */}
-                        <div className="flex flex-col sm:w-2/3 sm:pl-8 gap-5 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
+                        <div
+                            className="flex flex-col sm:w-2/3 sm:pl-8 gap-5 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
                             <Link href="/users/withdraw">
                                 <button
                                     className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
@@ -26,11 +28,13 @@ export default async function UserMenu() {
                                     Withdraw
                                 </button>
                             </Link>
-                            <button
-                                className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
-                                control-id="ControlID-80">
-                                Deposit
-                            </button>
+                            <Link href="/users/deposit">
+                                <button
+                                    className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+                                    control-id="ControlID-80">
+                                    Deposit
+                                </button>
+                            </Link>
                             <button
                                 className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
                                 control-id="ControlID-80">
