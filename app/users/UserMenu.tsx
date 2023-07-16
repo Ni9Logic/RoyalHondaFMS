@@ -23,24 +23,22 @@ export default async function UserMenu() {
                             className="flex flex-col sm:w-2/3 sm:pl-8 gap-5 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
                             <Link href="/users/withdraw">
                                 <button
-                                    className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
-                                    control-id="ControlID-80">
+                                    className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
                                     Withdraw
                                 </button>
                             </Link>
                             <Link href="/users/deposit">
                                 <button
-                                    className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
-                                    control-id="ControlID-80">
+                                    className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
                                     Deposit
                                 </button>
                             </Link>
-                            <button
-                                className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
-                                control-id="ControlID-80">
-                                Transfer Balance
-                            </button>
-
+                            <Link href="/users/transferBalance">
+                                <button
+                                    className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                                    Transfer Balance
+                                </button>
+                            </Link>
                             <button
                                 className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
                                 Update Profile

@@ -1,20 +1,18 @@
-import React from "react";
-import Navbar from "../Navbar";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import Withdraw from "./Withdraws";
-import Footer from "../Footer";
-
+import Navbar from "@/app/users/Navbar";
+import Transfers from "@/app/users/transferBalance/Transfers";
+import Footer from "@/app/users/Footer";
 
 export default async function page() {
     const user = await getCurrentUser();
-
     if (!user)
         return null;
+
     return (
-        <div>
+        <>
             <Navbar/>
-            <Withdraw currentUser={user}/>
+            <Transfers currentUser={user}/>
             <Footer/>
-        </div>
+        </>
     );
 }

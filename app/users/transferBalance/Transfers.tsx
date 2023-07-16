@@ -1,31 +1,36 @@
 'use client'
-import {webUser} from '@prisma/client'
-import {useRouter} from 'next/navigation'
-import React, {useState} from 'react'
-import {SubmitHandler, useForm} from 'react-hook-form';
-import {toast} from 'react-hot-toast';
 
-interface WithdrawProps {
-    currentUser: webUser | null;
+import {webUser} from "@prisma/client";
+// @ts-ignore
+import React, {useState} from "react";
+import {SubmitHandler, useForm} from "react-hook-form";
+import {useRouter} from "next/navigation";
+import toast from "react-hot-toast";
+import {NextResponse} from "next/server";
+
+interface transferProps {
+    currentUser: webUser
 }
 
 interface FormValues {
+    toUserEmail: string,
     amount: number
 }
 
-const withdraw = async (amount: number, email: string) => {
+const transfer = async (toUserEmail: string, fromUserEmail: string, amount: number) => {
     try {
-        const response = await fetch("/api/transactions/withdraw_deposit", {
-            method: "POST",
+        const response = await fetch('/api/transactions/transfer', {
+            method: 'POST',
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
+                toUserEmail: toUserEmail,
+                fromUserEmail: fromUserEmail,
                 amount: amount,
-                email: email,
-                transaction_type: "Withdraw"
             }),
-        });
+        })
+
         if (response.ok) {
             return await response.json();
         } else {
@@ -34,48 +39,61 @@ const withdraw = async (amount: number, email: string) => {
         }
     } catch (error: any) {
         console.error(error);
-        throw new Error("Something went wrong");
+        throw new Error(error.message);
     }
-};
+}
 
-const Withdraws: React.FC<WithdrawProps> = ({currentUser}) => {
-    const router = useRouter();
-    const {register, handleSubmit} = useForm<FormValues>();
+const Transfers: React.FC<transferProps> = ({currentUser}) => {
     const [isLoading, setLoading] = useState(false);
+    const {register, handleSubmit} = useForm<FormValues>();
+    const router = useRouter();
     const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
+        setLoading(true);
         try {
-            setLoading(true);
 
-            if (!currentUser || !currentUser?.Balance) {
+            if (currentUser?.email === data.toUserEmail) {
                 setLoading(false);
+                toast.error('You have entered invalid email');
+                return null;
+            }
+
+            if (!currentUser?.Balance || !currentUser || !currentUser?.email || !data.amount) {
+                setLoading(false);
+                toast.error('Missing fields');
                 return null;
             }
 
             if (data.amount <= 0) {
+                setLoading(false);
                 toast.error('Invalid Amount');
-                setLoading(false);
                 return null;
-            } else if (data.amount > currentUser?.Balance) {
+            }
+
+            if (data.amount > currentUser?.Balance) {
+                setLoading(false);
                 toast.error('Insufficient Balance');
-                setLoading(false);
                 return null;
             }
 
-            const update = await withdraw(data.amount, currentUser?.email as string);
+            const isTransfer = await transfer(data.toUserEmail as string, currentUser?.email as string, data.amount);
 
-            if (update) {
+            if (isTransfer) {
+                toast.success('Transfer Balance Successfully')
+
                 setLoading(false);
-                toast.success('Amount withdrawn successfully');
-                setTimeout(function () {
-                    window.location.reload();
-                }, 2000);
             }
+
+
         } catch (error: any) {
+            toast.error(error.message);
             setLoading(false);
         }
 
     }
-    if (!currentUser) return null;
+
+    if (!currentUser)
+        return null;
+
     return (
         <>
             <div className='flex flex-col border border-gray justify-center items-center h-[75vh] gap-10'>
@@ -96,12 +114,19 @@ const Withdraws: React.FC<WithdrawProps> = ({currentUser}) => {
                     </table>
                 </div>
 
-                {/* Need to add a input field */}
+                {/* Need to add an input field */}
                 <div>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <label htmlFor="input-group-1"
                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Enter Amount To Withdraw
+                            Enter email of the user
+                        </label>
+                        <input type="email" id="input-group-1" {...register('toUserEmail')}
+                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="name@email.com"/>
+                        <label htmlFor="input-group-1"
+                               className="block mb-2 my-6 text-sm font-medium text-gray-900 dark:text-white">
+                            Enter Amount To Transfer
                         </label>
                         <div className="relative mb-6">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-6.5 pointer-events-none">
@@ -165,7 +190,7 @@ const Withdraws: React.FC<WithdrawProps> = ({currentUser}) => {
                             </div>
                             <input type="text" id="input-group-1" {...register('amount')}
                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   pattern='[1-10]*' placeholder="Amount > 0"/>
+                                   placeholder="Amount > 0"/>
                         </div>
                         {/* Buttons */}
                         <div className='flex flex-row gap-10 mb-10'>
@@ -173,7 +198,7 @@ const Withdraws: React.FC<WithdrawProps> = ({currentUser}) => {
                                 className={`w-[300px] bg-gray-200 border-0 ${isLoading ? 'cursor-not-allowed opacity-25' : ''} py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mt-4 md:mt-0`}
                                 type="submit"
                                 disabled={isLoading}>
-                                Withdraw Amount
+                                Transfer Amount
                             </button>
                         </div>
                     </form>
@@ -187,7 +212,9 @@ const Withdraws: React.FC<WithdrawProps> = ({currentUser}) => {
                 </div>
             </div>
         </>
-    )
+    );
+
+
 }
 
-export default Withdraws;
+export default Transfers;
