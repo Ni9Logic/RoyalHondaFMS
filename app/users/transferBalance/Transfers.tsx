@@ -6,7 +6,6 @@ import React, {useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
 import toast from "react-hot-toast";
-import {NextResponse} from "next/server";
 
 interface transferProps {
     currentUser: webUser
@@ -33,9 +32,6 @@ const transfer = async (toUserEmail: string, fromUserEmail: string, amount: numb
 
         if (response.ok) {
             return await response.json();
-        } else {
-            const data = await response.json();
-            throw new Error(data.error);
         }
     } catch (error: any) {
         console.error(error);
@@ -63,7 +59,7 @@ const Transfers: React.FC<transferProps> = ({currentUser}) => {
                 return null;
             }
 
-            if (data.amount <= 0) {
+            if (data.amount <= 0 || !/^\d+$/.test(data.amount.toString())) {
                 setLoading(false);
                 toast.error('Invalid Amount');
                 return null;
