@@ -18,7 +18,7 @@ export default async function UserMenu() {
                             </div>
                         </div>
 
-                        {/* Seperated by line */}
+                        {/* Seperated by lines */}
                         <div
                             className="flex flex-col sm:w-2/3 sm:pl-8 gap-5 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
                             <Link href="/users/withdraw">
