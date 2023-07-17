@@ -29,6 +29,7 @@
     "mongoose": "^7.3.3",
     "next": "13.4.9",
     "next-auth": "^4.22.1",
+    "next-superjson-plugin": "^0.5.9",
     "nock": "^13.3.2",
     "postcss": "8.4.25",
     "prisma": "^5.0.0",

@@ -59,7 +59,7 @@ const Transfers: React.FC<transferProps> = ({currentUser}) => {
                 return null;
             }
 
-            if (data.amount <= 0 || !/^\d+$/.test(data.amount.toString())) {
+            if (data.amount <= 0 || isNaN(data.amount)) {
                 setLoading(false);
                 toast.error('Invalid Amount');
                 return null;
@@ -79,7 +79,8 @@ const Transfers: React.FC<transferProps> = ({currentUser}) => {
                     window.location.reload();
                 }, 3000);
                 setLoading(false);
-            }
+            } else
+                throw new Error('User email does not exist');
 
 
         } catch (error: any) {

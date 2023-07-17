@@ -7,6 +7,9 @@ export async function POST(request: Request) {
     const {toUserEmail, fromUserEmail, amount} = body;
 
     try {
+        if (Number(amount) === 0){
+            return NextResponse.json({error: 'Missing Amount'}, {status: 400});
+        }
         if (!toUserEmail || !fromUserEmail || !amount) {
             return NextResponse.json({error: 'Missing Info from Parameters'}, {status: 400});
         }

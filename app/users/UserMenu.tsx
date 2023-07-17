@@ -46,13 +46,53 @@ export default async function UserMenu() {
                                 </button>
                             </Link>
                             <Link href="/users/profile">
-
                                 <button
                                     className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
                                     View Profile
                                 </button>
                             </Link>
+                            <Link href="/users/profile">
+                                <button
+                                    className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                                    View Transactions
+                                </button>
+                            </Link>
                         </div>
+                        {
+                            user?.admin && <div
+                                className="flex flex-col sm:w-2/6 border-l sm:pl-8 gap-5 sm:py-8 border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
+                                <Link href="/users/withdraw">
+                                    <button
+                                        className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                                        Make Admin
+                                    </button>
+                                </Link>
+                                <Link href="/users/withdraw">
+                                    <button
+                                        className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                                        Create User
+                                    </button>
+                                </Link>
+                                <Link href="/users/deposit">
+                                    <button
+                                        className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                                        Edit User Account
+                                    </button>
+                                </Link>
+                                <Link href="/users/transferBalance">
+                                    <button
+                                        className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                                        View All Users
+                                    </button>
+                                </Link>
+                                <Link href="/users/updateProfile">
+                                    <button
+                                        className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                                        View Transactions
+                                    </button>
+                                </Link>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

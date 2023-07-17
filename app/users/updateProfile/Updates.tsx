@@ -187,7 +187,7 @@ const Updates: React.FC<updateProps> = ({currentUser}) => {
                                         closeModel={() => setOpenState('phoneModalIsOpen', false)}
                                         label={"Enter New Phone Number"}
                                         type={"text"}
-                                        placeholder={"+92-330-0000000"}
+                                        placeholder={"03300000000"}
                                         buttonName={"Update Phone Number"}
                                         email={currentUser?.email}
                                         field_to_update={"phone"}
