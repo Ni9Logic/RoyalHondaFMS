@@ -39,6 +39,29 @@ const transfer = async (toUserEmail: string, fromUserEmail: string, amount: numb
     }
 }
 
+const createTransaction = async (amount: number, email: string, recipient_email: string, transactionType = "Transfer-to") => {
+    try {
+        const response = await fetch('/api/create_transactions', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                amount: amount,
+                email: email,
+                transactionType: transactionType,
+                recipient_email: recipient_email,
+            })
+        });
+
+        if (response.ok)
+            return await response.json();
+    } catch (error: any) {
+        console.log(error);
+        throw new Error("Something went wrong")
+    }
+}
+
 const Transfers: React.FC<transferProps> = ({currentUser}) => {
     const [isLoading, setLoading] = useState(false);
     const {register, handleSubmit} = useForm<FormValues>();
@@ -74,11 +97,22 @@ const Transfers: React.FC<transferProps> = ({currentUser}) => {
             const isTransfer = await transfer(data.toUserEmail as string, currentUser?.email as string, data.amount);
 
             if (isTransfer) {
-                toast.success('Transfer Balance Successfully')
-                setTimeout(function () {
-                    window.location.reload();
-                }, 3000);
-                setLoading(false);
+                // Now since user is updated it is time we also create a transaction
+                //@ts-ignore
+                const transaction = await createTransaction(data.amount as number, currentUser?.email as string, data.toUserEmail as string);
+                const transactionR = await createTransaction(data.amount as number, currentUser?.email as string, data.toUserEmail as string, "Transfer-receive");
+                // If transaction is created we are going to print this else error
+                if (transaction && transactionR) {
+                    setLoading(false);
+                    toast.success('Amount Deposit successfully');
+
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    toast.error('Error with creating transaction')
+                    setLoading(false);
+                }
             } else
                 throw new Error('User email does not exist');
 
