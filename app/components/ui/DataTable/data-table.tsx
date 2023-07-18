@@ -25,8 +25,10 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
 }
 
-
 export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>) {
+    if (!data)
+        return null;
+
     const [sorting, setSorting] = React.useState<SortingState>([]);
 
     const table = useReactTable({
@@ -42,11 +44,12 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
     });
 
     React.useEffect(() => table.setPageSize(5), []);
+
     return (
         <div className="rounded-md border">
             <Table>
                 <TableHeader>
-                    {table.getHeaderGroups().map((headerGroup) => (
+                    {table.getHeaderGroups() && table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
                             {headerGroup.headers.map((header) => {
                                 return (
@@ -64,13 +67,13 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                     ))}
                 </TableHeader>
                 <TableBody>
-                    {table.getRowModel().rows?.length ? (
+                    {table.getRowModel().rows && table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow
                                 key={row.id}
                                 data-state={row.getIsSelected() && "selected"}
                             >
-                                {row.getVisibleCells().map((cell) => (
+                                {row.getVisibleCells() && row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id}>
                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                     </TableCell>
