@@ -2,8 +2,8 @@
 
 import {webTransactions} from "@prisma/client";
 import React from "react";
-import {DataTable} from "@/app/components/ui/DataTable/data-table";
-import {columns} from "@/app/components/ui/DataTable/columns";
+import {TransactionTable} from "@/app/components/ui/TransactionTable/data-table";
+import {columns} from "@/app/components/ui/TransactionTable/columns";
 import {useRouter} from "next/navigation";
 
 
@@ -17,7 +17,7 @@ const Transactions: React.FC<transactionProps> = async ({transactions}) => {
         <>
             <div className="flex flex-col container items-center justify-center  min-h-[72vh]">
                 {/* @ts-ignore */}
-                <DataTable columns={columns} data={transactions}/>
+                <TransactionTable columns={columns} data={transactions}/>
             </div>
 
             <button
