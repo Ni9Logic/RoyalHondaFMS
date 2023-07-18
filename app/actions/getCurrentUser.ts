@@ -23,6 +23,6 @@ const getCurrentUser = async () => {
         return currentUser;
     } catch (error: any) {
         return null;
-    };
+    }
 }
 export default getCurrentUser;
