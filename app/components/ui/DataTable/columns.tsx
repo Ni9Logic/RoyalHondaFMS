@@ -1,6 +1,5 @@
-"use client"
 import {ColumnDef} from "@tanstack/react-table";
-import {ArrowUpDown, MoreHorizontal} from "lucide-react";
+import {ArrowUpDown} from "lucide-react";
 import {Button} from "@/app/components/ui/button";
 
 export type Transaction = {
@@ -18,7 +17,7 @@ function SortingButton({column}) {
     return (
         <Button
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => column.toggleSorting(true)}
         >
             Time
             <ArrowUpDown className="ml-2 h-4 w-4"/>
