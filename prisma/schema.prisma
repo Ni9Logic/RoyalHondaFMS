@@ -10,14 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model webUser{
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  fullname String?
-  email String? @unique
-  phone String?
-  admin Boolean? @default(false)
-  accountType String?
-  Balance Float? @default(5000)
+model webUser {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  fullname       String?
+  email          String?  @unique
+  phone          String?
+  admin          Boolean? @default(false)
+  accountType    String?
+  Balance        Float?   @default(5000)
   hashedPassword String?
-  createdAt DateTime @default(now())
+  createdAt      DateTime @default(now())
+}
+
+model webTransactions {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  Time                DateTime @default(now())
+  Amount              Float?
+  AccountHolder_email String
+  Receipent_email     String?  @default("")
+  Transaction_Type    String
 }
