@@ -8,12 +8,10 @@ const getUserTransactions = async () => {
 
         const allTransactions = prisma?.webTransactions.findMany({
             where: {
-                OR: [
-                    {AccountHolder_email: user?.email},
-                    {Receipent_email: user?.email}
-                ]
-            }
-        })
+                    //@ts-ignore
+                    AccountHolder_email: user?.email
+            },
+        });
 
         if (!allTransactions)
             return null;

@@ -1,4 +1,6 @@
 import {ColumnDef} from "@tanstack/react-table";
+import {ArrowUpDown, MoreHorizontal} from "lucide-react";
+import {Button} from "@/app/components/ui/button";
 
 export type Transaction = {
     id: String,
@@ -21,7 +23,17 @@ export const columns: ColumnDef<Transaction>[] = [
 
     {
         accessorKey: "Time",
-        header: "Date"
+        header: ({column}) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Time
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
+                </Button>
+            )
+        }
     },
     {
         accessorKey: "Receipent_email",

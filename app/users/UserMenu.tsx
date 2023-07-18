@@ -51,7 +51,7 @@ export default async function UserMenu() {
                                     View Profile
                                 </button>
                             </Link>
-                            <Link href="/users/profile">
+                            <Link href="/users/transactions">
                                 <button
                                     className=" w-[200px] bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
                                     View Transactions

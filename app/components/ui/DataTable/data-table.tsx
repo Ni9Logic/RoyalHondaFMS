@@ -2,7 +2,10 @@
 import {
     ColumnDef,
     flexRender,
-    getCoreRowModel, getPaginationRowModel,
+    getCoreRowModel,
+    getPaginationRowModel,
+    SortingState,
+    getSortedRowModel,
     useReactTable
 } from "@tanstack/react-table";
 
@@ -15,20 +18,30 @@ import {
     TableRow
 } from "@/app/components/ui/table";
 import {Button} from "@/app/components/ui/button";
+import * as React from "react"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
 }
 
+
 export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>) {
+    const [sorting, setSorting] = React.useState<SortingState>([]);
+
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+        state: {
+            sorting,
+        },
     });
 
+    React.useEffect(() => table.setPageSize(5), []);
     return (
         <div className="rounded-md border">
             <Table>
@@ -73,7 +86,7 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                     )}
                 </TableBody>
             </Table>
-            <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="flex items-center justify-end space-x-2 py-2 px-4">
                 <Button
                     variant="outline"
                     size="sm"
