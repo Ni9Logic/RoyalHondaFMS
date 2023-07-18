@@ -112,7 +112,7 @@ const Models: React.FC<modelsProps> = ({
                         setTimeout(() => {
                         }, 3000)
 
-                        signOut();
+                        await signOut();
                         closeModel();
                         break;
                     default:
