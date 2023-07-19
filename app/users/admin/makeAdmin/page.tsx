@@ -34,7 +34,7 @@ interface FormValues {
     email: string,
 }
 
-const page: React.FC<FormValues> = () => {
+const Page: React.FC = () => {
     const [isLoading, setLoading] = useState(false);
     const {register, handleSubmit} = useForm<FormValues>();
     const router = useRouter();
@@ -88,4 +88,4 @@ const page: React.FC<FormValues> = () => {
     );
 }
 
-export default page;
+export default Page;
