@@ -13,13 +13,13 @@ export type Transaction = {
 
 
 //@ts-ignore
-function SortingButton({column}) {
+function SortingButton({column, btnName}) {
     return (
         <Button
             variant="ghost"
             onClick={() => column.toggleSorting(true)}
         >
-            Time
+            {btnName}
             <ArrowUpDown className="ml-2 h-4 w-4"/>
         </Button>
     )
@@ -37,7 +37,7 @@ export const columns: ColumnDef<Transaction>[] = [
 
     {
         accessorKey: "Time",
-        header: ({column}) => <SortingButton column={column}/>
+        header: ({column}) => <SortingButton column={column} btnName='Time'/>
     },
     {
         accessorKey: "Receipent_email",
@@ -45,7 +45,7 @@ export const columns: ColumnDef<Transaction>[] = [
     },
     {
         accessorKey: "Amount",
-        header: "Amount"
+        header: ({column}) => <SortingButton column={column} btnName='Amount' />
     },
     {
         accessorKey: "Transaction_Type",

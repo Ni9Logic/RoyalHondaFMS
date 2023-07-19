@@ -35,7 +35,7 @@ export function UsersTable<TData, TValue>({columns, data}: DataTableProps<TData,
         return null;
 
     // Need to add something through which I can control to edit inside table
-    
+
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
     const table = useReactTable({
