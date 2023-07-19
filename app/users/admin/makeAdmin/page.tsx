@@ -6,6 +6,7 @@ import React, {useState} from "react";
 import {toast} from "react-hot-toast";
 import {Button} from "@/app/components/ui/button";
 import {useRouter} from "next/navigation";
+// There was error with nextRouter from next/router
 
 const toMakeAdminUser = async (email: string) => {
     try {
