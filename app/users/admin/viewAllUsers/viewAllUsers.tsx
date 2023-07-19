@@ -1,17 +1,13 @@
 "use client"
 //@ts-ignore
 import React from "react";
-import {webUser} from "@prisma/client";
-import {UsersTable} from "../../../components/ui/UsersTable/data-table";
-import {columns} from "../../../components/ui/UsersTable/columns";
+
+import {UsersTable} from "@/app/components/ui/UsersTable/data-table";
+import {columns} from "@/app/components/ui/UsersTable/columns";
 import {useRouter} from "next/navigation";
+import {webUser} from "@prisma/client";
 
-interface viewAllUserProps {
-    user: webUser;
-}
-
-
-const ViewAllUsers: React.FC<viewAllUserProps> = async ({user}) => {
+const ViewAllUsers: ({user}: { user: any }) => Promise<null | React.JSX.Element> = async ({user}) => {
     const router = useRouter();
     if (!user)
         return null;

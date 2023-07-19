@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     try {
         const curUser = await getCurrentUser();
         if (curUser?.email === email)
-            return NextResponse.json({Error: 'Invalid Email Address'}, {status: 404})
+            return NextResponse.json({Error: 'You cannot enter your email'}, {status: 404})
 
         if (!email)
             return NextResponse.json({Error: 'Email not provided'}, {status: 404});
