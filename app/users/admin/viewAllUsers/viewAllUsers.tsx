@@ -7,7 +7,11 @@ import {columns} from "@/app/components/ui/UsersTable/columns";
 import {useRouter} from "next/navigation";
 import {webUser} from "@prisma/client";
 
-const ViewAllUsers: ({user}: { user: any }) => Promise<null | React.JSX.Element> = async ({user}) => {
+interface viewAllUserProps{
+    user: webUser;
+}
+
+const ViewAllUsers: React.FC<viewAllUserProps> = async ({user}) => {
     const router = useRouter();
     if (!user)
         return null;
