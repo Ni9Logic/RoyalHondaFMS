@@ -2,7 +2,6 @@
 
 import axios from 'axios'
 import React, { useState, useEffect } from 'react';
-import { MouseEvent } from 'react';
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Navbar } from '../navbar/Navbar'
 import { toast } from 'react-hot-toast';
@@ -19,10 +18,7 @@ export default function page() {
     const {
         register,
         handleSubmit,
-        setValue,
-        formState: {
-            errors
-        }
+        setValue
     } = useForm<FieldValues>({
         defaultValues: {
             fullname: '',
@@ -85,7 +81,7 @@ export default function page() {
         setAccountType(accountType);
     };
 
-    // We are using one seprately because it dynamically keeps changing the value of it self so it doesn't get rendered
+    // We are using one separately because it dynamically keeps changing the value of itself, so it doesn't get rendered
     const handleIsButton = (isButtonValue: string) => {
         setButton(isButtonValue);
     };
@@ -109,10 +105,9 @@ export default function page() {
                 <div className='container gap-10 flex flex-row w-full mx-auto mb-5 '>
                     {/* Somehow I had to use this mouse event to make it work and also an extra function for some reason */}
                     <button
-                        onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                        onClick={() => {
                             handleAccountTypeChange('Current');
                             handleIsButton('Current');
-                            console.log(isButton);
                         }}
                         type="button"
                         className={`py-2.5 px-5 mr-2 mb-2 w-full text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200
@@ -120,7 +115,7 @@ export default function page() {
                         Current Account
                     </button>
                     <button
-                        onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                        onClick={() => {
                             handleAccountTypeChange('Saving')
                             handleIsButton('Saving');
                         }}
