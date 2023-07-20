@@ -20,7 +20,7 @@ interface FormValues {
     value: string
 }
 
-const updateProfile = async (field_to_update: string, new_value: string, email: string) => {
+export const updateProfile = async (field_to_update: string, new_value: string, email: string) => {
     try {
         const response = await fetch('/api/updateprof', {
             method: 'POST',
