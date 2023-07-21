@@ -42,6 +42,12 @@ export default function page() {
         // Setting Loading state of button
         setLoading(true);
 
+        // Check for phone number
+        if (isNaN(data.phone) || data.phone.length > 12){
+            setLoading(false);
+            return toast.error('Invalid Phone Number')
+        }
+
         // If both passwords are incorrect
         if (data.password !== data.cpassword) {
             setLoading(false);
@@ -99,7 +105,9 @@ export default function page() {
                     </div>
                     <div>
                         <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone number</label>
-                        <input type="tel" id="phone" {...register('phone')} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="+92-330-0000000" pattern="[+][0-9]{2}-[0-9]{3}-[0-9]{7}" required />
+                        <input type="tel" id="phone" {...register('phone')} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="0330-0000000"
+                            required />
                     </div>
                 </div>
                 <div className='container gap-10 flex flex-row w-full mx-auto mb-5 '>
