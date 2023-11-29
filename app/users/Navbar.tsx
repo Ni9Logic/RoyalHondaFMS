@@ -58,7 +58,7 @@ export default function Navbar() {
                                   d="M62.5,53h-10c-0.3,0-0.5,0.2-0.5,0.5v5c0,0.3,0.2,0.5,0.5,0.5h10c0.3,0,0.5-0.2,0.5-0.5v-5 C63,53.2,62.8,53,62.5,53z M62,58h-9v-4h9V58z"></path>
                         </g>
                     </svg>
-                    <span className="mx-10 self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Banking Management System</span>
+                    <span className="mx-10 self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Study Tracker</span>
                 </a>
                 <button
                     className="flex flex-row ml-auto items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"

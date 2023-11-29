@@ -1,14 +1,14 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { JetBrains_Mono } from 'next/font/google'
 import ToasterContext from './context/ToasterContext'
 import AuthContext from './context/AuthContext'
 
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = JetBrains_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Banking Management System',
+  title: 'Study Tracker',
   description: 'A small system',
 }
 

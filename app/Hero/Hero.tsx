@@ -1,7 +1,7 @@
 'use client'
 
-import {useRouter} from 'next/navigation'
-import React, {useState} from 'react'
+import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
 
 export default function Hero() {
     const router = useRouter();
@@ -13,42 +13,31 @@ export default function Hero() {
                 <div
                     className="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
                     <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
-                        Banking Management System
+                        Study Tracker
                     </h1>
-                    <p className="mb-8 leading-relaxed">A small management system in NextJS with MongoDB, Prisma, React
-                        and React Libraries.
-                        This system consists of a simple user menu where user can perform transactions and on the other
-                        hand it consists of an admin dashboard menu where administrator can perform
-                        all the CURD operations.</p>
+                    <p className="mb-8 leading-relaxed">
+                        A Small Project, here you can keep track of your grades, subject weightage and much more.
+                    </p>
                     <div className="flex justify-center">
                         <button onClick={() => {
                             setLoading(true);
                             router.push('/sign-in')
                         }}
-                                className={`inline-flex text-white bg-indigo-500 ${isLoading ? 'opacity-25 cursor-not-allowed' : ''} border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg`}>
+                            className={`inline-flex text-white bg-indigo-500 ${isLoading ? 'opacity-25 cursor-not-allowed' : ''} border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg`}>
                             Login
                         </button>
                         <button onClick={() => {
                             setLoading(true);
                             router.push('/sign-up')
                         }}
-                                className={`ml-4 inline-flex text-gray-700 bg-gray-100 ${isLoading ? 'opacity-25 cursor-not-allowed' : ''} border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg`}>
+                            className={`ml-4 inline-flex text-gray-700 bg-gray-100 ${isLoading ? 'opacity-25 cursor-not-allowed' : ''} border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg`}>
                             Register
                         </button>
                     </div>
                 </div>
                 <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
-                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="500" height="600"
-                         viewBox="0 0 64 64">
-                        <path fill="#85cbf8"
-                              d="M61,17V51a2,2,0,0,1-2,2H5a2,2,0,0,1-2-2V17a2,2,0,0,1,2-2H59a2,2,0,0,1,2,2Z"></path>
-                        <path fill="#96d7f9"
-                              d="M33 52.9L16.5 52.9 46.5 15 60 15 61 17.53 33 52.9zM40.5 15L10.36 53 6.16 53 6.16 52.61 36 15 40.5 15zM31.5 15L3 50.99 3 49.1 30 15 31.5 15z"></path>
-                        <rect width="8" height="6" x="15" y="27" fill="#f9dd8f" rx="2" ry="2"></rect>
-                        <path fill="#8d6c9f"
-                              d="M59,14H5a3,3,0,0,0-3,3V51a3,3,0,0,0,3,3H59a3,3,0,0,0,3-3V17A3,3,0,0,0,59,14Zm1,37a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V17a1,1,0,0,1,1-1H59a1,1,0,0,1,1,1Z"></path>
-                        <path fill="#8d6c9f"
-                              d="M11 40a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2zM22 41a1 1 0 0 0 1 1h6a1 1 0 0 0 0-2H23A1 1 0 0 0 22 41zM41 40H35a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2zM53 40H47a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2zM25 44H11a1 1 0 0 0 0 2H25a1 1 0 0 0 0-2zM36 30H52a1 1 0 0 0 0-2H36a1 1 0 0 0 0 2zM33 44H29a1 1 0 0 0 0 2h4a1 1 0 0 0 0-2zM16 34h6a2 2 0 0 0 2-2V28a2 2 0 0 0-2-2H16a2 2 0 0 0-2 2v4A2 2 0 0 0 16 34zm0-6h6v4H16zM11 34a1 1 0 0 0 .83-1.55L10.2 30l1.63-2.45a1 1 0 0 0-1.66-1.11l-2 3a1 1 0 0 0 0 1.11l2 3A1 1 0 0 0 11 34z"></path>
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="500" height="600" viewBox="0 0 48 48">
+                        <path fill="#50e6ff" d="M39,16v25c0,1.105-0.895,2-2,2H11c-1.105,0-2-0.895-2-2V7c0-1.105,0.895-2,2-2h17L39,16z"></path><linearGradient id="_rnrzRmyCORmBgGe4G1aPa_aeo6Jl3iRPTl_gr1" x1="28.529" x2="33.6" y1="-2829.362" y2="-2824.29" gradientTransform="matrix(1 0 0 -1 0 -2813.89)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3079d6"></stop><stop offset="1" stop-color="#297cd2"></stop></linearGradient><path fill="url(#_rnrzRmyCORmBgGe4G1aPa_aeo6Jl3iRPTl_gr1)" d="M28,5v9c0,1.105,0.895,2,2,2h9L28,5z"></path><path fill="#e52030" d="M25.391,31h-3.083l-0.893-2.794h-4.466L16.065,31H13l4.571-12.558h3.354L25.391,31z M20.768,26.035 l-1.349-4.221c-0.099-0.315-0.169-0.692-0.21-1.13h-0.07c-0.029,0.368-0.102,0.733-0.219,1.095l-1.366,4.256H20.768z"></path><path fill="#e52030" d="M35,26.753h-3.372v3.372H29.86v-3.372h-3.389v-1.778h3.389v-3.389h1.769v3.389H35V26.753z"></path>
                     </svg>
                 </div>
             </div>

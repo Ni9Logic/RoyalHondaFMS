@@ -14,19 +14,7 @@ model webUser {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   fullname       String?
   email          String?  @unique
-  phone          String?
-  admin          Boolean? @default(false)
-  accountType    String?
-  Balance        Float?   @default(5000)
+  semester       String?
   hashedPassword String?
   createdAt      DateTime @default(now())
-}
-
-model webTransactions {
-  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
-  Time                DateTime @default(now())
-  Amount              Float?
-  AccountHolder_email String
-  Receipent_email     String?  @default("")
-  Transaction_Type    String
 }

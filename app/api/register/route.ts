@@ -10,11 +10,10 @@ export async function POST(request: Request) {
             fullname,
             password,
             email,
-            phone,
-            accountType,
+            semester,
         } = body;
 
-        if (!fullname || !password || !email || !phone || !accountType) {
+        if (!fullname || !password || !email || !semester) {
             return new NextResponse('Missing Info', { status: 400 });
         }
 
@@ -24,8 +23,7 @@ export async function POST(request: Request) {
                 fullname,
                 hashedPassword,
                 email,
-                phone,
-                accountType,
+                semester,
             }
         });
 
