@@ -14,7 +14,14 @@ model webUser {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   fullname       String?
   email          String?  @unique
-  semester       String?
   hashedPassword String?
+  isAdmin        Boolean?
+  emailVerified  Boolean?
   createdAt      DateTime @default(now())
+}
+
+model customer {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  fullname String?
+  
 }
