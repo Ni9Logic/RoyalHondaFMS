@@ -8,8 +8,8 @@ import AuthContext from './context/AuthContext'
 const inter = JetBrains_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Study Tracker',
-  description: 'A small system',
+  title: 'Royal Honda',
+  description: 'Invoices System',
 }
 
 export default function RootLayout({
