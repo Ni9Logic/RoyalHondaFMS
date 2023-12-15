@@ -20,8 +20,10 @@ model webUser {
   createdAt      DateTime @default(now())
 }
 
-model customer {
+model priceSheet {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  fullname String?
-  
+  partNo String?
+  partName String?
+  partModel String?
+  partPrice String?
 }

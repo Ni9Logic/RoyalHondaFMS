@@ -10,20 +10,19 @@ export async function POST(request: Request) {
             fullname,
             password,
             email,
-            semester,
         } = body;
 
-        if (!fullname || !password || !email || !semester) {
+        if (!fullname || !password || !email) {
             return new NextResponse('Missing Info', { status: 400 });
         }
 
+        // Encrypting password
         const hashedPassword = await bcrypt.hash(password, 12);
         const user = await prisma.webUser.create({
             data: {
                 fullname,
                 hashedPassword,
                 email,
-                semester,
             }
         });
 

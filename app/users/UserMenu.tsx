@@ -6,7 +6,42 @@ export default async function UserMenu() {
 
     return (
         <section className="flex flex-col text-gray-600 body-font h-[75vh] justify-center items-center">
-            {/* Implementation of how the user will update, view weightage and add assignments and modify the subjects */}
+            <div className="h-[60vh] w-[70vh] grid grid-cols-2 items-center flex-col gap-5">
+                <div className="gap-2 flex flex-col pt-5">
+                    <button className="relative inline-block px-4 py-2 font-medium group">
+                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                        <span className="relative z-10 text-black group-hover:text-white">Create Invoice</span>
+                    </button>
+                    <button className="relative inline-block px-4 py-2 font-medium group">
+                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                        <span className="relative z-10 text-black group-hover:text-white">View Invoice</span>
+                    </button>
+                    <button className="relative inline-block px-4 py-2 font-medium group">
+                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                        <span className="relative z-10 text-black group-hover:text-white">Delete Invoice</span>
+                    </button>
+                </div>
+                <div className="gap-2 flex flex-col pt-5">
+                    <button className="relative inline-block px-4 py-2 font-medium group">
+                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                        <span className="relative z-10 text-black group-hover:text-white">Simple Invoice</span>
+                    </button>
+                    <button className="relative inline-block px-4 py-2 font-medium group">
+                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                        <span className="relative z-10 text-black group-hover:text-white">Sales Tax Invoice</span>
+                    </button>
+                    <button className="relative inline-block px-4 py-2 font-medium group">
+                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                        <span className="relative z-10 text-black group-hover:text-white">User Logs</span>
+                    </button>
+                </div>
+            </div>
         </section>
     )
 }
