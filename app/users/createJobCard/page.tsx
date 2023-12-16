@@ -29,8 +29,8 @@ export default function Page() {
             RegistrationNumber: '',
             RequiredWorkDetails: '',
             OtherAdditionalWork: '',
-            Fuel: 'Not Checked',
-            Mileage: 'Not Checked',
+            Fuel: '0',
+            Mileage: '0',
             Lighter: 'Not Checked',
             Ashtray: 'Not Checked',
             FloorMats: 'Not Checked',
@@ -69,7 +69,7 @@ export default function Page() {
             <div className="items-center justify-center text-center container gap-10">
                 <div className="overflow-x-auto flex items-center justfiy-center">
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-2">
-                        <div className="grid grid-cols-2 grid-rows-2 gap-2">
+                        <div className="grid grid-cols-2 gap-2">
                             <div className="flex-1 m-0 p-0">
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
@@ -174,36 +174,139 @@ export default function Page() {
                                     </tbody>
                                 </table>
                             </div>
-                            <div className="flex items-center justify-center self-center text-center flex-col">
-                                <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">Tools | Checklist</h3>
-                                <ul className="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                        <div className="flex items-center ps-3">
-                                            <input id="vue-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                            <label htmlFor="vue-checkbox" className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Fuel</label>
-                                        </div>
-                                    </li>
-                                    <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                        <div className="flex items-center ps-3">
-                                            <input id="react-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                                <label htmlFor="react-checkbox" className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Mileage</label>
-                                        </div>
-                                    </li>
-                                    <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                        <div className="flex items-center ps-3">
-                                            <input id="angular-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                                <label htmlFor="angular-checkbox" className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Lighter</label>
-                                        </div>
-                                    </li>
-                                    <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                        <div className="flex items-center ps-3">
-                                            <input id="laravel-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                                <label htmlFor="laravel-checkbox" className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ashtray</label>
-                                        </div>
-                                    </li>
-                                </ul>
-
+                            {/* Tools CheckList */}
+                            <div className="flex-1 m-0 p-0">
+                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
+                                    <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" className="px-6 py-3 text-center">
+                                                Tools
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                | Checklist
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Fuel
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input placeholder="Fuel" {...register('Fuel')} className="border-none focus:outline-none"></input>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Mileage
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input placeholder="Mileage" {...register('Mileage')} className="border-none focus:outline-none"></input>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Lighter
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Ashtray
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Floor Mats
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Orignal Book
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Seat Covers
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Radio Anteena
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Spare Wheel
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Wheel Rod
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Jack | Handle
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Tools
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Extra Things
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
+                            {/* Additional Work Details */}
                             <div className="flex-1 m-0 p-0">
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
@@ -250,28 +353,44 @@ export default function Page() {
                                 <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
                                         <th scope="col" className="px-6 py-3 text-center">
-                                            User
+                                            Additional
                                         </th>
                                         <th scope="col" className="px-6 py-3">
                                             Details
                                         </th>
+                                        <th scope="col" className="px-6 py-3">
+                                            Time
+                                        </th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
                                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            In Time
+                                            In
                                         </th>
                                         <td className="px-6 py-4">
-                                            <input placeholder="In Time" {...register('In')} className="border-none focus:outline-none"></input>
+                                            <div className="flex flex-col">
+                                                <input placeholder="Vehicle Received By" {...register('In')} className="border-none focus:outline-none border-b"></input>
+                                                <input placeholder="Vehicle Received From" {...register('In')} className="border-none focus:outline-none"></input>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            Aleeza Shabbir Waking Time
                                         </td>
                                     </tr>
                                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Out Time
+                                            Out
                                         </th>
                                         <td className="px-6 py-4">
-                                            <input placeholder="Out Time" {...register('Out')} className="border-none focus:outline-none"></input>
+                                            <div className="flex flex-col">
+                                                <input placeholder="Vehicle Received By" {...register('In')} className="border-none focus:outline-none border-b"></input>
+                                                <input placeholder="Vehicle Received From" {...register('In')} className="border-none focus:outline-none"></input>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            Aleeza Shabbir Sleeping Time
                                         </td>
                                     </tr>
                                 </tbody>
