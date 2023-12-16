@@ -21,9 +21,41 @@ model webUser {
 }
 
 model priceSheet {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  partNo String?
-  partName String?
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  partNo    String?
+  partName  String?
   partModel String?
   partPrice String?
+}
+
+model JobCard {
+  SerialNo                  String  @id @default(auto()) @map("_id") @db.ObjectId
+  CustomerName        String?
+  DriverUser          String?
+  CellNo              String?
+  JobCheckedBy        String?
+  WorkType            String?
+  Insurance           String?
+  WorkOrder           String?
+  CashWorks           String?
+  RegistrationNumber  String?
+  RequiredWorkDetails String?
+  OtherAdditionalWork String?
+  Fuel                String?
+  Mileage             String?
+  Lighter             String?
+  Ashtray             String?
+  FloorMats           String?
+  OriginalBook        String?
+  SeatCovers          String?
+  RadioAntena         String?
+  SpareWheel          String?
+  WheelRod            String?
+  JackHandle          String?
+  Tools               String?
+  ExtraThings         String?
+  FrameNo             String?
+  BatteryNumber String?
+  In DateTime?
+  Out DateTime?
 }
