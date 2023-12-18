@@ -1,9 +1,11 @@
+import { create } from "domain";
 import prisma from "../../lib/prismadb";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     try {
         const body = await request.json();
+        console.log(body.RequiredWorkDetails.work);
         const {
             CustomerName,
             DriverUser,

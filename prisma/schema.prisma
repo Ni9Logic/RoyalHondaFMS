@@ -29,7 +29,7 @@ model priceSheet {
 }
 
 model JobCard {
-  SerialNo                  String  @id @default(auto()) @map("_id") @db.ObjectId
+  SerialNo            String                @id @default(auto()) @map("_id") @db.ObjectId
   CustomerName        String?
   DriverUser          String?
   CellNo              String?
@@ -39,7 +39,7 @@ model JobCard {
   WorkOrder           String?
   CashWorks           String?
   RegistrationNumber  String?
-  RequiredWorkDetails String?
+  RequiredWorkDetails Json?
   OtherAdditionalWork String?
   Fuel                String?
   Mileage             String?
@@ -55,7 +55,7 @@ model JobCard {
   Tools               String?
   ExtraThings         String?
   FrameNo             String?
-  BatteryNumber String?
-  In String?
-  Out String?
+  BatteryNumber       String?
+  In                  String?
+  Out                 String?
 }

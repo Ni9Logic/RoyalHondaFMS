@@ -2,12 +2,51 @@
 import Footer from "../Footer";
 import Navbar from "../Navbar";
 import React, { useState, useEffect } from 'react';
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm, useFieldArray, FieldArrayWithId } from "react-hook-form";
 import { toast } from 'react-hot-toast';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from "axios";
 
 export default function Page() {
+
+    type FormData = {
+        CustomerName: string,
+        DriverUser: string,
+        CellNo: string,
+        JobCheckedBy: string,
+        WorkType: string,
+        Insurance: string,
+        WorkOrder: string,
+        CashWorks: string,
+        RegistrationNumber: string,
+        RequiredWorkDetails: { work: string, price: string }[],
+        OtherAdditionalWork: string,
+        Fuel: string,
+        Mileage: string,
+        Lighter: boolean,
+        Ashtray: boolean,
+        FloorMats: boolean,
+        OriginalBook: boolean,
+        SeatCovers: boolean,
+        RadioAntena: boolean,
+        SpareWheel: boolean,
+        WheelRod: boolean,
+        JackHandle: boolean,
+        Tools: boolean,
+        ExtraThings: boolean,
+        FrameNo: boolean,
+        BatteryNumber: string,
+        In: any, // Assuming In is a string
+        Out: any, // Assuming Out is a string
+    };
+
+    const handleAddRow = () => {
+        append({ work: '', price: '' }); // Add an empty row to the fields array
+    };
+    const handleRemoveRow = (indexToRemove: any) => {
+        remove(indexToRemove);
+    }
+
 
 
     const [isLoading, setLoading] = useState(false);
@@ -16,7 +55,8 @@ export default function Page() {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm({
+        control,
+    } = useForm<FormData>({
         defaultValues: {
             CustomerName: '',
             DriverUser: '',
@@ -27,29 +67,49 @@ export default function Page() {
             WorkOrder: '',
             CashWorks: '',
             RegistrationNumber: '',
-            RequiredWorkDetails: '',
+            RequiredWorkDetails: [{ 'work': '', 'price': '' }],
             OtherAdditionalWork: '',
             Fuel: '0',
             Mileage: '0',
-            Lighter: 'Not Checked',
-            Ashtray: 'Not Checked',
-            FloorMats: 'Not Checked',
-            OriginalBook: 'Not Checked',
-            SeatCovers: 'Not Checked',
-            RadioAntena: 'Not Checked',
-            SpareWheel: 'Not Checked',
-            WheelRod: 'Not Checked',
-            JackHandle: 'Not Checked',
-            Tools: 'Not Checked',
-            ExtraThings: 'Not Checked',
-            FrameNo: 'Not Checked',
+            Lighter: false,
+            Ashtray: false,
+            FloorMats: false,
+            OriginalBook: false,
+            SeatCovers: false,
+            RadioAntena: false,
+            SpareWheel: false,
+            WheelRod: false,
+            JackHandle: false,
+            Tools: false,
+            ExtraThings: false,
+            FrameNo: false,
             BatteryNumber: '',
             In: '', // Assuming In is a string
             Out: '', // Assuming Out is a string
         },
     });
 
-    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'RequiredWorkDetails',
+    });
+
+    // We wanna keep track of changes in price and works
+    const logRequiredWorkDetails = () => {
+        fields.forEach((item, index) => {
+            console.log(`Item ${index + 1}:`, item);
+        });
+    };
+
+    // On each change uses useEffect
+    const [storedRequiredWorkDetails, setStoredRequiredWorkDetails] = useState<FieldArrayWithId<FormData, 'RequiredWorkDetails', 'id'>[]>([]);
+    useEffect(() => {
+        logRequiredWorkDetails();
+        setStoredRequiredWorkDetails([...fields]);
+        console.log(storedRequiredWorkDetails)
+    }, [fields])
+
+    const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
         // Setting Loading state of button
         setLoading(true);
 
@@ -169,6 +229,14 @@ export default function Page() {
                                             </th>
                                             <td className="px-6 py-4">
                                                 <input placeholder="Job Checked By" {...register('RegistrationNumber')} className="border-none focus:outline-none"></input>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Battery Number
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input placeholder="Battery #" {...register('BatteryNumber')} className="border-none focus:outline-none"></input>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -307,46 +375,49 @@ export default function Page() {
                                 </table>
                             </div>
                             {/* Additional Work Details */}
-                            <div className="flex-1 m-0 p-0">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
-                                    <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" className="px-6 py-3 text-center">
-                                                Additional
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Work Details
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Required Work Details
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <textarea placeholder="Describe..." {...register('RequiredWorkDetails')} className="resize-y h-32 w-full border-none focus:outline-none"></textarea>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Additional Work Details
+
+                            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
+                                <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th className="px-6 py-3 text-center">Work</th>
+                                        <th className="px-6 py-3 text-center">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {fields.map((item, index) => (
+                                        <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                <input
+                                                    {...register(`RequiredWorkDetails.${index}.work`)}
+                                                    placeholder="Work"
+                                                    className="border-none outline-none"
+                                                />
                                             </th>
                                             <td className="px-6 py-4">
-                                                <textarea placeholder="Describe..." {...register('OtherAdditionalWork')} className="resize-y h-32 w-full border-none focus:outline-none"></textarea>
+                                                <input
+                                                    {...register(`RequiredWorkDetails.${index}.price`)}
+                                                    placeholder="Price"
+                                                    className="border-none outline-none"
+                                                />
+                                            </td>
+                                            <td>
+                                                <button type="button" onClick={() => handleRemoveRow(index)} className="relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
+                                                    <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                                                    <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-red-500"></span>
+                                                    <span className="relative z-10 text-black group-hover:text-white">Delete</span>
+                                                </button>
                                             </td>
                                         </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Battery Number
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input placeholder="Battery #" {...register('BatteryNumber')} className="border-none focus:outline-none"></input>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    ))}
+                                </tbody>
+                                <button type="button" onClick={() => handleAddRow()} className="relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
+                                    <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                                    <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                                    <span className="relative z-10 text-black group-hover:text-white">Add New Record</span>
+                                </button>
+                            </table>
+
+
                         </div>
                         <div className="flex items-center justify-center">
                             <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -376,7 +447,7 @@ export default function Page() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            Aleeza Shabbir Waking Time
+                                            {/* Implementation of Time */}
                                         </td>
                                     </tr>
                                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -390,7 +461,7 @@ export default function Page() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            Aleeza Shabbir Sleeping Time
+                                            {/* Implementation of Time */}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -402,9 +473,9 @@ export default function Page() {
                             <span className="relative z-10 text-black group-hover:text-white">Submit</span>
                         </button>
                     </form>
-                </div>
+                </div >
 
-            </div>
+            </div >
             <Footer />
         </>
     )
