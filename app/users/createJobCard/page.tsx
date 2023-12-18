@@ -41,13 +41,24 @@ export default function Page() {
     };
 
     const handleAddRow = () => {
-        append({ work: '', price: '' }); // Add an empty row to the fields array
+        if (fields.length === 0) {
+            append({ work: storedRequiredWorkDetails[0].work, price: storedRequiredWorkDetails[0].price })
+        }
+        else
+            append({ work: '', price: '' })
+
+            // Find Solution for this
     };
     const handleRemoveRow = (indexToRemove: any) => {
         remove(indexToRemove);
     }
 
+    // We need to add one row before the page renders so
+    const [isEstimate, setIsEstimate] = useState(false);
 
+    const handleEstimate = () => {
+        if (!isEstimate) { setIsEstimate(!isEstimate); }
+    }
 
     const [isLoading, setLoading] = useState(false);
 
@@ -67,7 +78,7 @@ export default function Page() {
             WorkOrder: '',
             CashWorks: '',
             RegistrationNumber: '',
-            RequiredWorkDetails: [{ 'work': '', 'price': '' }],
+            RequiredWorkDetails: [{ work: '', price: '' }],
             OtherAdditionalWork: '',
             Fuel: '0',
             Mileage: '0',
@@ -94,17 +105,12 @@ export default function Page() {
         name: 'RequiredWorkDetails',
     });
 
-    // We wanna keep track of changes in price and works
-    const logRequiredWorkDetails = () => {
-        fields.forEach((item, index) => {
-            console.log(`Item ${index + 1}:`, item);
-        });
-    };
 
     // On each change uses useEffect
     const [storedRequiredWorkDetails, setStoredRequiredWorkDetails] = useState<FieldArrayWithId<FormData, 'RequiredWorkDetails', 'id'>[]>([]);
     useEffect(() => {
-        logRequiredWorkDetails();
+
+
         setStoredRequiredWorkDetails([...fields]);
         console.log(storedRequiredWorkDetails)
     }, [fields])
@@ -376,48 +382,73 @@ export default function Page() {
                             </div>
                             {/* Additional Work Details */}
 
-                            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
-                                <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th className="px-6 py-3 text-center">Work</th>
-                                        <th className="px-6 py-3 text-center">Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {fields.map((item, index) => (
-                                        <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                <input
-                                                    {...register(`RequiredWorkDetails.${index}.work`)}
-                                                    placeholder="Work"
-                                                    className="border-none outline-none"
-                                                />
+                            <div>
+                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
+                                    <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" className="px-6 py-3 text-center">
+                                                Work
                                             </th>
-                                            <td className="px-6 py-4">
-                                                <input
-                                                    {...register(`RequiredWorkDetails.${index}.price`)}
-                                                    placeholder="Price"
-                                                    className="border-none outline-none"
-                                                />
-                                            </td>
-                                            <td>
-                                                <button type="button" onClick={() => handleRemoveRow(index)} className="relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
-                                                    <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                                                    <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-red-500"></span>
-                                                    <span className="relative z-10 text-black group-hover:text-white">Delete</span>
-                                                </button>
-                                            </td>
+                                            <th scope="col" className="px-6 py-3 text-center">
+                                                Price
+                                            </th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                                <button type="button" onClick={() => handleAddRow()} className="relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
-                                    <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                                    <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
-                                    <span className="relative z-10 text-black group-hover:text-white">Add New Record</span>
-                                </button>
-                            </table>
+                                    </thead>
 
+                                    <tbody>
+                                        {fields.map((item, index) => (
+                                            <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <input
+                                                        {...register(`RequiredWorkDetails.${index}.work`)}
+                                                        placeholder="Work"
+                                                        className="border-none outline-none"
+                                                    />
+                                                </th>
+                                                <td className="px-6 py-4">
+                                                    <input
+                                                        {...register(`RequiredWorkDetails.${index}.price`)}
+                                                        placeholder="Price"
+                                                        className="border-none outline-none"
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleRemoveRow(index)}
+                                                        className="relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
+                                                    >
+                                                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                                                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-red-500"></span>
+                                                        <span className="relative z-10 text-black group-hover:text-white">Delete</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
 
+                                </table>
+                                <div className="flex flex-col gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => handleAddRow()}
+                                        className="relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
+                                    >
+                                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                                        <span className="relative z-10 text-black group-hover:text-white">Add New Record</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleEstimate()}
+                                        className="relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
+                                    >
+                                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                                        <span className="absolute inset-0 w-full h-full border-2 border-black bg-green-300"></span>
+                                        <span className="relative z-10 text-black ">Generate Estimate</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div className="flex items-center justify-center">
                             <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -467,15 +498,43 @@ export default function Page() {
                                 </tbody>
                             </table>
                         </div>
+
+                        {
+                            isEstimate &&
+                            <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full h-[100px]">
+                                <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th className="px-6 py-3 text-center">Work</th>
+                                        <th className="px-6 py-3 text-center">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        storedRequiredWorkDetails.map((item, index) => (
+                                            <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    {item.work}
+                                                </th>
+                                                <td className="px-6 py-4">
+                                                    {item.price}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                </tbody>
+
+                            </table>
+                        }
                         <button type="submit" className="relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
                             <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
                             <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
                             <span className="relative z-10 text-black group-hover:text-white">Submit</span>
                         </button>
+
                     </form>
                 </div >
 
             </div >
+
             <Footer />
         </>
     )
