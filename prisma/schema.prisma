@@ -55,6 +55,6 @@ model JobCard {
   ExtraThings         Boolean?
   FrameNo             String?
   BatteryNumber       String?
-  In                  String?
-  Out                 String?
+  In                  Json?
+  Out                 Json?
 }

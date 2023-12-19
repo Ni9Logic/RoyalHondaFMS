@@ -33,10 +33,16 @@ export async function POST(request: Request) {
             In,
             Out,
         } = body;
-        {
-        /**
-          * TODO: Validation checks required
-          */
+
+        // Validate the RequiredWorkDetails array
+        const isValid = RequiredWorkDetails.every((item: { work: string; price: string }) => {
+            // Check if price can be converted to a valid number
+            const priceAsNumber = parseFloat(item.price);
+            return !isNaN(priceAsNumber) && priceAsNumber >= 0; // Adjust the condition as needed
+        });
+
+        if (!isValid) {
+            return NextResponse.json({ error: 'Invalid price value in Work Details' }, { status: 400 });
         }
         const jobcard = await prisma.jobCard.create({
             data: {

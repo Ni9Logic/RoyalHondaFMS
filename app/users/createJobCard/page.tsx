@@ -7,7 +7,9 @@ import { toast } from 'react-hot-toast';
 import axios from "axios";
 import EstimateRow from "@/app/components/estimates/Row";
 
+
 export default function Page() {
+
     interface EstimateRowType {
         work: string;
         price: string;
@@ -43,8 +45,8 @@ export default function Page() {
         ExtraThings: boolean,
         FrameNo: string,
         BatteryNumber: string,
-        In: any, // Assuming In is a string
-        Out: any, // Assuming Out is a string
+        In: { VRecievedBy: string, VReceivedFrom: string, Time: string },
+        Out: { VRecievedBy: string, VReceivedFrom: string, Time: string },
     };
 
     const handleAddRow = () => {
@@ -85,8 +87,8 @@ export default function Page() {
             RegistrationNumber: '',
             RequiredWorkDetails: [{ work: '', price: '' }],
             OtherAdditionalWork: '',
-            Fuel: '0',
-            Mileage: '0',
+            Fuel: '',
+            Mileage: '',
             Lighter: false,
             Ashtray: false,
             FloorMats: false,
@@ -100,8 +102,8 @@ export default function Page() {
             ExtraThings: false,
             FrameNo: '',
             BatteryNumber: '',
-            In: '', // Assuming In is a string
-            Out: '', // Assuming Out is a string
+            In: { VReceivedFrom: '', VRecievedBy: '', Time: '' },
+            Out: { VReceivedFrom: '', VRecievedBy: '', Time: '' },
         },
     });
 
@@ -126,20 +128,26 @@ export default function Page() {
             .then(() => {
                 toast.success('Job Card Created!');
             })
-            .catch(() => {
-                toast.error('Some Error Occurred.');
+            .catch((error) => {
+                toast.error(error.error)
             })
             .finally(() => setLoading(false));
     }
+
     return (
         <>
             <Navbar />
-            <div className="items-center justify-center text-center container gap-10">
+            <div className="flex items-center justify-center ">
+                <h1 className="font-bold text-3xl self-center items-center text-center justify-center">
+                    Job Card Creation
+                </h1>
+            </div>
+            <div className="items-center justify-center text-center gap-10 container">
                 <div className="overflow-x-auto flex items-center justfiy-center">
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-2">
                         <div className="grid grid-cols-2 gap-2">
                             <div className="flex-1 m-0 p-0">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
+                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" className="px-6 py-3 text-center">
@@ -195,7 +203,7 @@ export default function Page() {
                                 </table>
                             </div>
                             <div className="flex-1 m-0 p-0">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
+                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" className="px-6 py-3 text-center">
@@ -225,14 +233,6 @@ export default function Page() {
                                         </tr>
                                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Cash Works
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <textarea placeholder="Describe..." {...register('CashWorks')} className="resize-y h-10 w-full border-none focus:outline-none"></textarea>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 Registration
                                             </th>
                                             <td className="px-6 py-4">
@@ -252,7 +252,7 @@ export default function Page() {
                             </div>
                             {/* Tools CheckList */}
                             <div className="flex-1 m-0 p-0">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
+                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" className="px-6 py-3 text-center">
@@ -429,7 +429,7 @@ export default function Page() {
                             {/* Additional Work Details */}
 
                             <div>
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
+                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" className="px-6 py-3 text-center">
@@ -472,7 +472,7 @@ export default function Page() {
                                                     <button
                                                         type="button"
                                                         onClick={() => handleRemoveRow(index)}
-                                                        className="relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
+                                                        className="relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden print:hidden"
                                                     >
                                                         <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
                                                         <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-red-500"></span>
@@ -484,7 +484,7 @@ export default function Page() {
                                     </tbody>
 
                                 </table>
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-2 w-[200px]">
                                     <button
                                         type="button"
                                         onClick={() => handleAddRow()}
@@ -519,71 +519,84 @@ export default function Page() {
                                         <span className="relative z-10 text-black">Print Form</span>
                                     </button>
                                 </div>
+                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
+                                    <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" className="px-6 py-3 text-center">
+                                                Additional
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                Details
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                Time
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                In
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <div className="flex flex-col">
+                                                    <input placeholder="Vehicle Received By" {...register('In.VRecievedBy')} className="border-none focus:outline-none border-b"></input>
+                                                    <input placeholder="Vehicle Received From" {...register('In.VReceivedFrom')} className="border-none focus:outline-none"></input>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                Testing
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Out
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <div className="flex flex-col">
+                                                    <input placeholder="Vehicle Received By" {...register('Out.VRecievedBy')} className="border-none focus:outline-none border-b"></input>
+                                                    <input placeholder="Vehicle Received From" {...register('Out.VReceivedFrom')} className="border-none focus:outline-none"></input>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                Testing
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                {
+                                    storedRequiredWorkDetails.length > 0 && isEstimate && (
+                                        <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[100px] mt-10">
+                                            <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th className="px-6 py-3 text-center">Estimated Work</th>
+                                                    <th className="px-6 py-3 text-center">Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {<EstimateRow list={storedRequiredWorkDetails} />}
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Estimated Cost</th>
+                                                    <td className="px-6 py-4">
+                                                        {
+                                                            storedRequiredWorkDetails.reduce((total, item) => {
+                                                                // Assuming item.price is a string, convert it to a number before summing
+                                                                const priceAsNumber = parseFloat(item.price);
+                                                                return total + (isNaN(priceAsNumber) ? 0 : priceAsNumber);
+                                                            }, 0)}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+
+                                        </table>
+                                    )
+                                }
                             </div>
                         </div>
-                        <div className="flex items-center justify-center">
-                            <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" className="px-6 py-3 text-center">
-                                            Additional
-                                        </th>
-                                        <th scope="col" className="px-6 py-3">
-                                            Details
-                                        </th>
-                                        <th scope="col" className="px-6 py-3">
-                                            Time
-                                        </th>
-                                    </tr>
-                                </thead>
 
-                                <tbody>
-                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            In
-                                        </th>
-                                        <td className="px-6 py-4">
-                                            <div className="flex flex-col">
-                                                <input placeholder="Vehicle Received By" {...register('In')} className="border-none focus:outline-none border-b"></input>
-                                                <input placeholder="Vehicle Received From" {...register('In')} className="border-none focus:outline-none"></input>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            {/* Implementation of Time */}
-                                        </td>
-                                    </tr>
-                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Out
-                                        </th>
-                                        <td className="px-6 py-4">
-                                            <div className="flex flex-col">
-                                                <input placeholder="Vehicle Received By" {...register('In')} className="border-none focus:outline-none border-b"></input>
-                                                <input placeholder="Vehicle Received From" {...register('In')} className="border-none focus:outline-none"></input>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            {/* Implementation of Time */}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        {
-                            storedRequiredWorkDetails.length > 0 &&
-                            <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full h-[100px]">
-                                <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th className="px-6 py-3 text-center">Work</th>
-                                        <th className="px-6 py-3 text-center">Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {<EstimateRow list={storedRequiredWorkDetails} />}
-                                </tbody>
 
-                            </table>
-                        }
+
                         <button type="submit" className="print:hidden relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
                             <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
                             <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
