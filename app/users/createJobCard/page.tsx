@@ -4,11 +4,18 @@ import Navbar from "../Navbar";
 import React, { useState, useEffect } from 'react';
 import { FieldValues, SubmitHandler, useForm, useFieldArray, FieldArrayWithId } from "react-hook-form";
 import { toast } from 'react-hot-toast';
-import 'react-datepicker/dist/react-datepicker.css';
 import axios from "axios";
+import EstimateRow from "@/app/components/estimates/Row";
 
 export default function Page() {
-
+    interface EstimateRowType {
+        work: string;
+        price: string;
+    }
+    const [rows, setRows] = useState<EstimateRowType[]>([]);
+    useEffect(() => {
+        console.log(rows);
+    }, [rows]);
     type FormData = {
         CustomerName: string,
         DriverUser: string,
@@ -34,39 +41,37 @@ export default function Page() {
         JackHandle: boolean,
         Tools: boolean,
         ExtraThings: boolean,
-        FrameNo: boolean,
+        FrameNo: string,
         BatteryNumber: string,
         In: any, // Assuming In is a string
         Out: any, // Assuming Out is a string
     };
 
     const handleAddRow = () => {
-        if (fields.length === 0) {
-            append({ work: storedRequiredWorkDetails[0].work, price: storedRequiredWorkDetails[0].price })
-        }
-        else
-            append({ work: '', price: '' })
-
-            // Find Solution for this
+        setRows(rows => [...rows, { work: storedRequiredWorkDetails[0].work, price: storedRequiredWorkDetails[0].price }]);
     };
     const handleRemoveRow = (indexToRemove: any) => {
-        remove(indexToRemove);
+        const updatedRows = rows.filter((_, index) => index !== indexToRemove);
+        setRows(updatedRows);
     }
-
-    // We need to add one row before the page renders so
-    const [isEstimate, setIsEstimate] = useState(false);
-
     const handleEstimate = () => {
-        if (!isEstimate) { setIsEstimate(!isEstimate); }
+        setValue('RequiredWorkDetails', rows);
     }
 
     const [isLoading, setLoading] = useState(false);
+    const [isEstimate, setisEstimate] = useState(false);
+
+    const handleIsEstimate = () => {
+        if (isEstimate === false)
+            setisEstimate(true);
+    }
 
     const {
         register,
         handleSubmit,
         formState: { errors },
         control,
+        setValue,
     } = useForm<FormData>({
         defaultValues: {
             CustomerName: '',
@@ -93,7 +98,7 @@ export default function Page() {
             JackHandle: false,
             Tools: false,
             ExtraThings: false,
-            FrameNo: false,
+            FrameNo: '',
             BatteryNumber: '',
             In: '', // Assuming In is a string
             Out: '', // Assuming Out is a string
@@ -109,11 +114,9 @@ export default function Page() {
     // On each change uses useEffect
     const [storedRequiredWorkDetails, setStoredRequiredWorkDetails] = useState<FieldArrayWithId<FormData, 'RequiredWorkDetails', 'id'>[]>([]);
     useEffect(() => {
-
-
         setStoredRequiredWorkDetails([...fields]);
-        console.log(storedRequiredWorkDetails)
     }, [fields])
+
 
     const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
         // Setting Loading state of button
@@ -121,7 +124,6 @@ export default function Page() {
 
         axios.post('../../api/jobcard', data)
             .then(() => {
-                console.log(data);
                 toast.success('Job Card Created!');
             })
             .catch(() => {
@@ -283,7 +285,11 @@ export default function Page() {
                                                 Lighter
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input onChange={
+                                                    (e) => {
+                                                        setValue('Lighter', e.target.checked);
+                                                    }
+                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                             </td>
                                         </tr>
@@ -292,7 +298,11 @@ export default function Page() {
                                                 Ashtray
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input onChange={
+                                                    (e) => {
+                                                        setValue('Ashtray', e.target.checked);
+                                                    }
+                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                             </td>
                                         </tr>
@@ -301,7 +311,11 @@ export default function Page() {
                                                 Floor Mats
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input onChange={
+                                                    (e) => {
+                                                        setValue('FloorMats', e.target.checked);
+                                                    }
+                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                             </td>
                                         </tr>
@@ -310,7 +324,11 @@ export default function Page() {
                                                 Orignal Book
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input onChange={
+                                                    (e) => {
+                                                        setValue('OriginalBook', e.target.checked);
+                                                    }
+                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                             </td>
                                         </tr>
@@ -319,16 +337,24 @@ export default function Page() {
                                                 Seat Covers
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input onChange={
+                                                    (e) => {
+                                                        setValue('SeatCovers', e.target.checked);
+                                                    }
+                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                             </td>
                                         </tr>
                                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Radio Anteena
+                                                Radio Antena
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input onChange={
+                                                    (e) => {
+                                                        setValue('RadioAntena', e.target.checked);
+                                                    }
+                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                             </td>
                                         </tr>
@@ -337,7 +363,11 @@ export default function Page() {
                                                 Spare Wheel
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input onChange={
+                                                    (e) => {
+                                                        setValue('SpareWheel', e.target.checked);
+                                                    }
+                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                             </td>
                                         </tr>
@@ -346,7 +376,11 @@ export default function Page() {
                                                 Wheel Rod
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input onChange={
+                                                    (e) => {
+                                                        setValue('WheelRod', e.target.checked);
+                                                    }
+                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                             </td>
                                         </tr>
@@ -355,7 +389,11 @@ export default function Page() {
                                                 Jack | Handle
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input onChange={
+                                                    (e) => {
+                                                        setValue('JackHandle', e.target.checked);
+                                                    }
+                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                             </td>
                                         </tr>
@@ -364,7 +402,11 @@ export default function Page() {
                                                 Tools
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input onChange={
+                                                    (e) => {
+                                                        setValue('Tools', e.target.checked);
+                                                    }
+                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                             </td>
                                         </tr>
@@ -373,7 +415,11 @@ export default function Page() {
                                                 Extra Things
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input onChange={
+                                                    (e) => {
+                                                        setValue('ExtraThings', e.target.checked);
+                                                    }
+                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                             </td>
                                         </tr>
@@ -396,18 +442,28 @@ export default function Page() {
                                     </thead>
 
                                     <tbody>
-                                        {fields.map((item, index) => (
-                                            <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                        {rows.map((item, index) => (
+                                            <tr key={`rows-${index}`} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                                 <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                     <input
-                                                        {...register(`RequiredWorkDetails.${index}.work`)}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value;
+                                                            const copy = [...rows];
+                                                            copy[index].work = value;
+                                                            setRows(copy);
+                                                        }}
                                                         placeholder="Work"
                                                         className="border-none outline-none"
                                                     />
                                                 </th>
                                                 <td className="px-6 py-4">
                                                     <input
-                                                        {...register(`RequiredWorkDetails.${index}.price`)}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value;
+                                                            const copy = [...rows];
+                                                            copy[index].price = value;
+                                                            setRows(copy);
+                                                        }}
                                                         placeholder="Price"
                                                         className="border-none outline-none"
                                                     />
@@ -432,20 +488,35 @@ export default function Page() {
                                     <button
                                         type="button"
                                         onClick={() => handleAddRow()}
-                                        className="relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
+                                        className="print:hidden relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
                                     >
                                         <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
                                         <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
                                         <span className="relative z-10 text-black group-hover:text-white">Add New Record</span>
                                     </button>
+
                                     <button
                                         type="button"
-                                        onClick={() => handleEstimate()}
-                                        className="relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
+                                        onClick={() => {
+                                            handleEstimate()
+                                            handleIsEstimate()
+                                        }}
+                                        className="print:hidden relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
                                     >
                                         <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
                                         <span className="absolute inset-0 w-full h-full border-2 border-black bg-green-300"></span>
-                                        <span className="relative z-10 text-black ">Generate Estimate</span>
+                                        <span className="relative z-10 text-black">Generate Estimate</span>
+                                    </button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            print()
+                                        }}
+                                        className="print:hidden relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
+                                    >
+                                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                                        <span className="absolute inset-0 w-full h-full border-2 border-black bg-green-300"></span>
+                                        <span className="relative z-10 text-black">Print Form</span>
                                     </button>
                                 </div>
                             </div>
@@ -498,9 +569,8 @@ export default function Page() {
                                 </tbody>
                             </table>
                         </div>
-
                         {
-                            isEstimate &&
+                            storedRequiredWorkDetails.length > 0 &&
                             <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full h-[100px]">
                                 <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
@@ -509,22 +579,12 @@ export default function Page() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {
-                                        storedRequiredWorkDetails.map((item, index) => (
-                                            <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    {item.work}
-                                                </th>
-                                                <td className="px-6 py-4">
-                                                    {item.price}
-                                                </td>
-                                            </tr>
-                                        ))}
+                                    {<EstimateRow list={storedRequiredWorkDetails} />}
                                 </tbody>
 
                             </table>
                         }
-                        <button type="submit" className="relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
+                        <button type="submit" className="print:hidden relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
                             <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
                             <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
                             <span className="relative z-10 text-black group-hover:text-white">Submit</span>

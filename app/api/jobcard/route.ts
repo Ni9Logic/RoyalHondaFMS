@@ -1,11 +1,9 @@
-import { create } from "domain";
 import prisma from "../../lib/prismadb";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        console.log(body.RequiredWorkDetails.work);
         const {
             CustomerName,
             DriverUser,
@@ -17,7 +15,6 @@ export async function POST(request: Request) {
             CashWorks,
             RegistrationNumber,
             RequiredWorkDetails,
-            OtherAdditionalWork,
             Fuel,
             Mileage,
             Lighter,
@@ -33,10 +30,14 @@ export async function POST(request: Request) {
             ExtraThings,
             FrameNo,
             BatteryNumber,
-            In, // Assuming In is a string
-            Out, // Assuming Out is a string
+            In,
+            Out,
         } = body;
-
+        {
+        /**
+          * TODO: Validation checks required
+          */
+        }
         const jobcard = await prisma.jobCard.create({
             data: {
                 CustomerName,
@@ -49,7 +50,6 @@ export async function POST(request: Request) {
                 CashWorks,
                 RegistrationNumber,
                 RequiredWorkDetails,
-                OtherAdditionalWork,
                 Fuel,
                 Mileage,
                 Lighter,
@@ -69,6 +69,7 @@ export async function POST(request: Request) {
                 Out, // Assuming Out is a string
             }
         })
+        console.log(jobcard);
         return NextResponse.json(jobcard);
     } catch (error: any) {
         console.log(error, "Error in registration");
