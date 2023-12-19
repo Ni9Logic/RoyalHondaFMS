@@ -1,17 +1,16 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// This is your Prisma schema file
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model webUser {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  id             Int      @id @default(autoincrement())
   fullname       String?
   email          String?  @unique
   hashedPassword String?
@@ -21,7 +20,7 @@ model webUser {
 }
 
 model priceSheet {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int     @id @default(autoincrement())
   partNo    String?
   partName  String?
   partModel String?
@@ -29,32 +28,36 @@ model priceSheet {
 }
 
 model JobCard {
-  SerialNo            String   @id @default(auto()) @map("_id") @db.ObjectId
-  CustomerName        String?
-  DriverUser          String?
-  CellNo              String?
-  JobCheckedBy        String?
-  WorkType            String?
-  Insurance           String?
-  WorkOrder           String?
-  CashWorks           String?
-  RegistrationNumber  String?
-  RequiredWorkDetails Json?
-  Fuel                String?
-  Mileage             String?
-  Lighter             Boolean?
-  Ashtray             Boolean?
-  FloorMats           Boolean?
-  OriginalBook        Boolean?
-  SeatCovers          Boolean?
-  RadioAntena         Boolean?
-  SpareWheel          Boolean?
-  WheelRod            Boolean?
-  JackHandle          Boolean?
-  Tools               Boolean?
-  ExtraThings         Boolean?
-  FrameNo             String?
-  BatteryNumber       String?
-  In                  Json?
-  Out                 Json?
+  SerialNo           Int      @id @default(autoincrement())
+  CustomerName       String?
+  DriverUser         String?
+  CellNo             String?
+  JobCheckedBy       String?
+  WorkType           String?
+  Insurance          String?
+  WorkOrder          String?
+  CashWorks          String?
+  RegistrationNumber String?
+  Fuel               String?
+  Mileage            String?
+  Lighter            Boolean?
+  Ashtray            Boolean?
+  FloorMats          Boolean?
+  OriginalBook       Boolean?
+  SeatCovers         Boolean?
+  RadioAntena        Boolean?
+  SpareWheel         Boolean?
+  WheelRod           Boolean?
+  JackHandle         Boolean?
+  Tools              Boolean?
+  ExtraThings        Boolean?
+  FrameNo            String?
+  BatteryNumber      String?
+  In                 Json?
+  Out                Json?
+}
+
+model EstimatedCostWork {
+  id                  Int   @id @default(autoincrement())
+  requiredWorkDetails String?
 }

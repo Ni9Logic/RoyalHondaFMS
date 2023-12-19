@@ -138,7 +138,7 @@ export default function Page() {
         <>
             <Navbar />
             <div className="flex items-center justify-center ">
-                <h1 className="font-bold text-3xl self-center items-center text-center justify-center">
+                <h1 className="font-bold text-3xl self-center items-center text-center justify-center mb-10 container">
                     Job Card Creation
                 </h1>
             </div>
@@ -484,7 +484,7 @@ export default function Page() {
                                     </tbody>
 
                                 </table>
-                                <div className="flex flex-col gap-2 w-[200px]">
+                                <div className="flex flex-row gap-2 w-[400px]">
                                     <button
                                         type="button"
                                         onClick={() => handleAddRow()}
@@ -506,17 +506,6 @@ export default function Page() {
                                         <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
                                         <span className="absolute inset-0 w-full h-full border-2 border-black bg-green-300"></span>
                                         <span className="relative z-10 text-black">Generate Estimate</span>
-                                    </button>
-                                    <button
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            print()
-                                        }}
-                                        className="print:hidden relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
-                                    >
-                                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                                        <span className="absolute inset-0 w-full h-full border-2 border-black bg-green-300"></span>
-                                        <span className="relative z-10 text-black">Print Form</span>
                                     </button>
                                 </div>
                                 <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">

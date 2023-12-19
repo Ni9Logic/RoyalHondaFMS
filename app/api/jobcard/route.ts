@@ -44,6 +44,8 @@ export async function POST(request: Request) {
         if (!isValid) {
             return NextResponse.json({ error: 'Invalid price value in Work Details' }, { status: 400 });
         }
+
+        // Create JobCard
         const jobcard = await prisma.jobCard.create({
             data: {
                 CustomerName,
@@ -55,7 +57,6 @@ export async function POST(request: Request) {
                 WorkOrder,
                 CashWorks,
                 RegistrationNumber,
-                RequiredWorkDetails,
                 Fuel,
                 Mileage,
                 Lighter,
@@ -73,10 +74,17 @@ export async function POST(request: Request) {
                 BatteryNumber,
                 In, // Assuming In is a string
                 Out, // Assuming Out is a string
-            }
-        })
-        console.log(jobcard);
-        return NextResponse.json(jobcard);
+            },
+        });
+
+        // Create EstimatedCostWork record
+        const estimatedWorkResult = await prisma.estimatedCostWork.create({
+            data: {
+                requiredWorkDetails: JSON.stringify(RequiredWorkDetails),
+            },
+        });
+
+        return NextResponse.json({ jobcard, estimatedWorkResult });
     } catch (error: any) {
         console.log(error, "Error in registration");
         return new NextResponse('Internal Error', { status: 500 });
