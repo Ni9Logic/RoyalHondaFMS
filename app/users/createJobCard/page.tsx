@@ -6,9 +6,15 @@ import { FieldValues, SubmitHandler, useForm, useFieldArray, FieldArrayWithId } 
 import { toast } from 'react-hot-toast';
 import axios from "axios";
 import EstimateRow from "@/app/components/estimates/Row";
+import Datetime from 'react-datetime';
+import 'react-datetime/css/react-datetime.css';
+import { Middleware } from "next/dist/lib/load-custom-routes";
 
 
 export default function Page() {
+    // Date Time Selection
+    const [inDate, setInDate] = useState<undefined | string | Date | moment.Moment>(undefined);
+    const [outDate, setOutDate] = useState<undefined | string | Date | moment.Moment>(undefined);
 
     interface EstimateRowType {
         work: string;
@@ -45,8 +51,8 @@ export default function Page() {
         ExtraThings: boolean,
         FrameNo: string,
         BatteryNumber: string,
-        In: { VRecievedBy: string, VReceivedFrom: string, Time: string },
-        Out: { VRecievedBy: string, VReceivedFrom: string, Time: string },
+        In: { VRecievedBy: string, VReceivedFrom: string, Time: string | null },
+        Out: { VRecievedBy: string, VReceivedFrom: string, Time: string | null },
     };
 
     const handleAddRow = () => {
@@ -147,7 +153,7 @@ export default function Page() {
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-2">
                         <div className="grid grid-cols-2 gap-2">
                             <div className="flex-1 m-0 p-0">
-                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
+                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" className="px-6 py-3 text-center">
@@ -203,7 +209,7 @@ export default function Page() {
                                 </table>
                             </div>
                             <div className="flex-1 m-0 p-0">
-                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
+                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" className="px-6 py-3 text-center">
@@ -228,7 +234,25 @@ export default function Page() {
                                                 Insurance
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder="Insurance" {...register('Insurance')} className="border-none focus:outline-none"></input>
+                                                <select placeholder="Insurance" {...register('Insurance')} className="border-none focus:outline-none">
+                                                    <option value="" disabled selected>Select an insurance company</option>
+                                                    <option value="HABIB BANK LIMITED">HABIB BANK LIMITED</option>
+                                                    <option value="TPL Insurance Coampnay">TPL INSURANCE COMPANY</option>
+                                                    <option value="IGI GENERAL INSURNACE LIMITED">IGI GENERAL INSURNACE LIMITED </option>
+                                                    <option value="SALAAM TAKAFUL INS PAKISTAN LTD">SALAAM TAKAFUL INS PAKISTAN LTD</option>
+                                                    <option value="ALFALAH GENERAL INSURNACE COMPANY LTD">ALFALAH GENERAL INSURNACE COMPANY LTD</option>
+                                                    <option value="JUBILEE INSURNACE COMPANY">JUBILEE INSURNACE COMPANY</option>
+                                                    <option value="ATLAS INSURNACE COMPANY LTD">ATLAS INSURNACE COMPANY LTD</option>
+                                                    <option value="ADAMJEE INSURNACE CORP BR KHI">ADAMJEE INSURNACE CORP BR KHI</option>
+                                                    <option value="ASKARI GENERAL INSURNACE COMPANY LTD">ASKARI GENERAL INSURNACE COMPANY LTD</option>
+                                                    <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY LTD</option>
+                                                    <option value="UBL INSURNACE COMPANY">UBL INSURNACE COMPANY</option>
+                                                    <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY LTD</option>
+                                                    <option value="PAK QATAR">PAK QATAR</option>
+                                                    <option value="UNITED INS">UNITED INS</option>
+                                                    <option value="NONE">NONE</option>
+
+                                                </select>
                                             </td>
                                         </tr>
                                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -252,7 +276,7 @@ export default function Page() {
                             </div>
                             {/* Tools CheckList */}
                             <div className="flex-1 m-0 p-0">
-                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
+                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" className="px-6 py-3 text-center">
@@ -429,7 +453,7 @@ export default function Page() {
                             {/* Additional Work Details */}
 
                             <div>
-                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[300px]">
+                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" className="px-6 py-3 text-center">
@@ -508,6 +532,8 @@ export default function Page() {
                                         <span className="relative z-10 text-black">Generate Estimate</span>
                                     </button>
                                 </div>
+
+                                {/* In Out Time Table */}
                                 <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
@@ -535,7 +561,16 @@ export default function Page() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                Testing
+                                                <div className="flex flex-row text-center justify-center gap-2">
+
+                                                    <Datetime
+                                                        initialValue={'Click to set Time'}
+                                                        value={inDate}
+                                                        onChange={(date) => setInDate(date)}
+                                                        dateFormat="MM/D/YY"
+                                                        timeFormat="hh:mm A"
+                                                    />
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -549,14 +584,22 @@ export default function Page() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                Testing
+
+                                                <Datetime
+                                                    initialValue={'Click to set Time'}
+                                                    className="border-none outline-none focus:border-none focus:outline-none"
+                                                    value={outDate}
+                                                    onChange={(date) => setOutDate(date)}
+                                                    dateFormat="MM/D/YY"
+                                                    timeFormat="hh:mm A"
+                                                />
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                                 {
                                     storedRequiredWorkDetails.length > 0 && isEstimate && (
-                                        <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 h-[100px] mt-10">
+                                        <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
                                             <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                                 <tr>
                                                     <th className="px-6 py-3 text-center">Estimated Work</th>
@@ -564,16 +607,22 @@ export default function Page() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {<EstimateRow list={storedRequiredWorkDetails} />}
+                                                {
+                                                    <EstimateRow list={storedRequiredWorkDetails} />
+                                                }
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                                     <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Estimated Cost</th>
                                                     <td className="px-6 py-4">
                                                         {
+
                                                             storedRequiredWorkDetails.reduce((total, item) => {
                                                                 // Assuming item.price is a string, convert it to a number before summing
                                                                 const priceAsNumber = parseFloat(item.price);
                                                                 return total + (isNaN(priceAsNumber) ? 0 : priceAsNumber);
-                                                            }, 0)}
+                                                            }, 0).toLocaleString()
+                                                            +
+                                                            ' Rs'
+                                                        }
                                                     </td>
                                                 </tr>
                                             </tbody>

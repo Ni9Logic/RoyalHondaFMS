@@ -24,7 +24,7 @@ const Row = ({ list }: EstimateRowProps) => {
                             {item.work}
                         </th>
                         <td className="px-6 py-4">
-                            {item.price}
+                            {parseFloat(item.price).toLocaleString()} Rs
                         </td>
                     </tr>
                 ))
