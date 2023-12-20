@@ -59,7 +59,5 @@ model JobCard {
 
 model EstimatedCostWork {
   id                  Int     @id @default(autoincrement())
-  customerName        String?
-  cellNo              String?
   requiredWorkDetails String?
 }
