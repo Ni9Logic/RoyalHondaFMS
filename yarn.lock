@@ -2957,7 +2957,7 @@ mock-aws-s3@^4.0.2:
     fs-extra "^7.0.1"
     underscore "1.12.1"
 
-moment@^2.16.0:
+moment@^2.16.0, moment@^2.29.4:
   version "2.29.4"
   resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
   integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==

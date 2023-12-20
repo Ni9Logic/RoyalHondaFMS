@@ -71,6 +71,9 @@ dependencies:
   mock-aws-s3:
     specifier: ^4.0.2
     version: 4.0.2
+  moment:
+    specifier: ^2.29.4
+    version: 2.29.4
   mongodb:
     specifier: ^5.7.0
     version: 5.9.2

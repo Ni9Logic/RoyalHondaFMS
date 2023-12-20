@@ -31,6 +31,7 @@
     "ignore-loader": "^0.1.2",
     "lucide-react": "^0.261.0",
     "mock-aws-s3": "^4.0.2",
+    "moment": "^2.29.4",
     "mongodb": "^5.7.0",
     "mongoose": "^7.3.3",
     "next": "^13.5.6",
