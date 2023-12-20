@@ -582,6 +582,7 @@ export default function Page() {
                                                     <input placeholder="Vehicle Received From" {...register('Out.VReceivedFrom')} className="border-none focus:outline-none"></input>
                                                 </div>
                                             </td>
+                                            {/* ,, */}
                                             <td className="px-6 py-4">
                                                 <Datetime
                                                     initialValue={'Click to set Time'}
