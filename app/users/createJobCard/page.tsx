@@ -21,9 +21,6 @@ export default function Page() {
         price: string;
     }
     const [rows, setRows] = useState<EstimateRowType[]>([]);
-    useEffect(() => {
-        console.log(rows);
-    }, [rows]);
     type FormData = {
         CustomerName: string,
         DriverUser: string,

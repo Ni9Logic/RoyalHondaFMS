@@ -82,6 +82,8 @@ export async function POST(request: Request) {
         // Create EstimatedCostWork record
         const estimatedWorkResult = await prisma.estimatedCostWork.create({
             data: {
+                cName: CustomerName,
+                cContact: CellNo,
                 requiredWorkDetails: JSON.stringify(RequiredWorkDetails),
             },
         });
