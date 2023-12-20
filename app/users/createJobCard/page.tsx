@@ -13,8 +13,8 @@ import { Middleware } from "next/dist/lib/load-custom-routes";
 
 export default function Page() {
     // Date Time Selection
-    const [inDate, setInDate] = useState<undefined | string | Date>(undefined);
-    const [outDate, setOutDate] = useState<undefined | string | Date>(undefined);
+    const [inDate, setInDate] = useState<any>(undefined);
+    const [outDate, setOutDate] = useState<any>(undefined);
 
     interface EstimateRowType {
         work: string;
@@ -562,14 +562,13 @@ export default function Page() {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex flex-row text-center justify-center gap-2">
-
-                                                    {/* <Datetime
+                                                    <Datetime
                                                         initialValue={'Click to set Time'}
                                                         value={inDate}
                                                         onChange={(date) => setInDate(date)}
                                                         dateFormat="MM/D/YY"
                                                         timeFormat="hh:mm A"
-                                                    /> */}
+                                                    />
                                                 </div>
                                             </td>
                                         </tr>
@@ -584,15 +583,14 @@ export default function Page() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-
-                                                {/* <Datetime
+                                                <Datetime
                                                     initialValue={'Click to set Time'}
                                                     className="border-none outline-none focus:border-none focus:outline-none"
                                                     value={outDate}
                                                     onChange={(date) => setOutDate(date)}
                                                     dateFormat="MM/D/YY"
                                                     timeFormat="hh:mm A"
-                                                /> */}
+                                                />
                                             </td>
                                         </tr>
                                     </tbody>
