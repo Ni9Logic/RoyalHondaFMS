@@ -1,4 +1,17 @@
 {
     "terminal.integrated.fontFamily": "JetBrains Mono",
-    "editor.fontFamily": "JetBrains Mono"
+    "editor.fontFamily": "JetBrains Mono",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "MySQL",
+            "connectString": "mysql://doadmin:AVNS_RnmMQ7bot8z4fvCcaIX@royalhondasql1-do-user-14076907-0.c.db.ondigitalocean.com:25060/defaultdb?ssl-mode=REQUIRED",
+            "name": "royalhondasqll"
+        }
+    ]
 }

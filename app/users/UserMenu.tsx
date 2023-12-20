@@ -1,10 +1,9 @@
-'use client'
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
 export default async function UserMenu() {
     const router = useRouter();
-    return (
+return (
         <section className="flex flex-col text-gray-600 body-font h-[75vh] justify-center items-center">
             <div className="h-[60vh] w-[70vh] grid grid-cols-2 items-center flex-col gap-5">
                 <div className="gap-2 flex flex-col pt-5">

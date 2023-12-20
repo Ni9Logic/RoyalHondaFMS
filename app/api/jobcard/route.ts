@@ -38,8 +38,10 @@ export async function POST(request: Request) {
         const isValid = RequiredWorkDetails.every((item: { work: string; price: string }) => {
             // Check if price can be converted to a valid number
             const priceAsNumber = parseFloat(item.price);
-            return !isNaN(priceAsNumber) && priceAsNumber >= 0; // Adjust the condition as needed
+            return !isNaN(priceAsNumber) && priceAsNumber >= 0;
         });
+
+
 
         if (!isValid) {
             return NextResponse.json({ error: 'Invalid price value in Work Details' }, { status: 400 });
