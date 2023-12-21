@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prismadb";
 
-export default async function POST(request: Request) {
+export async function POST(request: Request) {
     try {
         const body = await request.json();
         const { customerName, cellNo, requiredWorkDetails } = body;
