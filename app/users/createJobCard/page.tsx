@@ -562,7 +562,11 @@ export default function Page() {
                                                     <Datetime
                                                         initialValue={'Click to set Time'}
                                                         value={inDate}
-                                                        onChange={(date) => setInDate(date)}
+                                                        onChange={(date) => {
+                                                            setInDate(date);
+                                                            setValue('In.Time', inDate);
+                                                        }
+                                                        }
                                                         dateFormat="MM/D/YY"
                                                         timeFormat="hh:mm A"
                                                     />
@@ -584,7 +588,11 @@ export default function Page() {
                                                     initialValue={'Click to set Time'}
                                                     className="border-none outline-none focus:border-none focus:outline-none"
                                                     value={outDate}
-                                                    onChange={(date) => setOutDate(date)}
+                                                    onChange={(date) => {
+                                                        setInDate(date);
+                                                        setValue('Out.Time', outDate);
+                                                    }
+                                                    }
                                                     dateFormat="MM/D/YY"
                                                     timeFormat="hh:mm A"
                                                 />

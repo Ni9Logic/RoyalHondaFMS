@@ -148,7 +148,7 @@ export default function Page() {
         <>
             <Navbar />
             <div className="container h-[80vh] flex flex-col text-black justify-center gap-2">
-                <div className="flex flex-row items-center justify-center self-center gap-2">
+                <div className={`flex ${isCreateEstimate ? 'flex-col' : 'flex-row'} items-center justify-center self-center gap-2`}>
                     {/* When the user clicks on this button it will hide Create Estimate portion and show Find Estimate portion as well as hide show estimate portion */}
                     {
                         !isCreateEstimate &&

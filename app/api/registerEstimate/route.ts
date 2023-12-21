@@ -4,14 +4,16 @@ import prisma from "@/app/lib/prismadb";
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { customerName, cellNo, requiredWorkDetails } = body;
+        const { customerName, customerContact, requiredWorkDetails } = body;
 
-        if (!customerName || !cellNo || !requiredWorkDetails)
+        if (!customerName || !customerContact || !requiredWorkDetails)
             return NextResponse.json({ error: 'Missing Details' }, { status: 400 })
 
         // Create EstimatedCostWork record
         const estimatedWorkResult = await prisma.estimatedCostWork.create({
             data: {
+                cName: customerName,
+                cContact: customerContact,
                 requiredWorkDetails: JSON.stringify(requiredWorkDetails),
             },
         });
