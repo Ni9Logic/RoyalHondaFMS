@@ -257,7 +257,7 @@ export default function Page() {
                                                 Registration
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder="Job Checked By" {...register('RegistrationNumber')} className="border-none focus:outline-none"></input>
+                                                <input placeholder="Registration" {...register('RegistrationNumber')} className="border-none focus:outline-none"></input>
                                             </td>
                                         </tr>
                                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -266,6 +266,14 @@ export default function Page() {
                                             </th>
                                             <td className="px-6 py-4">
                                                 <input placeholder="Battery #" {...register('BatteryNumber')} className="border-none focus:outline-none"></input>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Frame Number
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input placeholder="Frame #" {...register('FrameNo')} className="border-none focus:outline-none"></input>
                                             </td>
                                         </tr>
                                     </tbody>

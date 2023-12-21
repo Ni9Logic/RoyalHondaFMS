@@ -27,8 +27,6 @@ model JobCard {
   JobCheckedBy       String?
   WorkType           String?
   Insurance          String?
-  WorkOrder          String?
-  CashWorks          String?
   RegistrationNumber String?
   Fuel               String?
   Mileage            String?
