@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
-export default async function UserMenu() {
+export default function UserMenu() {
     const router = useRouter();
 return (
         <section className="flex flex-col text-gray-600 body-font h-[75vh] justify-center items-center">
@@ -33,7 +33,7 @@ return (
                     </button>
                 </div>
                 <div className="gap-2 flex flex-col pt-5">
-                    <button className="relative inline-block px-4 py-2 font-medium group">
+                    <button onClick={() => router.push('users/createInvoice')} className="relative inline-block px-4 py-2 font-medium group">
                         <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
                         <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
                         <span className="relative z-10 text-black group-hover:text-white">Create Invoice</span>

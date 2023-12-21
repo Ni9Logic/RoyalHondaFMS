@@ -61,3 +61,15 @@ model PriceSheet {
   partModel       String?
   partPrice       String?
 }
+
+model Invoice {
+  id               Int     @id @default(autoincrement())
+  customerName     String?
+  customerContact  String?
+  NTN              String?
+  carColor         String?
+  carRegistration  String?
+  Mileage          String?
+  dateTime         String?
+  descriptionPrice Json?
+}
