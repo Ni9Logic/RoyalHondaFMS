@@ -19,14 +19,6 @@ model webUser {
   createdAt      DateTime @default(now())
 }
 
-model priceSheet {
-  id        Int     @id @default(autoincrement())
-  partNo    String?
-  partName  String?
-  partModel String?
-  partPrice String?
-}
-
 model JobCard {
   SerialNo           Int      @id @default(autoincrement())
   CustomerName       String?
@@ -59,7 +51,15 @@ model JobCard {
 
 model EstimatedCostWork {
   id                  Int     @id @default(autoincrement())
-  cName String?
-  cContact String?
+  cName               String?
+  cContact            String?
   requiredWorkDetails String?
+}
+
+model PriceSheet {
+  id              Int     @id @default(autoincrement())
+  partNo          String?
+  partDescription String?
+  partModel       String?
+  partPrice       String?
 }
