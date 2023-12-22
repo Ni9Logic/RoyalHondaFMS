@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
+import { useForm } from "react-hook-form";
 
 export default function Page() {
     // Invoice Creation Interface
@@ -9,6 +10,7 @@ export default function Page() {
         customerName: string;
         customerContact: string;
         NTN: string;
+        carName: string;
         carColor: string;
         carRegistration: string;
         Mileage: string;
@@ -21,6 +23,24 @@ export default function Page() {
         work: string;
         price: string;
     }
+
+    const {
+        register,
+        setValue,
+        handleSubmit,
+    } = useForm<invoiceCreateForm>({
+        defaultValues: {
+            customerName: '',
+            customerContact: '',
+            carName: '',
+            carColor: '',
+            carRegistration: '',
+            dateTime: '',
+            Mileage: '',
+            NTN: '',
+            descriptionPrice: [{ work: '', price: '' }]
+        }
+    })
 
     // Will be used later to store values inside this
     const [rows, setRows] = useState<descriptionPriceRowType[]>([]);
@@ -54,7 +74,7 @@ export default function Page() {
                                     Customer Name
                                 </th>
                                 <td className="px-6 py-3 text-center">
-                                    <input className="border-none outline-none text-center" placeholder="Customer Name" />
+                                    <input {...register('customerName')} className="border-none outline-none text-center" placeholder="Customer Name" />
                                 </td>
                             </tr>
                             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -62,7 +82,7 @@ export default function Page() {
                                     Customer Contact
                                 </th>
                                 <td className="px-6 py-6 text-center">
-                                    <input className="border-none outline-none text-center" placeholder="Customer Contact" />
+                                    <input {...register('customerContact')} className="border-none outline-none text-center" placeholder="Customer Contact" />
                                 </td>
                             </tr>
                             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -70,7 +90,7 @@ export default function Page() {
                                     Registration Number
                                 </th>
                                 <td className="px-6 py-6 text-center">
-                                    <input className="border-none outline-none text-center" placeholder="Registration Number" />
+                                    <input {...register('carRegistration')} className="border-none outline-none text-center" placeholder="Registration Number" />
                                 </td>
                             </tr>
                             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -78,7 +98,7 @@ export default function Page() {
                                     Mileage
                                 </th>
                                 <td className="px-6 py-6 text-center">
-                                    <input className="border-none outline-none text-center" placeholder="Mileage" />
+                                    <input {...register('Mileage')} className="border-none outline-none text-center" placeholder="Mileage" />
                                 </td>
                             </tr>
                             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -86,7 +106,7 @@ export default function Page() {
                                     Car Name
                                 </th>
                                 <td className="px-6 py-6 text-center">
-                                    <input className="border-none outline-none text-center" placeholder="Car Name" />
+                                    <input {...register('carName')} className="border-none outline-none text-center" placeholder="Car Name" />
                                 </td>
                             </tr>
                             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -94,7 +114,15 @@ export default function Page() {
                                     Car Color
                                 </th>
                                 <td className="px-6 py-6 text-center">
-                                    <input className="border-none outline-none text-center" placeholder="Car Color" />
+                                    <input {...register('carColor')} className="border-none outline-none text-center" placeholder="Car Color" />
+                                </td>
+                            </tr>
+                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    NTN
+                                </th>
+                                <td className="px-6 py-6 text-center">
+                                    <input {...register('NTN')} className="border-none outline-none text-center" placeholder="Car Color" />
                                 </td>
                             </tr>
                         </tbody>
