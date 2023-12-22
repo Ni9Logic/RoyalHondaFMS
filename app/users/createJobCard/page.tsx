@@ -9,12 +9,42 @@ import EstimateRow from "@/app/components/estimates/Row";
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import { Middleware } from "next/dist/lib/load-custom-routes";
+import PrintJobs from "@/app/components/printable/jobprintable";
 
 
 export default function Page() {
     // Date Time Selection
     const [inDate, setInDate] = useState<any>(undefined);
     const [outDate, setOutDate] = useState<any>(undefined);
+    const [isPreview, setIsPreview] = useState(false);
+
+    // To transfer all the fields inside jobprintable
+    const [CustomerName, setCustomerName] = useState<string>('');
+    const [DriverUser, setDriverUser] = useState<string>('');
+    const [CellNo, setCellNo] = useState<string>('');
+    const [JobCheckedBy, setJobCheckedBy] = useState<string>('');
+    const [WorkType, setWorkType] = useState<string>('');
+    const [Insurance, setInsurance] = useState<string>('');
+    const [WorkOrder, setWorkOrder] = useState<string>('');
+    const [CashWorks, setCashWorks] = useState<string>('');
+    const [RegistrationNumber, setRegistrationNumber] = useState<string>('');
+    const [OtherAdditionalWork, setOtherAdditionalWork] = useState<string>('');
+    const [Fuel, setFuel] = useState<string>('');
+    const [Mileage, setMileage] = useState<string>('');
+    const [Lighter, setLighter] = useState<boolean>(false);
+    const [Ashtray, setAshtray] = useState<boolean>(false);
+    const [FloorMats, setFloorMats] = useState<boolean>(false);
+    const [OriginalBook, setOriginalBook] = useState<boolean>(false);
+    const [SeatCovers, setSeatCovers] = useState<boolean>(false);
+    const [RadioAntena, setRadioAntena] = useState<boolean>(false);
+    const [SpareWheel, setSpareWheel] = useState<boolean>(false);
+    const [WheelRod, setWheelRod] = useState<boolean>(false);
+    const [JackHandle, setJackHandle] = useState<boolean>(false);
+    const [Tools, setTools] = useState<boolean>(false);
+    const [ExtraThings, setExtraThings] = useState<boolean>(false);
+    const [FrameNo, setFrameNo] = useState<string>('');
+    const [BatteryNumber, setBatteryNumber] = useState<string>('');
+    
 
     interface EstimateRowType {
         work: string;
@@ -31,7 +61,6 @@ export default function Page() {
         WorkOrder: string,
         CashWorks: string,
         RegistrationNumber: string,
-        RequiredWorkDetails: { work: string, price: string }[],
         OtherAdditionalWork: string,
         Fuel: string,
         Mileage: string,
@@ -51,17 +80,6 @@ export default function Page() {
         In: { VRecievedBy: string, VReceivedFrom: string, Time: string | null },
         Out: { VRecievedBy: string, VReceivedFrom: string, Time: string | null },
     };
-
-    const handleAddRow = () => {
-        setRows(rows => [...rows, { work: storedRequiredWorkDetails[0].work, price: storedRequiredWorkDetails[0].price }]);
-    };
-    const handleRemoveRow = (indexToRemove: any) => {
-        const updatedRows = rows.filter((_, index) => index !== indexToRemove);
-        setRows(updatedRows);
-    }
-    const handleEstimate = () => {
-        setValue('RequiredWorkDetails', rows);
-    }
 
     const [isLoading, setLoading] = useState(false);
     const [isEstimate, setisEstimate] = useState(false);
@@ -88,7 +106,6 @@ export default function Page() {
             WorkOrder: '',
             CashWorks: '',
             RegistrationNumber: '',
-            RequiredWorkDetails: [{ work: '', price: '' }],
             OtherAdditionalWork: '',
             Fuel: '',
             Mileage: '',
@@ -110,18 +127,6 @@ export default function Page() {
         },
     });
 
-    const { fields } = useFieldArray({
-        control,
-        name: 'RequiredWorkDetails',
-    });
-
-
-    // On each change uses useEffect
-    const [storedRequiredWorkDetails, setStoredRequiredWorkDetails] = useState<FieldArrayWithId<FormData, 'RequiredWorkDetails', 'id'>[]>([]);
-    useEffect(() => {
-        setStoredRequiredWorkDetails([...fields]);
-    }, [fields])
-
 
     const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
         // Setting Loading state of button
@@ -137,527 +142,517 @@ export default function Page() {
             .finally(() => setLoading(false));
     }
 
+
+
     return (
         <>
-            <Navbar />
-            <div className="flex items-center justify-center ">
-                <h1 className="font-bold text-3xl self-center items-center text-center justify-center mb-10 container">
-                    Job Card Creation
-                </h1>
-            </div>
-            <div className="items-center justify-center text-center gap-10 container">
-                <div className="overflow-x-auto flex items-center justfiy-center">
-                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-2">
-                        <div className="grid grid-cols-2 gap-2">
-                            <div className="flex-1 m-0 p-0">
-                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" className="px-6 py-3 text-center">
-                                                Job
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Card
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Customer Name
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input placeholder="Customer Name" {...register('CustomerName')} className="border-none focus:outline-none"></input>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Driver | User
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input placeholder="Driver | User" {...register('DriverUser')} className="border-none focus:outline-none"></input>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Contact Number
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input placeholder="Contact Number" {...register('CellNo')} className="border-none focus:outline-none"></input>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Job Checked By
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input placeholder="Job Checked By" {...register('JobCheckedBy')} className="border-none focus:outline-none"></input>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Email Us
-                                            </th>
-                                            <td className="px-6 py-4 font-bold">
-                                                services.royalhonda@gmail.com
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="flex-1 m-0 p-0">
-                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" className="px-6 py-3 text-center">
-                                                Work
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Details
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Work Type
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input placeholder="Work Type" {...register('WorkType')} className="border-none focus:outline-none"></input>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Insurance
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <select placeholder="Insurance" {...register('Insurance')} className="border-none focus:outline-none">
-                                                    <option value="" disabled selected>Select an insurance company</option>
-                                                    <option value="HABIB BANK LIMITED">HABIB BANK LIMITED</option>
-                                                    <option value="TPL Insurance Coampnay">TPL INSURANCE COMPANY</option>
-                                                    <option value="IGI GENERAL INSURNACE LIMITED">IGI GENERAL INSURNACE LIMITED </option>
-                                                    <option value="SALAAM TAKAFUL INS PAKISTAN LTD">SALAAM TAKAFUL INS PAKISTAN LTD</option>
-                                                    <option value="ALFALAH GENERAL INSURNACE COMPANY LTD">ALFALAH GENERAL INSURNACE COMPANY LTD</option>
-                                                    <option value="JUBILEE INSURNACE COMPANY">JUBILEE INSURNACE COMPANY</option>
-                                                    <option value="ATLAS INSURNACE COMPANY LTD">ATLAS INSURNACE COMPANY LTD</option>
-                                                    <option value="ADAMJEE INSURNACE CORP BR KHI">ADAMJEE INSURNACE CORP BR KHI</option>
-                                                    <option value="ASKARI GENERAL INSURNACE COMPANY LTD">ASKARI GENERAL INSURNACE COMPANY LTD</option>
-                                                    <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY LTD</option>
-                                                    <option value="UBL INSURNACE COMPANY">UBL INSURNACE COMPANY</option>
-                                                    <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY LTD</option>
-                                                    <option value="PAK QATAR">PAK QATAR</option>
-                                                    <option value="UNITED INS">UNITED INS</option>
-                                                    <option value="NONE">NONE</option>
 
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Registration
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input placeholder="Registration" {...register('RegistrationNumber')} className="border-none focus:outline-none"></input>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Battery Number
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input placeholder="Battery #" {...register('BatteryNumber')} className="border-none focus:outline-none"></input>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Frame Number
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input placeholder="Frame #" {...register('FrameNo')} className="border-none focus:outline-none"></input>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            {/* Tools CheckList */}
-                            <div className="flex-1 m-0 p-0">
-                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" className="px-6 py-3 text-center">
-                                                Tools
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                | Checklist
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Fuel
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input placeholder="Fuel" {...register('Fuel')} className="border-none focus:outline-none"></input>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Mileage
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input placeholder="Mileage" {...register('Mileage')} className="border-none focus:outline-none"></input>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Lighter
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input onChange={
-                                                    (e) => {
-                                                        setValue('Lighter', e.target.checked);
-                                                    }
-                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Ashtray
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input onChange={
-                                                    (e) => {
-                                                        setValue('Ashtray', e.target.checked);
-                                                    }
-                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Floor Mats
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input onChange={
-                                                    (e) => {
-                                                        setValue('FloorMats', e.target.checked);
-                                                    }
-                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Orignal Book
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input onChange={
-                                                    (e) => {
-                                                        setValue('OriginalBook', e.target.checked);
-                                                    }
-                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Seat Covers
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input onChange={
-                                                    (e) => {
-                                                        setValue('SeatCovers', e.target.checked);
-                                                    }
-                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Radio Antena
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input onChange={
-                                                    (e) => {
-                                                        setValue('RadioAntena', e.target.checked);
-                                                    }
-                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Spare Wheel
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input onChange={
-                                                    (e) => {
-                                                        setValue('SpareWheel', e.target.checked);
-                                                    }
-                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Wheel Rod
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input onChange={
-                                                    (e) => {
-                                                        setValue('WheelRod', e.target.checked);
-                                                    }
-                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Jack | Handle
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input onChange={
-                                                    (e) => {
-                                                        setValue('JackHandle', e.target.checked);
-                                                    }
-                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Tools
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input onChange={
-                                                    (e) => {
-                                                        setValue('Tools', e.target.checked);
-                                                    }
-                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Extra Things
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <input onChange={
-                                                    (e) => {
-                                                        setValue('ExtraThings', e.target.checked);
-                                                    }
-                                                } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            {/* Additional Work Details */}
-
-                            <div>
-                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" className="px-6 py-3 text-center">
-                                                Work
-                                            </th>
-                                            <th scope="col" className="px-6 py-3 text-center">
-                                                Price
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        {rows.map((item, index) => (
-                                            <tr key={`rows-${index}`} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    <input
-                                                        onChange={(e) => {
-                                                            const value = e.target.value;
-                                                            const copy = [...rows];
-                                                            copy[index].work = value;
-                                                            setRows(copy);
-                                                        }}
-                                                        placeholder="Work"
-                                                        className="border-none outline-none"
-                                                    />
-                                                </th>
-                                                <td className="px-6 py-4">
-                                                    <input
-                                                        onChange={(e) => {
-                                                            const value = e.target.value;
-                                                            const copy = [...rows];
-                                                            copy[index].price = value;
-                                                            setRows(copy);
-                                                        }}
-                                                        placeholder="Price"
-                                                        className="border-none outline-none"
-                                                    />
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => handleRemoveRow(index)}
-                                                        className="relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden print:hidden"
-                                                    >
-                                                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                                                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-red-500"></span>
-                                                        <span className="relative z-10 text-black group-hover:text-white">Delete</span>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-
-                                </table>
-                                <div className="flex flex-row gap-2 w-[400px]">
-                                    <button
-                                        type="button"
-                                        onClick={() => handleAddRow()}
-                                        className="print:hidden relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
-                                    >
-                                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
-                                        <span className="relative z-10 text-black group-hover:text-white">Add New Record</span>
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            handleEstimate()
-                                            handleIsEstimate()
-                                        }}
-                                        className="print:hidden relative mt-2 inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden"
-                                    >
-                                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                                        <span className="absolute inset-0 w-full h-full border-2 border-black bg-green-300"></span>
-                                        <span className="relative z-10 text-black">Generate Estimate</span>
-                                    </button>
-                                </div>
-
-                                {/* In Out Time Table */}
-                                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
-                                    <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" className="px-6 py-3 text-center">
-                                                Additional
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Details
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Time
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                In
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <div className="flex flex-col">
-                                                    <input placeholder="Vehicle Received By" {...register('In.VRecievedBy')} className="border-none focus:outline-none border-b"></input>
-                                                    <input placeholder="Vehicle Received From" {...register('In.VReceivedFrom')} className="border-none focus:outline-none"></input>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex flex-row text-center justify-center gap-2">
-                                                    <Datetime
-                                                        initialValue={'Click to set Time'}
-                                                        value={inDate}
-                                                        onChange={(date) => {
-                                                            setInDate(date);
-                                                            setValue('In.Time', inDate);
-                                                        }
-                                                        }
-                                                        dateFormat="MM/D/YY"
-                                                        timeFormat="hh:mm A"
-                                                    />
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Out
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                <div className="flex flex-col">
-                                                    <input placeholder="Vehicle Received By" {...register('Out.VRecievedBy')} className="border-none focus:outline-none border-b"></input>
-                                                    <input placeholder="Vehicle Received From" {...register('Out.VReceivedFrom')} className="border-none focus:outline-none"></input>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <Datetime
-                                                    initialValue={'Click to set Time'}
-                                                    className="border-none outline-none focus:border-none focus:outline-none"
-                                                    value={outDate}
-                                                    onChange={(date) => {
-                                                        setInDate(date);
-                                                        setValue('Out.Time', outDate);
-                                                    }
-                                                    }
-                                                    dateFormat="MM/D/YY"
-                                                    timeFormat="hh:mm A"
-                                                />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                {
-                                    storedRequiredWorkDetails.length > 0 && isEstimate && (
-                                        <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
+            {
+                !isPreview &&
+                <>
+                    <Navbar />
+                    <div className="flex items-center justify-center ">
+                        <h1 className="font-bold text-3xl self-center items-center text-center justify-center mb-10 container">
+                            Job Card Creation
+                        </h1>
+                    </div>
+                    <div className="items-center justify-center text-center gap-10 container">
+                        <div className="overflow-x-auto flex items-center justfiy-center">
+                            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-2">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div className="flex-1 m-0 p-0">
+                                        <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                             <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                                 <tr>
-                                                    <th className="px-6 py-3 text-center">Estimated Work</th>
-                                                    <th className="px-6 py-3 text-center">Price</th>
+                                                    <th scope="col" className="px-6 py-3 text-center">
+                                                        Job
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-3">
+                                                        Card
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {
-                                                    <EstimateRow list={storedRequiredWorkDetails} />
-                                                }
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                    <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Estimated Cost</th>
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Customer Name
+                                                    </th>
                                                     <td className="px-6 py-4">
-                                                        {
-
-                                                            storedRequiredWorkDetails.reduce((total, item) => {
-                                                                // Assuming item.price is a string, convert it to a number before summing
-                                                                const priceAsNumber = parseFloat(item.price);
-                                                                return total + (isNaN(priceAsNumber) ? 0 : priceAsNumber);
-                                                            }, 0).toLocaleString()
-                                                            +
-                                                            ' Rs'
-                                                        }
+                                                        <input placeholder="Customer Name" onChange={(value) => {
+                                                            setValue('CustomerName', value.target.value);
+                                                            setCustomerName(value.target.value);
+                                                        }} className="border-none focus:outline-none" />
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Driver | User
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input placeholder="Driver | User" onChange={(value) => {
+                                                            setValue('DriverUser', value.target.value);
+                                                            setDriverUser(value.target.value);
+                                                        }} className="border-none focus:outline-none"></input>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Contact Number
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input placeholder="Contact Number" onChange={(value) => {
+                                                            setValue('CellNo', value.target.value);
+                                                            setCellNo(value.target.value);
+                                                        }} className="border-none focus:outline-none"></input>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Job Checked By
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input placeholder="Job Checked By" onChange={(value) => {
+                                                            setValue('JobCheckedBy', value.target.value);
+                                                            setJobCheckedBy(value.target.value);
+                                                        }} className="border-none focus:outline-none"></input>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Email Us
+                                                    </th>
+                                                    <td className="px-6 py-4 font-bold">
+                                                        services.royalhonda@gmail.com
                                                     </td>
                                                 </tr>
                                             </tbody>
-
                                         </table>
-                                    )
-                                }
-                            </div>
-                        </div>
+                                    </div>
+                                    <div className="flex-1 m-0 p-0">
+                                        <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" className="px-6 py-3 text-center">
+                                                        Work
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-3">
+                                                        Details
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Work Type
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input placeholder="Work Type" onChange={(value) => {
+                                                            setValue('WorkType', value.target.value);
+                                                            setWorkType(value.target.value);
+                                                        }} className="border-none focus:outline-none"></input>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Insurance
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <select defaultValue={"NONE"} onChange={(value) => {
+                                                            setValue('Insurance', value.target.value);
+                                                            setInsurance(value.target.value);
+                                                        }} className="border-none focus:outline-none">
+                                                            <option value="" disabled selected>Select an insurance company</option>
+                                                            <option value="HABIB BANK LIMITED">HABIB BANK LIMITED</option>
+                                                            <option value="TPL Insurance Coampnay">TPL INSURANCE COMPANY</option>
+                                                            <option value="IGI GENERAL INSURNACE LIMITED">IGI GENERAL INSURNACE LIMITED </option>
+                                                            <option value="SALAAM TAKAFUL INS PAKISTAN LTD">SALAAM TAKAFUL INS PAKISTAN LTD</option>
+                                                            <option value="ALFALAH GENERAL INSURNACE COMPANY LTD">ALFALAH GENERAL INSURNACE COMPANY LTD</option>
+                                                            <option value="JUBILEE INSURNACE COMPANY">JUBILEE INSURNACE COMPANY</option>
+                                                            <option value="ATLAS INSURNACE COMPANY LTD">ATLAS INSURNACE COMPANY LTD</option>
+                                                            <option value="ADAMJEE INSURNACE CORP BR KHI">ADAMJEE INSURNACE CORP BR KHI</option>
+                                                            <option value="ASKARI GENERAL INSURNACE COMPANY LTD">ASKARI GENERAL INSURNACE COMPANY LTD</option>
+                                                            <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY LTD</option>
+                                                            <option value="UBL INSURNACE COMPANY">UBL INSURNACE COMPANY</option>
+                                                            <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY LTD</option>
+                                                            <option value="PAK QATAR">PAK QATAR</option>
+                                                            <option value="UNITED INS">UNITED INS</option>
+                                                            <option value="NONE">NONE</option>
+
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Registration
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input placeholder="Registration" onChange={(value) => {
+                                                            setValue('RegistrationNumber', value.target.value);
+                                                            setRegistrationNumber(value.target.value);
+                                                        }} className="border-none focus:outline-none"></input>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Battery Number
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input placeholder="Battery #" onChange={(value) => {
+                                                            setValue('BatteryNumber', value.target.value);
+                                                            setBatteryNumber(value.target.value);
+                                                        }} className="border-none focus:outline-none"></input>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Frame Number
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input placeholder="Frame #" onChange={(value) => {
+                                                            setValue('FrameNo', value.target.value);
+                                                            setFrameNo(value.target.value);
+                                                        }} className="border-none focus:outline-none"></input>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {/* Tools CheckList */}
+                                    <div className="flex-1 m-0 p-0">
+                                        <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" className="px-6 py-3 text-center">
+                                                        Tools
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-3">
+                                                        | Checklist
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Fuel
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input placeholder="Fuel" onChange={(value) => {
+                                                            setValue('Fuel', value.target.value);
+                                                            setFuel(value.target.value);
+                                                        }} className="border-none focus:outline-none"></input>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Mileage
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input placeholder="Mileage" onChange={(value) => {
+                                                            setValue('Mileage', value.target.value);
+                                                            setMileage(value.target.value);
+                                                        }} className="border-none focus:outline-none"></input>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Lighter
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setValue('Lighter', e.target.checked);
+                                                                setLighter(e.target.checked);
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Ashtray
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setValue('Ashtray', e.target.checked);
+                                                                setAshtray(e.target.checked);
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Floor Mats
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setValue('FloorMats', e.target.checked);
+                                                                setFloorMats(e.target.checked);
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Orignal Book
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setValue('OriginalBook', e.target.checked);
+                                                                setOriginalBook(e.target.checked);
+
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Seat Covers
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setValue('SeatCovers', e.target.checked);
+                                                                setSeatCovers(e.target.checked);
+
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Radio Antena
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setValue('RadioAntena', e.target.checked);
+                                                                setRadioAntena(e.target.checked);
+
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Spare Wheel
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setValue('SpareWheel', e.target.checked);
+                                                                setSpareWheel(e.target.checked);
+
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Wheel Rod
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setValue('WheelRod', e.target.checked);
+                                                                setWheelRod(e.target.checked);
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Jack | Handle
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setValue('JackHandle', e.target.checked);
+                                                                setJackHandle(e.target.checked);
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Tools
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setValue('Tools', e.target.checked);
+                                                                setTools(e.target.checked);
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Extra Things
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setValue('ExtraThings', e.target.checked);
+                                                                setExtraThings(e.target.checked);
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {/* Additional Work Details */}
+
+                                    <div>
+                                        {/* In Out Time Table */}
+                                        <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
+                                            <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" className="px-6 py-3 text-center">
+                                                        Additional
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-3">
+                                                        Details
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-3">
+                                                        Time
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        In
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex flex-col">
+                                                            <input placeholder="Vehicle Received By" onChange={
+                                                                (e) => {
+                                                                    setValue('In.VRecievedBy', e.target.value);
+                                                                }
+                                                            } className="border-none focus:outline-none border-b"></input>
+                                                            <input placeholder="Vehicle Received From" {...register('In.VReceivedFrom')} className="border-none focus:outline-none"></input>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex flex-row text-center justify-center gap-2">
+                                                            <Datetime
+                                                                initialValue={'Click to set Time'}
+                                                                value={inDate}
+                                                                onChange={(date) => {
+                                                                    setInDate(date);
+                                                                    setValue('In.Time', inDate);
+                                                                }
+                                                                }
+                                                                dateFormat="MM/D/YY"
+                                                                timeFormat="hh:mm A"
+                                                            />
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Out
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex flex-col">
+                                                            <input placeholder="Vehicle Received By" {...register('Out.VRecievedBy')} className="border-none focus:outline-none border-b"></input>
+                                                            <input placeholder="Vehicle Received From" {...register('Out.VReceivedFrom')} className="border-none focus:outline-none"></input>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <Datetime
+                                                            initialValue={'Click to set Time'}
+                                                            className="border-none outline-none focus:border-none focus:outline-none"
+                                                            value={outDate}
+                                                            onChange={(date) => {
+                                                                setInDate(date);
+                                                                setValue('Out.Time', outDate);
+                                                            }
+                                                            }
+                                                            dateFormat="MM/D/YY"
+                                                            timeFormat="hh:mm A"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
 
 
+                                <div className="flex flex-row gap-2 items-center justify-center">
+                                    <button type="submit" className="print:hidden relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
+                                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                                        <span className="relative z-10 text-black group-hover:text-white">Submit</span>
+                                    </button>
+                                    <button onClick={() => {
+                                        setIsPreview(!isPreview);
 
-                        <button type="submit" className="print:hidden relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
-                            <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                            <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
-                            <span className="relative z-10 text-black group-hover:text-white">Submit</span>
-                        </button>
+                                    }} type="button" className="print:hidden relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
+                                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                                        <span className="relative z-10 text-black group-hover:text-white">Preview</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div >
 
-                    </form>
-                </div >
-
-            </div >
-
-            <Footer />
+                    </div >
+                    <Footer />
+                </>
+            }
+            {
+                isPreview &&
+                <div>
+                    <PrintJobs
+                        data={
+                            {
+                                CustomerName,
+                                DriverUser,
+                                CellNo,
+                                JobCheckedBy,
+                                WorkType,
+                                Insurance,
+                                WorkOrder,
+                                CashWorks,
+                                RegistrationNumber,
+                                OtherAdditionalWork,
+                                Fuel,
+                                Mileage,
+                                Lighter,
+                                Ashtray,
+                                FloorMats,
+                                OriginalBook,
+                                SeatCovers,
+                                RadioAntena,
+                                SpareWheel,
+                                WheelRod,
+                                JackHandle,
+                                Tools,
+                                ExtraThings,
+                                FrameNo,
+                                BatteryNumber,
+                            }
+                        }
+                    />
+                </div>
+            }
         </>
     )
 }
