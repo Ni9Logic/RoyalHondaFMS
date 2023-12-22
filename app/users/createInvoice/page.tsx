@@ -78,7 +78,7 @@ export default function Page() {
                                     Mileage
                                 </th>
                                 <td className="px-6 py-6 text-center">
-                                    <input className="border-none outline-none text-center" placeholder="Mileage" />
+                                    <input className="border-none outline-none text-center" placeholder="Mileage.." />
                                 </td>
                             </tr>
                             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
