@@ -5,7 +5,6 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { id, customerName, customerContact, requiredWorkDetails } = body;
 
-
         const updatedEstimate = await prisma?.estimatedCostWork.update({
             where: {
                 id: id

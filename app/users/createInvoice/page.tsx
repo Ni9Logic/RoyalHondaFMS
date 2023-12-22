@@ -78,7 +78,7 @@ export default function Page() {
                                     Mileage
                                 </th>
                                 <td className="px-6 py-6 text-center">
-                                    <input className="border-none outline-none text-center" placeholder="Mileage.." />
+                                    <input className="border-none outline-none text-center" placeholder="Mileage" />
                                 </td>
                             </tr>
                             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -101,8 +101,25 @@ export default function Page() {
                         <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                             <th scope="col" className="px-6 py-3 text-center">Item Description</th>
                             <th scope="col" className="px-6 py-3 text-center">Item Price</th>
-
                         </thead>
+                        <tbody>
+                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    Item Description
+                                </th>
+                                <td className="px-6 py-3 text-center">
+                                    Item Price
+                                </td>
+                            </tr>
+                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    Total Estimate Cost
+                                </th>
+                                <td className="px-6 py-3 text-center">
+                                    {/* Logic for total Estimate Cost */}
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </form>
             </div>
