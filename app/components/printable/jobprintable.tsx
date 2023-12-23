@@ -1,10 +1,42 @@
+'use client'
 import logo from "@/app/components/images/logo.png";
+import axios from "axios";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 interface PrintJobProps {
     data: any;
 }
-
 const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data }: PrintJobProps) => {
+    const [serialNumber, setSerialNumber] = useState<string | null>(null);
+
+    const fetchSerialNumber = async () => {
+        try {
+            const response = await axios.get('/api/getLasJobId');
+            const serial = response.data.serialNumber;
+            setSerialNumber(serial);
+        } catch (error) {
+            console.error('Error fetching serial:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await fetchSerialNumber();
+                // Additional code after the fetch operation if needed
+            } catch (error) {
+                console.error('Error fetching serial number:', error);
+                // Handle the error as needed
+            }
+        };
+
+        fetchData(); // Call the async function immediately
+
+        // If you have a cleanup function (optional)
+        return () => {
+            // Code to run on unmount (cleanup)
+        };
+    }, []); // Empty dependency array
     return (
         <>
             <div className="container h-[99vh]">
@@ -67,7 +99,9 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data }: PrintJobProps) => {
                             <hr className="border-t-1 border-black" />
 
                             <p className="ml-2 text-sm"> Email: services.royalhonda@gmail.com </p>
+                            <hr className="border-t-1 border-black" />
 
+                            <p className="ml-2 text-sm flex flex-row gap-2 items-center"> Serial No:  <p className="text-xl font-bold text-center text-red-500">{serialNumber ? serialNumber + 1 : 'Null'}</p></p>
                         </div>
                     </div>
                     <hr className="border-t-1 border-black" />
@@ -173,7 +207,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data }: PrintJobProps) => {
                     </div>
                 </div>
                 <div className="w-full flex items-center justify-center print:hidden mt-2">
-                    <button onClick={() => {
+                    <button onClick={async () => {
                         window.print();
                     }} type="button" className="print:hidden relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
                         <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
