@@ -128,6 +128,43 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data }: PrintJobProps) => {
                     <div className="ml-2 h-[20vh]">
                         <p className="text-sm">Other Additional Work (If Required)</p>
                     </div>
+                    <hr className="border-t-1 border-black" />
+                    <div className="flex flex-row">
+                        <p className="ml-2 w-full border border-black border-l-0 border-b-0 border-t-0">User Signature</p>
+                        <p className="w-full ml-2 text-blue-600">
+                            <p className="text-red-500">Note:</p>
+                            I have personally verified the things mentioned above, and I have also checked all the belongings of my car. I am completely satisfied.
+                        </p>
+                    </div>
+                    <hr className="border-t-1 border-black" />
+                    <div className="flex flex-row">
+                        <div className="w-full border border-black border-l-0 border-t-0 border-b-0">
+
+                        </div>
+                        <h1 className="w-full text-xl font-bold flex flex-row">
+                            <p className="ml-2 mr-2">IN</p>
+
+                        </h1>
+                        
+                        <div className="w-full border border-b-0 border-t-0 border-r-0 border-black">
+                            <p className="ml-2">Date Time</p>
+                        </div>
+                    </div>
+
+                    <hr className="border-t-1 border-black" />
+                    <div className="flex flex-row">
+                        <div className="w-full border border-black border-l-0 border-t-0 border-b-0">
+
+                        </div>
+                        <h1 className="w-full text-xl font-bold flex flex-row">
+                            <p className="ml-2 mr-2">OUT</p>
+
+                        </h1>
+                        
+                        <div className="w-full border border-b-0 border-t-0 border-r-0 border-black">
+                            <p className="ml-2">Date Time</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
