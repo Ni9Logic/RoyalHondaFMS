@@ -20,31 +20,33 @@ model webUser {
 }
 
 model JobCard {
-  SerialNo        Int      @id @default(autoincrement())
-  CustomerName    String?
-  DriverUser      String?
-  CellNo          String?
-  JobCheckedBy    String?
-  WorkType        String?
-  Insurance       String?
-  carRegistration String?
-  Fuel            String?
-  Mileage         String?
-  Lighter         Boolean?
-  Ashtray         Boolean?
-  FloorMats       Boolean?
-  OriginalBook    Boolean?
-  SeatCovers      Boolean?
-  RadioAntena     Boolean?
-  SpareWheel      Boolean?
-  WheelRod        Boolean?
-  JackHandle      Boolean?
-  Tools           Boolean?
-  ExtraThings     Boolean?
-  FrameNo         String?
-  BatteryNumber   String?
-  In              Json?
-  Out             Json?
+  SerialNo              Int      @id @default(autoincrement())
+  CustomerName          String?
+  DriverUser            String?
+  CellNo                String?
+  JobCheckedBy          String?
+  WorkType              String?
+  Insurance             String?
+  carRegistration       String?
+  RequiredWorkDetails   String?
+  AdditionalWorkDetails String?
+  Fuel                  String?
+  Mileage               String?
+  Lighter               Boolean?
+  Ashtray               Boolean?
+  FloorMats             Boolean?
+  OriginalBook          Boolean?
+  SeatCovers            Boolean?
+  RadioAntena           Boolean?
+  SpareWheel            Boolean?
+  WheelRod              Boolean?
+  JackHandle            Boolean?
+  Tools                 Boolean?
+  ExtraThings           Boolean?
+  FrameNo               String?
+  BatteryNumber         String?
+  In                    Json?
+  Out                   Json?
 }
 
 model EstimatedCostWork {

@@ -9,8 +9,7 @@ import EstimateRow from "@/app/components/estimates/Row";
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import { Middleware } from "next/dist/lib/load-custom-routes";
-import PrintJobs from "@/app/components/printable/jobprintable";
-import AnotherPrintJobs from "@/app/components/printable/anotherPrintAble";
+import AnotherPrintJobs from "@/app/components/printable/jobPrintAble";
 
 
 export default function Page() {
@@ -45,6 +44,16 @@ export default function Page() {
     const [ExtraThings, setExtraThings] = useState<boolean>(false);
     const [FrameNo, setFrameNo] = useState<string>('');
     const [BatteryNumber, setBatteryNumber] = useState<string>('');
+    const [RequiredWorkDetails, setRequiredWorkDetails] = useState<string>('');
+    const [AdditionalWorkDetails, setAdditionalWorkDetails] = useState<string>('');
+    const [InReceivedBy, setInReceivedBy] = useState<string>('');
+    const [InReceivedFrom, setInReceivedFrom] = useState<string>('');
+    const [InReceivedTime, setInReceivedTime] = useState<any>('');
+    const [OutReceivedBy, setOutReceivedBy] = useState<string>('');
+    const [OutReceivedFrom, setOutReceivedFrom] = useState<string>('');
+    const [OutReceivedTime, setOutReceivedTime] = useState<string>('');
+
+
 
 
     interface EstimateRowType {
@@ -60,6 +69,7 @@ export default function Page() {
         WorkType: string,
         Insurance: string,
         RegistrationNumber: string,
+        RequiredWorkDetails: string,
         OtherAdditionalWork: string,
         Fuel: string,
         Mileage: string,
@@ -103,6 +113,7 @@ export default function Page() {
             WorkType: '',
             Insurance: '',
             RegistrationNumber: '',
+            RequiredWorkDetails: '',
             OtherAdditionalWork: '',
             Fuel: '',
             Mileage: '',
@@ -252,7 +263,6 @@ export default function Page() {
                                                             <option value="WORK ORDER">WORK ORDER</option>
                                                             <option value="CASH WORK">CASH WORK</option>
                                                             <option value="NONE">NONE</option>
-
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -521,7 +531,16 @@ export default function Page() {
                                     {/* Additional Work Details */}
 
                                     <div>
-                                        {/* In Out Time Table */}
+                                        <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Required Work Details</label>
+                                        <textarea onChange={(e) => {
+                                            setValue('RequiredWorkDetails', e.target.value);
+                                            setRequiredWorkDetails(e.target.value);
+                                        }} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                                        <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Addtional Work Details (If Required)</label>
+                                        <textarea onChange={(e) => {
+                                            setValue('OtherAdditionalWork', e.target.value);
+                                            setAdditionalWorkDetails(e.target.value);
+                                        }} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                                         <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
                                             <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                                 <tr>
@@ -547,9 +566,15 @@ export default function Page() {
                                                             <input placeholder="Vehicle Received By" onChange={
                                                                 (e) => {
                                                                     setValue('In.VRecievedBy', e.target.value);
+                                                                    setInReceivedBy(e.target.value);
                                                                 }
                                                             } className="border-none focus:outline-none border-b"></input>
-                                                            <input placeholder="Vehicle Received From" {...register('In.VReceivedFrom')} className="border-none focus:outline-none"></input>
+                                                            <input placeholder="Vehicle Received From" onChange={
+                                                                (e) => {
+                                                                    setValue('In.VReceivedFrom', e.target.value);
+                                                                    setInReceivedFrom(e.target.value);
+                                                                }
+                                                            } className="border-none focus:outline-none"></input>
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
@@ -560,10 +585,10 @@ export default function Page() {
                                                                 onChange={(date) => {
                                                                     setInDate(date);
                                                                     setValue('In.Time', inDate);
+                                                                    setInReceivedTime(date?.toString());
                                                                 }
                                                                 }
                                                                 dateFormat="MM/D/YY"
-                                                                timeFormat="hh:mm A"
                                                             />
                                                         </div>
                                                     </td>
@@ -574,8 +599,18 @@ export default function Page() {
                                                     </th>
                                                     <td className="px-6 py-4">
                                                         <div className="flex flex-col">
-                                                            <input placeholder="Vehicle Received By" {...register('Out.VRecievedBy')} className="border-none focus:outline-none border-b"></input>
-                                                            <input placeholder="Vehicle Received From" {...register('Out.VReceivedFrom')} className="border-none focus:outline-none"></input>
+                                                            <input placeholder="Vehicle Received By" onChange={
+                                                                (e) => {
+                                                                    setValue('Out.VRecievedBy', e.target.value);
+                                                                    setOutReceivedBy(e.target.value);
+                                                                }
+                                                            } className="border-none focus:outline-none border-b"></input>
+                                                            <input placeholder="Vehicle Received From" onChange={
+                                                                (e) => {
+                                                                    setValue('Out.VReceivedFrom', e.target.value);
+                                                                    setOutReceivedFrom(e.target.value);
+                                                                }
+                                                            } className="border-none focus:outline-none"></input>
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
@@ -586,6 +621,7 @@ export default function Page() {
                                                             onChange={(date) => {
                                                                 setInDate(date);
                                                                 setValue('Out.Time', outDate);
+                                                                setOutReceivedTime(date?.toString());
                                                             }
                                                             }
                                                             dateFormat="MM/D/YY"
@@ -597,8 +633,6 @@ export default function Page() {
                                         </table>
                                     </div>
                                 </div>
-
-
                                 <div className="flex flex-row gap-2 items-center justify-center">
                                     <button type="submit" className="print:hidden relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
                                         <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
@@ -636,7 +670,8 @@ export default function Page() {
                                 WorkOrder,
                                 CashWorks,
                                 RegistrationNumber,
-                                OtherAdditionalWork,
+                                RequiredWorkDetails,
+                                AdditionalWorkDetails,
                                 Fuel,
                                 Mileage,
                                 Lighter,
@@ -652,6 +687,12 @@ export default function Page() {
                                 ExtraThings,
                                 FrameNo,
                                 BatteryNumber,
+                                InReceivedBy,
+                                InReceivedFrom,
+                                InReceivedTime,
+                                OutReceivedBy,
+                                OutReceivedFrom,
+                                OutReceivedTime,
                                 isPreview,
                             }
                         }

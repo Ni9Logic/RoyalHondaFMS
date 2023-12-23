@@ -13,6 +13,7 @@ export async function POST(request: Request) {
             Insurance,
             RegistrationNumber,
             RequiredWorkDetails,
+            AdditionalWorkDetails,
             Fuel,
             Mileage,
             Lighter,
@@ -54,6 +55,8 @@ export async function POST(request: Request) {
                 JobCheckedBy,
                 WorkType,
                 Insurance,
+                RequiredWorkDetails,
+                AdditionalWorkDetails,
                 carRegistration: RegistrationNumber,
                 Fuel,
                 Mileage,
@@ -70,21 +73,12 @@ export async function POST(request: Request) {
                 ExtraThings,
                 FrameNo,
                 BatteryNumber,
-                In, // Assuming In is a string
-                Out, // Assuming Out is a string
+                In, 
+                Out,
             },
         });
 
-        // Create EstimatedCostWork record
-        const estimatedWorkResult = await prisma.estimatedCostWork.create({
-            data: {
-                cName: CustomerName,
-                cContact: CellNo,
-                requiredWorkDetails: JSON.stringify(RequiredWorkDetails),
-            },
-        });
-
-        return NextResponse.json({ jobcard, estimatedWorkResult });
+        return NextResponse.json({ jobcard });
     } catch (error: any) {
         console.log(error, "Error in registration");
         return new NextResponse('Internal Error', { status: 500 });
