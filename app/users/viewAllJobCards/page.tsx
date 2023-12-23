@@ -7,7 +7,7 @@ export default function PAGE() {
     return (
         <>
             <Navbar />
-            <div className="container h-[80vh] flex items-center justify-center">
+            <div className="h-[80vh] mr-5 ml-5 flex items-center justify-center">
                 <AllTables />
             </div>
             <Footer />

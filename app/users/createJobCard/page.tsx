@@ -9,7 +9,7 @@ import EstimateRow from "@/app/components/estimates/Row";
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import { Middleware } from "next/dist/lib/load-custom-routes";
-import AnotherPrintJobs from "@/app/components/printable/jobprintable";
+import AnotherPrintJobs from "@/app/components/printable/jobPrintAble";
 
 
 export default function Page() {

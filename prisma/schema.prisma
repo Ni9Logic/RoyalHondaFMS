@@ -47,6 +47,7 @@ model JobCard {
   BatteryNumber         String?
   In                    Json?
   Out                   Json?
+  CreatedAt             DateTime @default(now())
 }
 
 model EstimatedCostWork {
