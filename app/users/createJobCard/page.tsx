@@ -93,11 +93,6 @@ export default function Page() {
     const [isLoading, setLoading] = useState(false);
     const [isEstimate, setisEstimate] = useState(false);
 
-    const handleIsEstimate = () => {
-        if (isEstimate === false)
-            setisEstimate(true);
-    }
-
     const {
         register,
         handleSubmit,
