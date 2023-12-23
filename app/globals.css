@@ -74,11 +74,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-/* Additional styles for print */
-@media print {
-  /* Example: Hide unwanted elements during print */
-  .hide-on-print {
-    display: none !important;
-  }
-}
