@@ -44,7 +44,7 @@ export default function Page() {
     const [ExtraThings, setExtraThings] = useState<boolean>(false);
     const [FrameNo, setFrameNo] = useState<string>('');
     const [BatteryNumber, setBatteryNumber] = useState<string>('');
-    
+
 
     interface EstimateRowType {
         work: string;
@@ -58,8 +58,6 @@ export default function Page() {
         JobCheckedBy: string,
         WorkType: string,
         Insurance: string,
-        WorkOrder: string,
-        CashWorks: string,
         RegistrationNumber: string,
         OtherAdditionalWork: string,
         Fuel: string,
@@ -103,8 +101,6 @@ export default function Page() {
             JobCheckedBy: '',
             WorkType: '',
             Insurance: '',
-            WorkOrder: '',
-            CashWorks: '',
             RegistrationNumber: '',
             OtherAdditionalWork: '',
             Fuel: '',
@@ -246,10 +242,17 @@ export default function Page() {
                                                         Work Type
                                                     </th>
                                                     <td className="px-6 py-4">
-                                                        <input placeholder="Work Type" onChange={(value) => {
+                                                        <select onChange={(value) => {
                                                             setValue('WorkType', value.target.value);
                                                             setWorkType(value.target.value);
-                                                        }} className="border-none focus:outline-none"></input>
+                                                        }} className="border-none focus:outline-none">
+                                                            <option value="" disabled selected>Select Work Type</option>
+                                                            <option value="INSURANCE">INSURANCE</option>
+                                                            <option value="WORK ORDER">WORK ORDER</option>
+                                                            <option value="CASH WORK">CASH WORK</option>
+                                                            <option value="NONE">NONE</option>
+
+                                                        </select>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -257,7 +260,7 @@ export default function Page() {
                                                         Insurance
                                                     </th>
                                                     <td className="px-6 py-4">
-                                                        <select defaultValue={"NONE"} onChange={(value) => {
+                                                        <select onChange={(value) => {
                                                             setValue('Insurance', value.target.value);
                                                             setInsurance(value.target.value);
                                                         }} className="border-none focus:outline-none">
