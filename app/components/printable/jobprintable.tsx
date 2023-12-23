@@ -8,7 +8,7 @@ const PrintJobs: React.FC<PrintJobProps> = ({ data }: PrintJobProps) => {
     return (
         <>
             <div className="container flex flex-col">
-                <div className="w-full mt-6 flex flex-row">
+                <div className="w-full mt-6 flex flex-row border border-black">
                     <div className="border border-black border-b-0 w-screen border-print">
                         <div className="flex flex-row gap-2 print:w-[35vw]">
                             <h1 className="print:text-3xl text-5xl text-[#221DAA] font-bold mb-0 print:mb-0 ml-2 print:ml-2">ROYAL </h1>
@@ -204,7 +204,6 @@ const PrintJobs: React.FC<PrintJobProps> = ({ data }: PrintJobProps) => {
                     </div>
                 </div>
             </div>
-
         </>
     );
 };

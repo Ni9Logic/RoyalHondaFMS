@@ -54,7 +54,7 @@ export async function POST(request: Request) {
                 JobCheckedBy,
                 WorkType,
                 Insurance,
-                RegistrationNumber,
+                carRegistration: RegistrationNumber,
                 Fuel,
                 Mileage,
                 Lighter,

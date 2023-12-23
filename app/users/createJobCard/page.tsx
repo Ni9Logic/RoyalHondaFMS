@@ -10,6 +10,7 @@ import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import { Middleware } from "next/dist/lib/load-custom-routes";
 import PrintJobs from "@/app/components/printable/jobprintable";
+import AnotherPrintJobs from "@/app/components/printable/anotherPrintAble";
 
 
 export default function Page() {
@@ -623,7 +624,7 @@ export default function Page() {
             {
                 isPreview &&
                 <div>
-                    <PrintJobs
+                    <AnotherPrintJobs
                         data={
                             {
                                 CustomerName,
@@ -651,6 +652,7 @@ export default function Page() {
                                 ExtraThings,
                                 FrameNo,
                                 BatteryNumber,
+                                isPreview,
                             }
                         }
                     />
