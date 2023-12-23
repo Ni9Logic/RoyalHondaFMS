@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/ui/input"
 
 import { Button } from "./button"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal } from "lucide-react"
 
@@ -51,6 +51,11 @@ export function DataTable<TData, TValue>({
     })
 
     const [filterColumn, setFilterColumn] = useState('');
+    useEffect(() => {
+        return () => void
+
+        table.setPageSize(5);
+    }, [])
     return (
         <div className="flex flex-col">
             <div className="flex flex-row items-center gap-2">
@@ -112,7 +117,7 @@ export function DataTable<TData, TValue>({
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel()?.rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
+                            table.getRowModel().rows.map((row, index) => (
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}

@@ -30,6 +30,7 @@ model JobCard {
   carRegistration       String?
   RequiredWorkDetails   String?
   AdditionalWorkDetails String?
+  OtherAddionalWorkDetails String?
   Fuel                  String?
   Mileage               String?
   Lighter               Boolean?

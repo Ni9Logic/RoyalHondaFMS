@@ -5,8 +5,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 interface PrintJobProps {
     data: any;
+    onClose: () => void; // Function to close the drawer
 }
-const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data }: PrintJobProps) => {
+const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobProps) => {
     const [serialNumber, setSerialNumber] = useState<string | null>(null);
 
     const fetchSerialNumber = async () => {
@@ -37,6 +38,22 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data }: PrintJobProps) => {
             // Code to run on unmount (cleanup)
         };
     }, []); // Empty dependency array
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                onClose(); // Call the onClose function when "Escape" is pressed
+            }
+        };
+
+        // Add event listener when the component mounts
+        document.addEventListener("keydown", handleKeyDown);
+
+        // Remove event listener when the component unmounts
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [onClose]); // Re-run effect when onClose changes
     return (
         <>
             <div className="container h-[99vh]">
@@ -101,7 +118,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data }: PrintJobProps) => {
                             <p className="ml-2 text-sm"> Email: services.royalhonda@gmail.com </p>
                             <hr className="border-t-1 border-black" />
 
-                            <p className="ml-2 text-sm flex flex-row gap-2 items-center"> Serial No:  <p className="text-xl font-bold text-center text-red-500">{serialNumber ? serialNumber + 1 : 'Null'}</p></p>
+                            <p className="ml-2 text-sm flex flex-row gap-2 items-center"> Serial No:  <p className="text-xl font-bold text-center text-red-500">{data?.SerialNo ? data?.SerialNo : serialNumber ? serialNumber : 'NULL'}</p></p>
                         </div>
                     </div>
                     <hr className="border-t-1 border-black" />
@@ -164,7 +181,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data }: PrintJobProps) => {
                     <hr className="border-t-1 border-black" />
                     <div className="ml-2 h-[20vh]">
                         <p className="text-sm">Other Additional Work (If Required)</p>
-                        <p>{data?.AdditionalWorkDetails}</p>
+                        <p>{data?.OtherAdditionalWork}</p>
                     </div>
                     <hr className="border-t-1 border-black" />
                     <div className="flex flex-row">
@@ -196,7 +213,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data }: PrintJobProps) => {
                             {data?.OutReceivedBy}
                         </div>
                         <h1 className="w-full  flex flex-row">
-                            <p className="ml-2 mr-2 text-xl font-bold">IN</p>
+                            <p className="ml-2 mr-2 text-xl font-bold">Out</p>
                             {data?.OutReceivedFrom}
                         </h1>
 

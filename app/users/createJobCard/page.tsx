@@ -1,16 +1,42 @@
 'use client'
 import Footer from "../Footer";
 import Navbar from "../Navbar";
-import React, { useState, useEffect } from 'react';
-import { FieldValues, SubmitHandler, useForm, useFieldArray, FieldArrayWithId } from "react-hook-form";
+import React, { useState } from 'react';
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from 'react-hot-toast';
 import axios from "axios";
-import EstimateRow from "@/app/components/estimates/Row";
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
-import { Middleware } from "next/dist/lib/load-custom-routes";
 import AnotherPrintJobs from "@/app/components/printable/jobPrintAble";
 
+export type JOBFormData = {
+    CustomerName: string,
+    DriverUser: string,
+    CellNo: string,
+    JobCheckedBy: string,
+    WorkType: string,
+    Insurance: string,
+    RegistrationNumber: string,
+    RequiredWorkDetails: string,
+    OtherAdditionalWork: string,
+    Fuel: string,
+    Mileage: string,
+    Lighter: boolean,
+    Ashtray: boolean,
+    FloorMats: boolean,
+    OriginalBook: boolean,
+    SeatCovers: boolean,
+    RadioAntena: boolean,
+    SpareWheel: boolean,
+    WheelRod: boolean,
+    JackHandle: boolean,
+    Tools: boolean,
+    ExtraThings: boolean,
+    FrameNo: string,
+    BatteryNumber: string,
+    In: { VRecievedBy: string, VReceivedFrom: string, Time: string | null },
+    Out: { VRecievedBy: string, VReceivedFrom: string, Time: string | null },
+};
 
 export default function Page() {
     // Date Time Selection
@@ -25,8 +51,6 @@ export default function Page() {
     const [JobCheckedBy, setJobCheckedBy] = useState<string>('');
     const [WorkType, setWorkType] = useState<string>('');
     const [Insurance, setInsurance] = useState<string>('');
-    const [WorkOrder, setWorkOrder] = useState<string>('');
-    const [CashWorks, setCashWorks] = useState<string>('');
     const [RegistrationNumber, setRegistrationNumber] = useState<string>('');
     const [OtherAdditionalWork, setOtherAdditionalWork] = useState<string>('');
     const [Fuel, setFuel] = useState<string>('');
@@ -61,34 +85,7 @@ export default function Page() {
         price: string;
     }
     const [rows, setRows] = useState<EstimateRowType[]>([]);
-    type FormData = {
-        CustomerName: string,
-        DriverUser: string,
-        CellNo: string,
-        JobCheckedBy: string,
-        WorkType: string,
-        Insurance: string,
-        RegistrationNumber: string,
-        RequiredWorkDetails: string,
-        OtherAdditionalWork: string,
-        Fuel: string,
-        Mileage: string,
-        Lighter: boolean,
-        Ashtray: boolean,
-        FloorMats: boolean,
-        OriginalBook: boolean,
-        SeatCovers: boolean,
-        RadioAntena: boolean,
-        SpareWheel: boolean,
-        WheelRod: boolean,
-        JackHandle: boolean,
-        Tools: boolean,
-        ExtraThings: boolean,
-        FrameNo: string,
-        BatteryNumber: string,
-        In: { VRecievedBy: string, VReceivedFrom: string, Time: string | null },
-        Out: { VRecievedBy: string, VReceivedFrom: string, Time: string | null },
-    };
+
 
     const [isLoading, setLoading] = useState(false);
 
@@ -98,7 +95,7 @@ export default function Page() {
         formState: { errors },
         control,
         setValue,
-    } = useForm<FormData>({
+    } = useForm<JOBFormData>({
         defaultValues: {
             CustomerName: '',
             DriverUser: '',
@@ -130,7 +127,7 @@ export default function Page() {
     });
 
 
-    const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
+    const onSubmit: SubmitHandler<JOBFormData> = async (data: JOBFormData) => {
         // Setting Loading state of button
         setLoading(true);
 
@@ -183,7 +180,7 @@ export default function Page() {
                                                         <input placeholder="Customer Name" onChange={(value) => {
                                                             setValue('CustomerName', value.target.value);
                                                             setCustomerName(value.target.value);
-                                                        }} className="border-none focus:outline-none" />
+                                                        }} className="border-none focus:outline-none" required />
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -194,7 +191,7 @@ export default function Page() {
                                                         <input placeholder="Driver | User" onChange={(value) => {
                                                             setValue('DriverUser', value.target.value);
                                                             setDriverUser(value.target.value);
-                                                        }} className="border-none focus:outline-none"></input>
+                                                        }} className="border-none focus:outline-none" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -205,7 +202,7 @@ export default function Page() {
                                                         <input placeholder="Contact Number" onChange={(value) => {
                                                             setValue('CellNo', value.target.value);
                                                             setCellNo(value.target.value);
-                                                        }} className="border-none focus:outline-none"></input>
+                                                        }} className="border-none focus:outline-none" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -216,7 +213,7 @@ export default function Page() {
                                                         <input placeholder="Job Checked By" onChange={(value) => {
                                                             setValue('JobCheckedBy', value.target.value);
                                                             setJobCheckedBy(value.target.value);
-                                                        }} className="border-none focus:outline-none"></input>
+                                                        }} className="border-none focus:outline-none" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -251,7 +248,7 @@ export default function Page() {
                                                         <select onChange={(value) => {
                                                             setValue('WorkType', value.target.value);
                                                             setWorkType(value.target.value);
-                                                        }} className="border-none focus:outline-none">
+                                                        }} className="border-none focus:outline-none" required>
                                                             <option value="" disabled selected>Select Work Type</option>
                                                             <option value="INSURANCE">INSURANCE</option>
                                                             <option value="WORK ORDER">WORK ORDER</option>
@@ -297,7 +294,7 @@ export default function Page() {
                                                         <input placeholder="Registration" onChange={(value) => {
                                                             setValue('RegistrationNumber', value.target.value);
                                                             setRegistrationNumber(value.target.value);
-                                                        }} className="border-none focus:outline-none"></input>
+                                                        }} className="border-none focus:outline-none" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -308,7 +305,7 @@ export default function Page() {
                                                         <input placeholder="Battery #" onChange={(value) => {
                                                             setValue('BatteryNumber', value.target.value);
                                                             setBatteryNumber(value.target.value);
-                                                        }} className="border-none focus:outline-none"></input>
+                                                        }} className="border-none focus:outline-none" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -319,7 +316,7 @@ export default function Page() {
                                                         <input placeholder="Frame #" onChange={(value) => {
                                                             setValue('FrameNo', value.target.value);
                                                             setFrameNo(value.target.value);
-                                                        }} className="border-none focus:outline-none"></input>
+                                                        }} className="border-none focus:outline-none" required></input>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -347,7 +344,7 @@ export default function Page() {
                                                         <input placeholder="Fuel" onChange={(value) => {
                                                             setValue('Fuel', value.target.value);
                                                             setFuel(value.target.value);
-                                                        }} className="border-none focus:outline-none"></input>
+                                                        }} className="border-none focus:outline-none" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -358,7 +355,7 @@ export default function Page() {
                                                         <input placeholder="Mileage" onChange={(value) => {
                                                             setValue('Mileage', value.target.value);
                                                             setMileage(value.target.value);
-                                                        }} className="border-none focus:outline-none"></input>
+                                                        }} className="border-none focus:outline-none" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -533,7 +530,7 @@ export default function Page() {
                                         <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Addtional Work Details (If Required)</label>
                                         <textarea onChange={(e) => {
                                             setValue('OtherAdditionalWork', e.target.value);
-                                            setAdditionalWorkDetails(e.target.value);
+                                            setOtherAdditionalWork(e.target.value);
                                         }} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                                         <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
                                             <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
@@ -568,7 +565,7 @@ export default function Page() {
                                                                     setValue('In.VReceivedFrom', e.target.value);
                                                                     setInReceivedFrom(e.target.value);
                                                                 }
-                                                            } className="border-none focus:outline-none"></input>
+                                                            } className="border-none focus:outline-none" required></input>
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
@@ -604,7 +601,7 @@ export default function Page() {
                                                                     setValue('Out.VReceivedFrom', e.target.value);
                                                                     setOutReceivedFrom(e.target.value);
                                                                 }
-                                                            } className="border-none focus:outline-none"></input>
+                                                            } className="border-none focus:outline-none" required></input>
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
@@ -672,11 +669,9 @@ export default function Page() {
                                 JobCheckedBy,
                                 WorkType,
                                 Insurance,
-                                WorkOrder,
-                                CashWorks,
+                                OtherAdditionalWork,
                                 RegistrationNumber,
                                 RequiredWorkDetails,
-                                AdditionalWorkDetails,
                                 Fuel,
                                 Mileage,
                                 Lighter,
@@ -701,6 +696,8 @@ export default function Page() {
                                 isPreview,
                             }
                         }
+
+                        onClose={() => setIsPreview(false)}
                     />
                 </div>
             }
