@@ -21,7 +21,7 @@ export default function Page() {
         id: number;
         customerName: string;
         customerContact: string;
-        requiredWorkDetails: { work: string, price: string }[];
+        requiredWorkDetails: EstimateRowType[];
     }
 
     // Array of rows
