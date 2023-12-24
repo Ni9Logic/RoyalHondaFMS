@@ -7,7 +7,9 @@ import {
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
+    getSortedRowModel,
     useReactTable,
+    SortingState,
 } from "@tanstack/react-table"
 
 import {
@@ -24,7 +26,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "./button"
 import React, { useEffect, useState } from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal } from "lucide-react"
+
+import { MoreHorizontal,ArrowUpDown } from "lucide-react"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -38,6 +41,7 @@ export function DataTable<TData, TValue>({
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
     );
+    const [sorting, setSorting] = React.useState<SortingState>([])
     const table = useReactTable({
         data,
         columns,
@@ -45,8 +49,11 @@ export function DataTable<TData, TValue>({
         getPaginationRowModel: getPaginationRowModel(),
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
         state: {
             columnFilters,
+            sorting,
         }
     })
 
@@ -54,7 +61,7 @@ export function DataTable<TData, TValue>({
     useEffect(() => {
         return () => void
 
-        table.setPageSize(5);
+            table.setPageSize(7);
     }, [])
     return (
         <div className="flex flex-col">

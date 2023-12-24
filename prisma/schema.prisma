@@ -21,6 +21,8 @@ model webUser {
 
 model JobCard {
   SerialNo                 Int      @id @default(autoincrement())
+  isEstimate               Boolean? // It will become true as soon as estimate is created for this job card.
+  EstimateNumber           Int? //Once user creates estimate he'll have to link that estimate with this job card
   CustomerName             String?
   DriverUser               String?
   CellNo                   String?
@@ -57,6 +59,7 @@ model JobCard {
 
 model EstimatedCostWork {
   id                  Int     @id @default(autoincrement())
+  jobId               Int? // If this job id exists it means this estimate can be shown if a user opens job card with this id
   cName               String?
   cContact            String?
   carRegistration     String?
