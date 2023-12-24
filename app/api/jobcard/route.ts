@@ -13,7 +13,6 @@ export async function POST(request: Request) {
             Insurance,
             RegistrationNumber,
             RequiredWorkDetails,
-            AdditionalWorkDetails,
             OtherAdditionalWork,
             Fuel,
             Mileage,
@@ -30,8 +29,12 @@ export async function POST(request: Request) {
             ExtraThings,
             FrameNo,
             BatteryNumber,
-            In,
-            Out,
+            InReceivedBy,
+            InReceivedFrom,
+            InTime,
+            OutReceivedBy,
+            OutReceivedFrom,
+            OutTime
         } = body;
 
 
@@ -45,7 +48,7 @@ export async function POST(request: Request) {
                 WorkType,
                 Insurance,
                 RequiredWorkDetails,
-                AdditionalWorkDetails,
+                AdditionalWorkDetails: OtherAdditionalWork,
                 OtherAddionalWorkDetails: OtherAdditionalWork,
                 carRegistration: RegistrationNumber,
                 Fuel,
@@ -63,8 +66,12 @@ export async function POST(request: Request) {
                 ExtraThings,
                 FrameNo,
                 BatteryNumber,
-                In,
-                Out,
+                InReceivedBy,
+                InReceivedFrom,
+                InTime,
+                OutReceivedBy,
+                OutReceivedFrom,
+                OutTime,
             },
         });
 

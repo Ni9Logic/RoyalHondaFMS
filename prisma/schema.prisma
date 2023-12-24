@@ -20,35 +20,39 @@ model webUser {
 }
 
 model JobCard {
-  SerialNo              Int      @id @default(autoincrement())
-  CustomerName          String?
-  DriverUser            String?
-  CellNo                String?
-  JobCheckedBy          String?
-  WorkType              String?
-  Insurance             String?
-  carRegistration       String?
-  RequiredWorkDetails   String?
-  AdditionalWorkDetails String?
+  SerialNo                 Int      @id @default(autoincrement())
+  CustomerName             String?
+  DriverUser               String?
+  CellNo                   String?
+  JobCheckedBy             String?
+  WorkType                 String?
+  Insurance                String?
+  carRegistration          String?
+  RequiredWorkDetails      String?
+  AdditionalWorkDetails    String?
   OtherAddionalWorkDetails String?
-  Fuel                  String?
-  Mileage               String?
-  Lighter               Boolean?
-  Ashtray               Boolean?
-  FloorMats             Boolean?
-  OriginalBook          Boolean?
-  SeatCovers            Boolean?
-  RadioAntena           Boolean?
-  SpareWheel            Boolean?
-  WheelRod              Boolean?
-  JackHandle            Boolean?
-  Tools                 Boolean?
-  ExtraThings           Boolean?
-  FrameNo               String?
-  BatteryNumber         String?
-  In                    Json?
-  Out                   Json?
-  CreatedAt             DateTime @default(now())
+  Fuel                     String?
+  Mileage                  String?
+  Lighter                  Boolean?
+  Ashtray                  Boolean?
+  FloorMats                Boolean?
+  OriginalBook             Boolean?
+  SeatCovers               Boolean?
+  RadioAntena              Boolean?
+  SpareWheel               Boolean?
+  WheelRod                 Boolean?
+  JackHandle               Boolean?
+  Tools                    Boolean?
+  ExtraThings              Boolean?
+  FrameNo                  String?
+  BatteryNumber            String?
+  InReceivedBy             String?
+  InReceivedFrom           String?
+  InTime                   String?
+  OutTime                  String?
+  OutReceivedBy            String?
+  OutReceivedFrom          String?
+  CreatedAt                DateTime @default(now())
 }
 
 model EstimatedCostWork {

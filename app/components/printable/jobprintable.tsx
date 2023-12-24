@@ -85,7 +85,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                             <p className="ml-2 print:ml-2 text-sm">
                                 Registration:
                                 <p className="text-red-500 text-xl">
-                                    {data?.RegistrationNumber}
+                                    {data?.carRegistration}
                                 </p>
                             </p>
 
@@ -181,7 +181,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                     <hr className="border-t-1 border-black" />
                     <div className="ml-2 h-[20vh]">
                         <p className="text-sm">Other Additional Work (If Required)</p>
-                        <p>{data?.OtherAdditionalWork}</p>
+                        <p>{data?.AdditionalWorkDetails}</p>
                     </div>
                     <hr className="border-t-1 border-black" />
                     <div className="flex flex-row">
@@ -201,9 +201,9 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                             {data?.InReceivedFrom}
                         </h1>
 
-                        <div className="w-full border border-b-0 border-t-0 border-r-0 border-black">
-                            <p className="ml-2">Date Time</p>
-                            {data?.InReceivedTime}
+                        <div className="w-full border border-b-0 border-t-0 border-r-0 border-black flex flex-row gap-2">
+                            <p className="ml-2">Date Time: </p>
+                            {data?.InTime?.toString()}
                         </div>
                     </div>
 
@@ -217,9 +217,9 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                             {data?.OutReceivedFrom}
                         </h1>
 
-                        <div className="w-full border border-b-0 border-t-0 border-r-0 border-black">
-                            <p className="ml-2">Date Time</p>
-                            {data?.OutReceivedTime}
+                        <div className="w-full border border-b-0 border-t-0 border-r-0 border-black flex flex-row gap-2">
+                            <p className="ml-2">Date Time: </p>
+                            {data?.OutTime?.toString()}
                         </div>
                     </div>
                 </div>

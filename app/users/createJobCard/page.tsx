@@ -34,8 +34,12 @@ export type JOBFormData = {
     ExtraThings: boolean,
     FrameNo: string,
     BatteryNumber: string,
-    In: { VRecievedBy: string, VReceivedFrom: string, Time: string | null },
-    Out: { VRecievedBy: string, VReceivedFrom: string, Time: string | null },
+    InReceivedBy: string,
+    InReceivedFrom: string,
+    InTime: string,
+    OutReceivedBy: string,
+    OutReceivedFrom: string,
+    OutTime: string
 };
 
 export default function Page() {
@@ -121,8 +125,9 @@ export default function Page() {
             ExtraThings: false,
             FrameNo: '',
             BatteryNumber: '',
-            In: { VReceivedFrom: '', VRecievedBy: '', Time: '' },
-            Out: { VReceivedFrom: '', VRecievedBy: '', Time: '' },
+            InReceivedBy: '',
+            InReceivedFrom: '',
+            InTime: '',
         },
     });
 
@@ -556,13 +561,13 @@ export default function Page() {
                                                         <div className="flex flex-col">
                                                             <input placeholder="Vehicle Received By" onChange={
                                                                 (e) => {
-                                                                    setValue('In.VRecievedBy', e.target.value);
+                                                                    setValue('InReceivedBy', e.target.value);
                                                                     setInReceivedBy(e.target.value);
                                                                 }
                                                             } className="border-none focus:outline-none border-b"></input>
                                                             <input placeholder="Vehicle Received From" onChange={
                                                                 (e) => {
-                                                                    setValue('In.VReceivedFrom', e.target.value);
+                                                                    setValue('InReceivedFrom', e.target.value);
                                                                     setInReceivedFrom(e.target.value);
                                                                 }
                                                             } className="border-none focus:outline-none" required></input>
@@ -575,7 +580,7 @@ export default function Page() {
                                                                 value={inDate}
                                                                 onChange={(date) => {
                                                                     setInDate(date);
-                                                                    setValue('In.Time', inDate);
+                                                                    setValue('InTime', inDate);
                                                                     setInReceivedTime(date?.toString());
                                                                 }
                                                                 }
@@ -592,13 +597,13 @@ export default function Page() {
                                                         <div className="flex flex-col">
                                                             <input placeholder="Vehicle Received By" onChange={
                                                                 (e) => {
-                                                                    setValue('Out.VRecievedBy', e.target.value);
+                                                                    setValue('OutReceivedBy', e.target.value);
                                                                     setOutReceivedBy(e.target.value);
                                                                 }
                                                             } className="border-none focus:outline-none border-b"></input>
                                                             <input placeholder="Vehicle Received From" onChange={
                                                                 (e) => {
-                                                                    setValue('Out.VReceivedFrom', e.target.value);
+                                                                    setValue('OutReceivedFrom', e.target.value);
                                                                     setOutReceivedFrom(e.target.value);
                                                                 }
                                                             } className="border-none focus:outline-none" required></input>
@@ -610,8 +615,8 @@ export default function Page() {
                                                             className="border-none outline-none focus:border-none focus:outline-none"
                                                             value={outDate}
                                                             onChange={(date) => {
-                                                                setInDate(date);
-                                                                setValue('Out.Time', outDate);
+                                                                setOutDate(date);
+                                                                setValue('OutTime', outDate);
                                                                 setOutReceivedTime(date?.toString());
                                                             }
                                                             }
@@ -672,6 +677,7 @@ export default function Page() {
                                 OtherAdditionalWork,
                                 RegistrationNumber,
                                 RequiredWorkDetails,
+                                AdditionalWorkDetails,
                                 Fuel,
                                 Mileage,
                                 Lighter,

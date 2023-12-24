@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -25,8 +26,8 @@ import {
 } from "@/components/ui/drawer"
 
 import AnotherPrintJobs from "../printable/jobPrintAble";
-import EditJobCard from "../jobCard/editJobCard";
-
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export type JobTable = {
     SerialNo: number;
@@ -39,8 +40,28 @@ export type JobTable = {
     carRegistration: String;
     FrameNo: String;
     BatteryNumber: String;
-    In: { VRecievedBy: string, VRecievedFrom: string, Time: string };
-    Out: { VRecievedBy: string, VRecievedFrom: string, Time: string };
+    RequiredWorkDetails: String;
+    AdditionalWorkDetails: string;
+    OtherAdditionalWorkDetails: String;
+    Fuel: string;
+    Mileage: string;
+    Lighter: boolean;
+    Ashtray: boolean;
+    FloorMats: boolean;
+    OriginalBook: boolean;
+    SeatCovers: boolean;
+    RadioAnteena: boolean;
+    SpareWheel: boolean;
+    WheelRod: boolean;
+    JackHandle: boolean;
+    Tools: boolean,
+    ExtraThings: boolean;
+    InReceivedBy: string;
+    InReceivedFrom: string;
+    InTime: string;
+    OutReceivedBy: string;
+    OutReceivedFrom: string;
+    OutTime: string;
     CreatedAt: Date;
 }
 
@@ -96,7 +117,7 @@ export const columns: ColumnDef<JobTable>[] = [
         cell: ({ row }) => {
             const job = row.original
             const [printing, setIsPrinting] = useState(false);
-            const [edit, setEdit] = useState(false);
+
 
             return (
                 <>
@@ -117,9 +138,45 @@ export const columns: ColumnDef<JobTable>[] = [
                                     Copy Serial Number
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => {
-                                    setEdit(true);
-                                }}>Edit Job Card</DropdownMenuItem>
+                                <Link href={{
+                                    pathname: '../components/editJob',
+                                    query: {
+                                        SerialNo: `${job.SerialNo}`,
+                                        CustomerName: `${job.CustomerName}`,
+                                        CustomerContact: `${job.CellNo}`,
+                                        JobCheckedBy: `${job.JobCheckedBy}`,
+                                        WorkType: `${job.WorkType}`,
+                                        Insurance: `${job.Insurance}`,
+                                        RegistrationNumber: `${job.carRegistration}`,
+                                        RequiredWorkDetails: `${job.RequiredWorkDetails}`,
+                                        AdditionalWorkDetails: `${job.AdditionalWorkDetails}`,
+                                        OtherAdditionalWorkDetails: `${job.OtherAdditionalWorkDetails}`,
+                                        BatteryNumber: `${job.BatteryNumber}`,
+                                        FrameNumber: `${job.FrameNo}`,
+                                        DriverUser: `${job.DriverUser}`,
+                                        Fuel: `${job.Fuel}`,
+                                        Mileage: `${job.Mileage}`,
+                                        Lighter: `${job.Lighter}`,
+                                        Ashtray: `${job.Ashtray}`,
+                                        FloorMats: `${job.FloorMats}`,
+                                        OriginalBook: `${job.OriginalBook}`,
+                                        SeatCovers: `${job.SeatCovers}`,
+                                        RadioAnteena: `${job.RadioAnteena}`,
+                                        SpareWheel: `${job.SpareWheel}`,
+                                        WheelRod: `${job.WheelRod}`,
+                                        JackHandle: `${job.JackHandle}`,
+                                        Tools: `${job.Tools}`,
+                                        ExtraThings: `${job.ExtraThings}`,
+                                        InReceivedBy: `${job.InReceivedBy}`,
+                                        InReceivedFrom: `${job.InReceivedFrom}`,
+                                        InTime: `${job.InTime}`,
+                                        OutReceivedBy: `${job.OutReceivedBy}`,
+                                        OutReceivedFrom: `${job.OutReceivedFrom}`,
+                                        OutTime: `${job.OutTime}`,
+                                    },
+                                }}>
+                                    <DropdownMenuItem>Edit Job Card</DropdownMenuItem>
+                                </Link>
                                 <DropdownMenuItem onClick={() => {
                                     setIsPrinting(true);
                                 }
@@ -132,16 +189,6 @@ export const columns: ColumnDef<JobTable>[] = [
                         <Drawer open={printing}>
                             <DrawerContent className="h-full w-full">
                                 <AnotherPrintJobs data={job} onClose={() => setIsPrinting(false)} />
-                                <DrawerClose>
-                                </DrawerClose>
-                            </DrawerContent>
-                        </Drawer>
-                    }
-                    {
-                        edit &&
-                        <Drawer open={edit}>
-                            <DrawerContent className="h-full w-full">
-                                <EditJobCard data={job} onClose={() => setEdit(false)} />
                                 <DrawerClose>
                                 </DrawerClose>
                             </DrawerContent>
