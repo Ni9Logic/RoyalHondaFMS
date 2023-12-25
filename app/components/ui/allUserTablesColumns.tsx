@@ -25,7 +25,7 @@ import {
     DrawerTrigger,
 } from "@/components/ui/drawer"
 
-import AnotherPrintJobs from "../printable/jobPrintAble";
+import AnotherPrintJobs from "../printable/jobprintable";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 

@@ -7,7 +7,7 @@ import { toast } from 'react-hot-toast';
 import axios from "axios";
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
-import AnotherPrintJobs from "@/app/components/printable/jobPrintAble";
+import AnotherPrintJobs from "@/app/components/printable/jobprintable";
 
 export type JOBFormData = {
     CustomerName: string,
