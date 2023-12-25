@@ -18,16 +18,9 @@ import {
     Drawer,
     DrawerClose,
     DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
 } from "@/components/ui/drawer"
 
 import AnotherPrintJobs from "../../users/jobCards/printable/jobprintable";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 
 export type JobTable = {
     SerialNo: number;

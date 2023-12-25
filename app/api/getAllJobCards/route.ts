@@ -5,8 +5,9 @@ export async function GET() {
     try {
         const allJobCards = await prisma.jobCard.findMany();
         
-        if (!allJobCards)
-            return NextResponse.json({ Error: "No Job Cards Created Yet!" }, { status: 404 })
+        if (!allJobCards || allJobCards.length === 0) {
+            return NextResponse.json({ Error: "No Job Cards Created Yet!" }, { status: 404 });
+        }
 
         return NextResponse.json({ jobCards: allJobCards })
     }
