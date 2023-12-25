@@ -68,9 +68,10 @@ model EstimatedCostWork {
   PaymentMode       String?
   EstimateTableData Json?
   ServicesTableData Json?
-  DiscountServices  String?
-  DiscountEstimate  String?
-  OverAllAmount     String?
+  DiscountServices  Float?
+  DiscountEstimate  Float?
+  OverAllAmount     Float?
+  createdAt         String?
 }
 
 model PriceSheet {

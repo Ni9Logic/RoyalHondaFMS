@@ -82,22 +82,10 @@ export default function Page() {
     const [OutReceivedTime, setOutReceivedTime] = useState<string>('');
 
 
-
-
-    interface EstimateRowType {
-        work: string;
-        price: string;
-    }
-    const [rows, setRows] = useState<EstimateRowType[]>([]);
-
-
     const [isLoading, setLoading] = useState(false);
 
     const {
-        register,
         handleSubmit,
-        formState: { errors },
-        control,
         setValue,
     } = useForm<JOBFormData>({
         defaultValues: {

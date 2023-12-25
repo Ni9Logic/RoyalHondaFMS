@@ -6,6 +6,7 @@ import {Label} from "@/components/ui/label";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select";
 import React, {useState} from "react";
 import {Button} from "@/app/components/ui/button";
+import {useForm} from "react-hook-form";
 
 export interface TableDataProp {
     PartNo: string,
@@ -14,6 +15,7 @@ export interface TableDataProp {
     PartPrice: string
 }
 
+// @ts-ignore
 export default function PAGE() {
     // Get the current date
     const currentDate = new Date();
@@ -42,12 +44,20 @@ export default function PAGE() {
 
     interface EstimateForm {
         customerName: string;
+        JobId: string;
         make: string;
         model: string;
         EstimateTableData: EstimateRowType[];
         ServicesDetailsTableData: ServicesDetailsType[];
         ServicesDiscount: number;
         EstimateDiscount: number;
+        TotalServiceFee: number;
+        TotalEstimateFee: number;
+        Kilometers: number;
+        CreatedAt: string;
+        carRegistration: string;
+        paymentMode: string;
+        OverAllAmount: number;
     }
 
     const [servicesDetailsRows, setServicesDetailsRow] = useState<ServicesDetailsType[]>([
@@ -115,6 +125,7 @@ export default function PAGE() {
             totalPrice = totalPrice + item?.partTotalPrice
         ))
 
+        setEstimateFee(totalPrice);
         return totalPrice;
     }
 
@@ -124,19 +135,72 @@ export default function PAGE() {
             totalPrice = totalPrice + item?.charges
         ))
 
+        setServiceFee(totalPrice);
         return totalPrice;
     }
+
 
     const [servicesDiscount, setServicesDiscount] = useState(0);
     const [estimateDiscount, setEstimateDiscount] = useState(0);
 
+    const [estimateFee, setEstimateFee] = useState(0);
+    const [estimateFeeDiscount, setEstimateFeeDiscount] = useState(0);
+
+    const [serviceFee, setServiceFee] = useState(0);
+    const [serviceFeeDiscount, setServiceFeeDiscount] = useState(0);
+
+    const [overAllPrice, setOverAllPrice] = useState(0);
+
     function handleEstimateDiscount(totalEstimatePrice: number) {
+        if (isNaN(estimateDiscount))
+            setEstimateDiscount(0);
+
+        setEstimateDiscount((estimateDiscount / 100) * totalEstimatePrice);
         return (estimateDiscount / 100) * totalEstimatePrice;
     }
 
     function handleServicesDiscount(totalServicesPrice: number) {
+        if (isNaN(servicesDiscount))
+            setServicesDiscount(0);
+
+        setServicesDiscount((servicesDiscount / 100) * totalServicesPrice)
         return (servicesDiscount / 100) * totalServicesPrice;
     }
+
+    function overAllBillEstimate(totalEstimatePrice: number) {
+        return totalEstimatePrice - handleEstimateDiscount(totalEstimatePrice);
+    }
+
+    function overAllBillServices(totalServicesPrice: number) {
+        return totalServicesPrice - handleServicesDiscount(totalServicesPrice);
+    }
+
+    function handleOverAllBill() {
+        setOverAllPrice(overAllBillEstimate(handleEstimateTotalPrice(estimateRows)) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)))
+        return overAllBillEstimate(handleEstimateTotalPrice(estimateRows)) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows));
+    }
+
+    const {
+        register,
+        handleSubmit,
+        setValue,
+    } = useForm<EstimateForm>({
+        defaultValues: {
+            customerName: '',
+            make: '',
+            model: '',
+            EstimateDiscount: estimateDiscount,
+            ServicesDiscount: servicesDiscount,
+            Kilometers: 0,
+            EstimateTableData: estimateRows,
+            ServicesDetailsTableData: servicesDetailsRows,
+            JobId: '',
+            paymentMode: '',
+            OverAllAmount: overAllPrice,
+            CreatedAt: '',
+        }
+    })
+
 
     return (
         <>
@@ -149,7 +213,8 @@ export default function PAGE() {
                     <div className="flex flex-row gap-2">
                         <div className="flex-grow max-w-sm items-center gap-1.5">
                             <Label htmlFor="Customer Name">Customer Name</Label>
-                            <Input type="text" id="text" placeholder="Customer Name" required/>
+                            <Input {...register('customerName')} type="text" id="text" placeholder="Customer Name"
+                                   required/>
                         </div>
                         <div className="flex-grow max-w-sm items-center gap-1.5">
                             <Label htmlFor="Customer Name">Estimate Number</Label>
@@ -159,7 +224,8 @@ export default function PAGE() {
                     <div className="flex flex-row gap-2">
                         <div className="flex-grow max-w-sm items-center gap-1.5">
                             <Label htmlFor="Customer Name">Date</Label>
-                            <Input type="text" id="text" placeholder="Date" value={formattedDate} disabled/>
+                            <Input {...register('CreatedAt')} type="text" id="text" placeholder="Date"
+                                   value={formattedDate} disabled/>
                         </div>
                         <div className="flex-grow max-w-sm items-center gap-1.5">
                             <Label htmlFor="Customer Name">NTN</Label>
@@ -169,30 +235,31 @@ export default function PAGE() {
                     <div className="flex flex-row gap-2">
                         <div className="flex-grow max-w-sm items-center gap-1.5">
                             <Label htmlFor="Customer Name">Make</Label>
-                            <Input type="text" id="text" placeholder="Make" required/>
+                            <Input {...register('make')} type="text" id="text" placeholder="Make" required/>
                         </div>
                         <div className="flex-grow max-w-sm items-center gap-1.5">
                             <Label htmlFor="Customer Name">Model</Label>
-                            <Input type="text" id="text" placeholder="Model" required/>
+                            <Input {...register('model')} type="text" id="text" placeholder="Model" required/>
                         </div>
                     </div>
                     <div className="flex flex-row gap-2">
                         <div className="flex-grow max-w-sm items-center gap-1.5">
                             <Label htmlFor="Customer Name">Vehicle Reg No</Label>
-                            <Input type="text" id="text" placeholder="Vehicle Reg No" required/>
+                            <Input {...register('carRegistration')} type="text" id="text" placeholder="Vehicle Reg No"
+                                   required/>
                         </div>
                         <div className="flex-grow max-w-sm items-center gap-1.5">
                             <Label htmlFor="Customer Name">Job Card Id</Label>
-                            <Input type="text" id="text" placeholder="Job Card ID (If Exist)"/>
+                            <Input {...register('JobId')} type="text" id="text" placeholder="Job Card ID (If Exist)"/>
                         </div>
                     </div>
                     <div className="flex flex-row gap-2 mt-2">
                         <div className="w-full max-w-sm items-center gap-1.5">
                             <Label htmlFor="Customer Name">KiloMeters</Label>
-                            <Input type="text" id="text" placeholder="Km"/>
+                            <Input {...register('Kilometers')} type="number" id="number" placeholder="Km"/>
                         </div>
                         <div className="max-w-sm items-center gap-1.5 w-full">
-                            <Select required>
+                            <Select {...register('paymentMode')} required>
                                 <Label>Payment Mode</Label>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Payment Mode"/>
@@ -416,9 +483,12 @@ export default function PAGE() {
                                                 Parts
                                                 Total: {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs
                                             </Label>
-                                            <Label className={"flex justify-end"}>
-                                                Discount: {handleEstimateDiscount(handleEstimateTotalPrice(estimateRows)).toLocaleString()} Rs
-                                            </Label>
+                                            {
+                                                estimateDiscount !== 0 && !isNaN(estimateDiscount) &&
+                                                <Label className={"flex justify-end"}>
+                                                    Discount: {handleEstimateDiscount(handleEstimateTotalPrice(estimateRows)).toLocaleString()} Rs
+                                                </Label>
+                                            }
                                         </div>
                                     </div>
                                     <div>
@@ -464,32 +534,89 @@ export default function PAGE() {
                                                 Services
                                                 Total: {handleServicesTotalPrice(servicesDetailsRows).toLocaleString()} Rs
                                             </Label>
-                                            <Label className={"mt-2 flex justify-end"}>
-                                                Discount: {handleServicesDiscount(handleServicesTotalPrice(servicesDetailsRows)).toLocaleString()} Rs
-                                            </Label>
+                                            {servicesDiscount !== 0 && !isNaN(servicesDiscount) &&
+                                                <Label className={"mt-2 flex justify-end"}>
+                                                    Discount: {handleServicesDiscount(handleServicesTotalPrice(servicesDetailsRows)).toLocaleString()} Rs
+                                                </Label>
+                                            }
                                         </div>
 
-                                        <div className={"mt-16 flex justify-center items-end flex-col gap-2"}>
-                                            <div className={"absolute w-auto"}>
-                                                <hr className={"border-t-1 border-black flex w-auto"}/>
+                                        <div className={"mt-16 flex justify-center items-end flex-col gap-2 h-auto"}>
+                                            <div className={"relative w-auto h-auto"}>
+                                                <hr className={"border-t-1 border-black flex w-auto h-auto"}/>
                                                 <Label className={"mt-2 flex justify-center mb-2 font-bold"}>
                                                     Overall Summary
                                                 </Label>
                                                 <hr className={"border-t-1 border-black flex"}/>
-                                                <div className={"mt-2 flex flex-col gap-1"}>
+                                                <div className={"relative mt-2 flex flex-col gap-1"}>
                                                     <Label className={"flex flex-row gap-1"}>
-                                                        <p className={"font-bold"}>
-                                                            Cost of Parts:
-                                                        </p> {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs</Label>
-                                                    <Label>
-                                                        <p className={"font-bold flex flex-row"}>
-                                                            {estimateDiscount} % Discount on Parts:
-                                                        </p> {handleEstimateDiscount(handleEstimateTotalPrice(estimateRows)).toLocaleString()} Rs
+                                                        <p className={"font-bold"}>Cost of Parts:</p>{" "}
+                                                        {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs
+                                                    </Label>
+                                                    {estimateDiscount !== 0 && !isNaN(estimateDiscount) && (
+                                                        <Label className={"flex flex-row gap-1"}>
+                                                            <p className={"font-bold"}>{estimateDiscount} % Discount on
+                                                                Parts:</p>{" "}
+                                                            {handleEstimateDiscount(
+                                                                handleEstimateTotalPrice(estimateRows)
+                                                            ).toLocaleString()}{" "}
+                                                            Rs
+                                                        </Label>
+                                                    )}
+                                                    <Label className={"flex flex-row gap-1"}>
+                                                        <p className={"font-bold"}>Services / Labor Cost: </p>
+                                                        {handleServicesTotalPrice(servicesDetailsRows).toLocaleString()} Rs
+                                                    </Label>
+                                                    {
+                                                        servicesDiscount !== 0 && !isNaN(servicesDiscount) && (
+                                                            <Label className={"flex flex-row gap-1"}>
+                                                                <p className={"font-bold"}>{servicesDiscount} % Discount on
+                                                                    Services:</p>{" "}
+                                                                {handleServicesDiscount(
+                                                                    handleServicesTotalPrice(servicesDetailsRows)
+                                                                ).toLocaleString()} Rs
+                                                            </Label>
+                                                        )
+                                                    }
+
+                                                    <hr className={"border-t-1 border-black flex w-auto h-auto mt-3"}/>
+                                                    <Label className={"mt-1 flex justify-center mb-1 font-bold"}>
+                                                        Overall Bill
+                                                    </Label>
+                                                    <hr className={"border-t-1 border-black flex"}/>
+                                                    <Label className={"flex flex-row gap-1"}>
+                                                        Parts Price{
+                                                        estimateDiscount !== 0 && !isNaN(estimateDiscount) ? (
+                                                            <p className={"font-bold"}>
+                                                                (Discount): {overAllBillEstimate(handleEstimateTotalPrice(estimateRows)).toLocaleString()} Rs
+                                                            </p>
+                                                        ) : (
+                                                            <p>
+                                                                <p>: {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs</p>
+                                                            </p>
+                                                        )
+                                                    }
+                                                    </Label>
+                                                    <Label className={"flex flex-row gap-1"}>
+                                                        Services Price{
+                                                        servicesDiscount !== 0 && !isNaN(servicesDiscount) ? (
+                                                            <p className={"font-bold"}>
+                                                                (Discount): {overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)).toLocaleString()} Rs
+                                                            </p>
+                                                        ) : (
+                                                            <p>
+                                                                <p>: {handleServicesTotalPrice(servicesDetailsRows).toLocaleString()} Rs</p>
+                                                            </p>
+                                                        )
+                                                    }
                                                     </Label>
 
+                                                    <Label className={"flex flex-row gap-1"}>
+                                                        Total Bill: <p
+                                                        className={"font-bold"}>{handleOverAllBill().toLocaleString()} Rs</p>
+                                                    </Label>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -501,4 +628,5 @@ export default function PAGE() {
             <Footer/>
         </>
     )
+//     @ts-ignore
 }
