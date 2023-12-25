@@ -15,7 +15,6 @@ export async function GET(request: Request) {
 
         // Extract and return the serial number
         const { SerialNo } = lastJobCard;
-        console.log(SerialNo)
 
         return NextResponse.json({ serialNumber: SerialNo });
     } catch (error: any) {
