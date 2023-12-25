@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "
 import React, { useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 interface EstimateRowType {
     partNo: string;
@@ -50,7 +51,15 @@ export default function PAGE() {
 
     // Format the date as a string (e.g., "2023-12-23")
     const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const [customerName, setCustomerName] = useState('');
+    // Convert this to integer later in the api
+    const [JobId, setJobId] = useState('');
+    const [make, setMake] = useState('');
 
+
+    // const data: EstimateForm = {
+
+    // }
 
 
 
