@@ -172,83 +172,14 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                             <h1 className="text-sm ml-2">Extra Things: {data?.ExtraThings ? 'Yes' : 'No'}</h1>
                             <hr className="border-t-1 border-black" />
 
-                            <h1 className="text-sm ml-INSERT INTO JobCard (
-                                SerialNo,
-                                CustomerName,
-                                DriverUser,
-                                CellNo,
-                                JobCheckedBy,
-                                WorkType,
-                                Insurance,
-                                Fuel,
-                                Mileage,
-                                Lighter,
-                                Ashtray,
-                                FloorMats,
-                                OriginalBook,
-                                SeatCovers,
-                                RadioAntena,
-                                SpareWheel,
-                                WheelRod,
-                                JackHandle,
-                                Tools,
-                                ExtraThings,
-                                FrameNo,
-                                BatteryNumber,
-                                carRegistration,
-                                AdditionalWorkDetails,
-                                RequiredWorkDetails,
-                                CreatedAt,
-                                OtherAddionalWorkDetails,
-                                InReceivedBy,
-                                InReceivedFrom,
-                                InTime,
-                                OutReceivedBy,
-                                OutReceivedFrom,
-                                OutTime
-                              )
-                            VALUES (
-                                SerialNo:int,
-                                'CustomerName:varchar',
-                                'DriverUser:varchar',
-                                'CellNo:varchar',
-                                'JobCheckedBy:varchar',
-                                'WorkType:varchar',
-                                'Insurance:varchar',
-                                'Fuel:varchar',
-                                'Mileage:varchar',
-                                'Lighter:tinyint',
-                                'Ashtray:tinyint',
-                                'FloorMats:tinyint',
-                                'OriginalBook:tinyint',
-                                'SeatCovers:tinyint',
-                                'RadioAntena:tinyint',
-                                'SpareWheel:tinyint',
-                                'WheelRod:tinyint',
-                                'JackHandle:tinyint',
-                                'Tools:tinyint',
-                                'ExtraThings:tinyint',
-                                'FrameNo:varchar',
-                                'BatteryNumber:varchar',
-                                'carRegistration:varchar',
-                                'AdditionalWorkDetails:varchar',
-                                'RequiredWorkDetails:varchar',
-                                'CreatedAt:datetime',
-                                'OtherAddionalWorkDetails:varchar',
-                                'InReceivedBy:varchar',
-                                'InReceivedFrom:varchar',
-                                'InTime:varchar',
-                                'OutReceivedBy:varchar',
-                                'OutReceivedFrom:varchar',
-                                'OutTime:varchar'
-                              );2">Frame No: {data?.FrameNo}</h1>
+                            <h1 className="text-sm ml-2">Frame No: {data?.FrameNo}</h1>
                             <hr className="border-t-1 border-black" />
 
                             <h1 className="text-sm ml-2">Battery No: {data?.BatteryNumber}</h1>
                         </div>
                     </div>
                     <hr className="border-t-1 border-black" />
-                    <div className="ml-2 h-[20vh]">
+                    <div className="ml-2 h-[10vh]">
                         <p className="text-sm">Other Additional Work (If Required)</p>
                         <p>{data?.AdditionalWorkDetails}</p>
                     </div>
