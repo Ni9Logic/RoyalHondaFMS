@@ -3,10 +3,12 @@ import Footer from "../../Footer";
 import Navbar from "../../Navbar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { useForm } from "react-hook-form";
 import PrintEstimate from "../printableEstimate/PrintableEstimate";
+import { v4 as uuidv4 } from 'uuid';
+
 
 interface EstimateRowType {
     partNo: string;
@@ -15,10 +17,17 @@ interface EstimateRowType {
     partPrice: number;
     partTotalPrice: number;
 }
+interface EstimateRowObject {
+    [key: string]: EstimateRowType;
+};
 
 interface ServicesDetailsType {
     details: string;
     charges: number;
+}
+
+interface ServiceRowObject {
+    [key: string]: ServicesDetailsType;
 }
 
 export interface EstimateForm {
@@ -26,8 +35,8 @@ export interface EstimateForm {
     JobId: string;
     make: string;
     model: string;
-    EstimateTableData: EstimateRowType[];
-    ServicesDetailsTableData: ServicesDetailsType[];
+    EstimateTableData: EstimateRowObject;
+    ServicesDetailsTableData: ServiceRowObject;
     ServicesDiscount: number;
     EstimateDiscount: number;
     TotalServiceFee: number;
@@ -51,6 +60,7 @@ export default function PAGE() {
     // Format the date as a string (e.g., "2023-12-23")
     const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
     const [customerName, setCustomerName] = useState('');
+
     // Convert this to integer later in the api
     const [JobId, setJobId] = useState('');
     const [make, setMake] = useState('');
@@ -58,56 +68,48 @@ export default function PAGE() {
     const [model, setModel] = useState('');
     const [carRegistration, setCarRegistration] = useState('');
     const [paymentMode, setPaymentMode] = useState('');
-    const [servicesDetailsRows, setServicesDetailsRow] = useState<ServicesDetailsType[]>([
-        {
-            details: '',
-            charges: 0,
-        },
-        {
-            details: '',
-            charges: 0,
-        }
-    ])
+    const [servicesDetailsRows, setServicesDetailsRow] = useState<ServiceRowObject>({})
+
     // Array of rows
-    const [estimateRows, setEstimateRows] = useState<EstimateRowType[]>([
-        {
-            partPrice: 0,
-            partNo: '',
-            partQty: 1,
-            partDesc: '',
-            partTotalPrice: 0,
-        },
-        {
-            partPrice: 0,
-            partNo: '',
-            partQty: 1,
-            partDesc: '',
-            partTotalPrice: 0,
-        },
-    ]);
+    // const [estimateRows, setEstimateRows] = useState<EstimateRowType[]>([]);
+    const [estimateRows, setEstimateRows] = useState<EstimateRowObject>({});
+    useEffect(() => {
+        console.log(estimateRows);
+    }, [estimateRows]);
+
     const handleAddEstimateRow = () => {
-        setEstimateRows(rows => [...rows, {
+        const obj = { ...estimateRows };
+        obj[uuidv4()] = {
             partNo: '',
             partDesc: '',
             partQty: 1,
             partPrice: 0,
             partTotalPrice: 0
-        }]);
+        };
+        setEstimateRows(obj);
+
     };
 
     const handleAddServicesDetailsRow = () => {
-        setServicesDetailsRow(rows => [...rows, {
+        const obj = { ...servicesDetailsRows };
+        obj[uuidv4()] = {
             details: '',
-            charges: 0
-        }]);
+            charges: 0,
+        };
+
+        setServicesDetailsRow(obj);
     };
 
-    const handleRemoveServicesDetailsRow = (indexToRemove: number) => {
-        setServicesDetailsRow(prevRows => prevRows.filter((_, index) => index !== indexToRemove));
+    const handleRemoveServicesDetailsRow = (uuidtoRemove: string) => {
+        const obj = { ...servicesDetailsRows };
+        delete obj[uuidtoRemove];
+        setServicesDetailsRow(obj);
     }
 
-    const handleRemoveEstimateRow = (indexToRemove: any) => {
-        setEstimateRows(prevRows => prevRows.filter((_, index) => index !== indexToRemove));
+    const handleRemoveEstimateRow = (uuidToRemove: string) => {
+        const obj = { ...estimateRows };
+        delete obj[uuidToRemove];
+        setEstimateRows(obj);
     };
 
 
@@ -120,19 +122,19 @@ export default function PAGE() {
         setGenerateSummary(!isGenerateSummary);
     }
 
-    function handleEstimateTotalPrice(EstimateArray: EstimateRowType[]) {
+    function handleEstimateTotalPrice(EstimateArray: EstimateRowObject) {
         let totalPrice = 0;
-        EstimateArray.map((item) => (
-            totalPrice = totalPrice + item?.partTotalPrice
+        Object.keys(EstimateArray).map((key, index) => (
+            totalPrice = totalPrice + EstimateArray[key].partTotalPrice
         ))
 
         return totalPrice;
     }
 
-    function handleServicesTotalPrice(EstimateArray: ServicesDetailsType[]) {
+    function handleServicesTotalPrice(EstimateArray: ServiceRowObject) {
         let totalPrice = 0;
-        EstimateArray.map((item) => (
-            totalPrice = totalPrice + item?.charges
+        Object.keys(EstimateArray).map((key, index) => (
+            totalPrice = totalPrice + EstimateArray[key].charges
         ))
 
         return totalPrice;
@@ -194,6 +196,7 @@ export default function PAGE() {
         }
     })
 
+    // @ts-ignore
     const data: EstimateForm = {
         customerName: customerName,
         JobId: JobId,
@@ -203,13 +206,13 @@ export default function PAGE() {
         ServicesDetailsTableData: servicesDetailsRows,
         ServicesDiscount: servicesDiscount,
         EstimateDiscount: estimateDiscount,
-        TotalServiceFee: serviceFee,
-        TotalEstimateFee: estimateFee,
+        TotalServiceFee: handleServicesTotalPrice(servicesDetailsRows),
+        TotalEstimateFee: handleEstimateTotalPrice(estimateRows),
         Kilometers: kiloMeters,
         CreatedAt: formattedDate,
         carRegistration: carRegistration,
         paymentMode: paymentMode,
-        OverAllAmount: overAllPrice,
+        OverAllAmount: handleOverAllBill(),
     }
 
     const [isPrinting, setIsPrinting] = useState(false);
@@ -333,43 +336,54 @@ export default function PAGE() {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    estimateRows.map((item, index) => (
-                                                        <tr key={index}
+                                                    Object.keys(estimateRows).map((key, index) => (
+                                                        <tr key={key}
                                                             className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                             <th scope="row"
                                                                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                                 {index + 1}
                                                             </th>
                                                             <td className="px-6 py-4">
-                                                                <input onChange={(e) => estimateRows[index].partNo = e.target.value}
+                                                                <input onChange={(e) => {
+                                                                    const updatedRows = { ...estimateRows };
+                                                                    updatedRows[key].partNo = e.target.value;
+                                                                    setEstimateRows(updatedRows);
+                                                                }}
                                                                     className={"border-none outline-none"} />
                                                             </td>
                                                             <td className="px-6 py-4">
-                                                                <input onChange={(e) => estimateRows[index].partDesc = e.target.value}
+                                                                <input onChange={(e) => {
+                                                                    const updatedRows = { ...estimateRows };
+                                                                    updatedRows[key].partDesc = e.target.value;
+                                                                    setEstimateRows(updatedRows);
+                                                                }}
                                                                     className={"border-none outline-none"} />
                                                             </td>
                                                             <td className={"px-6 py-4"}>
                                                                 <input type={"number"} onChange={(e) => {
-                                                                    estimateRows[index].partPrice = parseInt(e.target.value);
-                                                                    estimateRows[index].partTotalPrice = (estimateRows[index].partPrice) * (estimateRows[index].partQty);
-                                                                    console.log(estimateRows);
+                                                                    const updatedRows = { ...estimateRows };
+                                                                    updatedRows[key].partPrice = parseInt(e.target.value);
+                                                                    updatedRows[key].partTotalPrice = (updatedRows[key].partPrice) * (updatedRows[key].partQty);
+                                                                    setEstimateRows(updatedRows);
                                                                 }} className={"border-none outline-none"}
                                                                     style={{ width: dynamicWidth }} /> Rs
                                                             </td>
                                                             <td className="px-6 py-4">
                                                                 <input type={"number"} onChange={(e) => {
-                                                                
-                                                                    estimateRows[index].partQty = parseInt(e.target.value);
-                                                                    estimateRows[index].partTotalPrice = (estimateRows[index].partPrice) * (estimateRows[index].partQty);
+
+                                                                    const updatedRows = { ...estimateRows }
+                                                                    updatedRows[key].partQty = parseInt(e.target.value);
+                                                                    updatedRows[key].partTotalPrice = (updatedRows[key].partPrice) * (updatedRows[key].partQty);
+                                                                    setEstimateRows(updatedRows);
                                                                     console.log(estimateRows);
 
                                                                 }} className={"border-none outline-none w-[56px]"}
-                                                                    defaultValue={item.partQty} />
+                                                                    defaultValue={estimateRows[key].partQty} />
                                                             </td>
                                                             <td className="px-6 py-4">
                                                                 <div className={"gap-2 flex"}>
                                                                     <button type={"button"}
-                                                                        onClick={() => handleRemoveEstimateRow(index)}
+                                                                        onClick={() => handleRemoveEstimateRow(key)}
                                                                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete
                                                                     </button>
                                                                 </div>
@@ -382,7 +396,7 @@ export default function PAGE() {
                                         <div className={"flex flex-row gap-2"}>
                                             <Button type={"button"} className={"mt-2 w-2/6"} onChange={(e) => e.preventDefault()}
                                                 onClick={() => handleAddEstimateRow()}>Add Row</Button>
-                                            <Input placeholder={"Parts Discount %"}
+                                            <Input type="number" placeholder={"Parts Discount %"}
                                                 onChange={(e) => setEstimateDiscount(parseFloat(e.target.value))}
                                                 className={"mt-2 flex justify-end ml-auto w-[2/6]"} />
                                         </div>
@@ -409,7 +423,7 @@ export default function PAGE() {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    servicesDetailsRows.map((item, index) => (
+                                                    Object.keys(servicesDetailsRows).map((key, index) => (
                                                         <tr key={index}
                                                             className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                             <th scope="row"
@@ -418,18 +432,18 @@ export default function PAGE() {
                                                             </th>
                                                             <td className="px-6 py-4">
                                                                 <input
-                                                                    onChange={(e) => servicesDetailsRows[index].details = e.target.value}
+                                                                    onChange={(e) => servicesDetailsRows[key].details = e.target.value}
                                                                     className={"border-none outline-none w-full"} />
                                                             </td>
                                                             <td className="px-6 py-4">
-                                                                <input
-                                                                    onChange={(e) => servicesDetailsRows[index].charges = parseInt(e.target.value)}
+                                                                <input type="number"
+                                                                    onChange={(e) => servicesDetailsRows[key].charges = parseInt(e.target.value)}
                                                                     className={"border-none outline-none w-full"} />
                                                             </td>
                                                             <td className="px-6 py-4">
                                                                 <div className={"gap-2 flex"}>
                                                                     <button type={"button"}
-                                                                        onClick={() => handleRemoveServicesDetailsRow(index)}
+                                                                        onClick={() => handleRemoveServicesDetailsRow(key)}
                                                                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                                                         Delete
                                                                     </button>
@@ -447,7 +461,7 @@ export default function PAGE() {
                                                 Generate Summary
                                             </Button>
                                             <Input onChange={(e) => setServicesDiscount(parseFloat(e.target.value))}
-                                                className={"mt-2 flex w-1/6 ml-auto"} placeholder={"Discount Services %"} />
+                                                className={"mt-2 flex w-1/6 ml-auto"} type="number" placeholder={"Discount Services %"} />
                                         </div>
                                     </div>
                                     {
@@ -484,7 +498,7 @@ export default function PAGE() {
                                                         </thead>
                                                         <tbody>
                                                             {
-                                                                estimateRows.map((item, index) => (
+                                                                Object.keys(estimateRows).map((key, index) => (
                                                                     <tr key={index}
                                                                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                                         <th scope="row"
@@ -492,19 +506,19 @@ export default function PAGE() {
                                                                             {index + 1}
                                                                         </th>
                                                                         <td className="px-6 py-4">
-                                                                            {item?.partNo}
+                                                                            {estimateRows[key].partNo}
                                                                         </td>
                                                                         <td className="px-6 py-4">
-                                                                            {item?.partDesc}
+                                                                            {estimateRows[key].partDesc}
                                                                         </td>
                                                                         <td className={"px-6 py-4"}>
-                                                                            {item?.partPrice.toLocaleString()} Rs
+                                                                            {estimateRows[key].partPrice.toLocaleString()} Rs
                                                                         </td>
                                                                         <td className="px-6 py-4">
-                                                                            {item?.partQty}
+                                                                            {estimateRows[key].partQty}
                                                                         </td>
                                                                         <td className={"px-6 py-4"}>
-                                                                            {item?.partTotalPrice.toLocaleString()} Rs
+                                                                            {estimateRows[key].partTotalPrice.toLocaleString()} Rs
                                                                         </td>
                                                                     </tr>
                                                                 ))}
@@ -513,12 +527,12 @@ export default function PAGE() {
                                                     <div className={"mt-2 flex justify-end flex-col gap-2"}>
                                                         <Label className={"flex justify-end"}>
                                                             Parts
-                                                            Total: {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs
+                                                            {/* Total: {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs */}
                                                         </Label>
                                                         {
                                                             estimateDiscount !== 0 && !isNaN(estimateDiscount) &&
                                                             <Label className={"flex justify-end"}>
-                                                                Discount: {handleEstimateDiscount(handleEstimateTotalPrice(estimateRows)).toLocaleString()} Rs
+                                                                {/* Discount: {handleEstimateDiscount(handleEstimateTotalPrice(estimateRows)).toLocaleString()} Rs */}
                                                             </Label>
                                                         }
                                                     </div>
@@ -544,7 +558,7 @@ export default function PAGE() {
                                                         </thead>
                                                         <tbody>
                                                             {
-                                                                servicesDetailsRows.map((item, index) => (
+                                                                Object.keys(servicesDetailsRows).map((key, index) => (
                                                                     <tr key={index}
                                                                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                                         <th scope="row"
@@ -552,10 +566,10 @@ export default function PAGE() {
                                                                             {index + 1}
                                                                         </th>
                                                                         <td className="px-6 py-4">
-                                                                            {item?.details}
+                                                                            {servicesDetailsRows[key].details}
                                                                         </td>
                                                                         <td className="px-6 py-4">
-                                                                            {item?.charges.toLocaleString()} Rs
+                                                                            {servicesDetailsRows[key].charges.toLocaleString()} Rs
                                                                         </td>
                                                                     </tr>
                                                                 ))}
@@ -671,7 +685,16 @@ export default function PAGE() {
             }
             {
                 isPrinting &&
-                <PrintEstimate data={data} />
+                <div>
+                    <PrintEstimate data={data} />
+                    <div className="flex flex-row mt-2 justify-center gap-2 print:hidden">
+                        <Button className="print:hidden" type="button" onClick={() => setIsPrinting(false)}>Close</Button>
+                        <Button className="print:hidden" type="button" onClick={() => {
+                            setIsPrinting(false);
+                            window.print();
+                        }}>Print</Button>
+                    </div>
+                </div>
             }
 
         </>

@@ -1,11 +1,12 @@
 'use client'
 import { SubmitHandler, useForm } from "react-hook-form";
-import Footer from "../Footer";
-import Navbar from "../Navbar";
+import Footer from "../../Footer";
+import Navbar from "../../Navbar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import CreateEstimate from "@/app/components/estimates/createEstimate";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Page() {
     const [isLoading, setIsLoading] = useState(false);
@@ -266,7 +267,7 @@ export default function Page() {
 
                                     <tbody>
                                         {estimate?.map((item: any, index: number) => (
-                                            <tr key={`rows-${index}`} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <tr key={uuidv4()} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                                 <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                                     {
                                                         isUpdate ?
