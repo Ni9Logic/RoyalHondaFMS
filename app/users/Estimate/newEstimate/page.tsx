@@ -3,11 +3,10 @@ import Footer from "../../Footer";
 import Navbar from "../../Navbar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import React, { useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
+import PrintEstimate from "../printableEstimate/PrintableEstimate";
 
 interface EstimateRowType {
     partNo: string;
@@ -55,16 +54,10 @@ export default function PAGE() {
     // Convert this to integer later in the api
     const [JobId, setJobId] = useState('');
     const [make, setMake] = useState('');
-
-
-    // const data: EstimateForm = {
-
-    // }
-
-
-
-
-
+    const [kiloMeters, setKiloMeters] = useState(0);
+    const [model, setModel] = useState('');
+    const [carRegistration, setCarRegistration] = useState('');
+    const [paymentMode, setPaymentMode] = useState('');
     const [servicesDetailsRows, setServicesDetailsRow] = useState<ServicesDetailsType[]>([
         {
             details: '',
@@ -183,6 +176,7 @@ export default function PAGE() {
     const {
         register,
         handleSubmit,
+        setValue,
     } = useForm<EstimateForm>({
         defaultValues: {
             customerName: '',
@@ -200,232 +194,120 @@ export default function PAGE() {
         }
     })
 
+    const data: EstimateForm = {
+        customerName: customerName,
+        JobId: JobId,
+        make: make,
+        model: model,
+        EstimateTableData: estimateRows,
+        ServicesDetailsTableData: servicesDetailsRows,
+        ServicesDiscount: servicesDiscount,
+        EstimateDiscount: estimateDiscount,
+        TotalServiceFee: serviceFee,
+        TotalEstimateFee: estimateFee,
+        Kilometers: kiloMeters,
+        CreatedAt: formattedDate,
+        carRegistration: carRegistration,
+        paymentMode: paymentMode,
+        OverAllAmount: overAllPrice,
+    }
 
+    const [isPrinting, setIsPrinting] = useState(false);
     return (
         <>
-            <Navbar />
-            <div className="flex-grow w-full container flex flex-col gap-2">
-                <div className="flex justify-center w-full">
-                    <h1 className="text-3xl font-bold">Estimate Sheet</h1>
-                </div>
-                <form className="flex flex-col items-center justify-center gap-2 mt-10">
-                    <div className="flex flex-row gap-2">
-                        <div className="flex-grow max-w-sm items-center gap-1.5">
-                            <Label htmlFor="Customer Name">Customer Name</Label>
-                            <Input {...register('customerName')} type="text" id="text" placeholder="Customer Name"
-                                required />
-                        </div>
-                        <div className="flex-grow max-w-sm items-center gap-1.5">
-                            <Label htmlFor="Customer Name">Estimate Number</Label>
-                            <Input type="text" id="text" placeholder="Estimate Number" disabled />
-                        </div>
-                    </div>
-                    <div className="flex flex-row gap-2">
-                        <div className="flex-grow max-w-sm items-center gap-1.5">
-                            <Label htmlFor="Customer Name">Date</Label>
-                            <Input {...register('CreatedAt')} type="text" id="text" placeholder="Date"
-                                value={formattedDate} disabled />
-                        </div>
-                        <div className="flex-grow max-w-sm items-center gap-1.5">
-                            <Label htmlFor="Customer Name">NTN</Label>
-                            <Input type="text" id="text" placeholder="NTN" value={"3268859-8"} disabled />
-                        </div>
-                    </div>
-                    <div className="flex flex-row gap-2">
-                        <div className="flex-grow max-w-sm items-center gap-1.5">
-                            <Label htmlFor="Customer Name">Make</Label>
-                            <Input {...register('make')} type="text" id="text" placeholder="Make" required />
-                        </div>
-                        <div className="flex-grow max-w-sm items-center gap-1.5">
-                            <Label htmlFor="Customer Name">Model</Label>
-                            <Input {...register('model')} type="text" id="text" placeholder="Model" required />
-                        </div>
-                    </div>
-                    <div className="flex flex-row gap-2">
-                        <div className="flex-grow max-w-sm items-center gap-1.5">
-                            <Label htmlFor="Customer Name">Vehicle Reg No</Label>
-                            <Input {...register('carRegistration')} type="text" id="text" placeholder="Vehicle Reg No"
-                                required />
-                        </div>
-                        <div className="flex-grow max-w-sm items-center gap-1.5">
-                            <Label htmlFor="Customer Name">Job Card Id</Label>
-                            <Input {...register('JobId')} type="text" id="text" placeholder="Job Card ID (If Exist)" />
-                        </div>
-                    </div>
-                    <div className="flex flex-row gap-2 mt-2">
-                        <div className="w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="Customer Name">KiloMeters</Label>
-                            <Input {...register('Kilometers')} type="number" id="number" placeholder="Km" />
-                        </div>
-                        <div className="max-w-sm items-center gap-1.5 w-full">
-                            <Select {...register('paymentMode')} required>
-                                <Label>Payment Mode</Label>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Payment Mode" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="light">Cheque</SelectItem>
-                                    <SelectItem value="dark">Cash</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
-
-                    <div className={"mt-32 h-full w-full flex flex-col gap-4"}>
-                        <div>
-                            {/* @ts-ignore */}
-                            <Label className={"mb-2 font-bold flex justify-center"}>Estimated Cost Work</Label>
-                            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead
-                                    className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" className="px-6 py-3">
-                                            Serial No
-                                        </th>
-                                        <th scope="col" className="px-6 py-3">
-                                            Part No
-                                        </th>
-                                        <th scope="col" className="px-6 py-3">
-                                            Part Desc
-                                        </th>
-                                        <th scope="col" className="px-6 py-3">
-                                            Part Price
-                                        </th>
-                                        <th scope="col" className="px-6 py-3">
-                                            Qty
-                                        </th>
-                                        <th scope="col" className="px-6 py-3">
-                                            Action
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        estimateRows.map((item, index) => (
-                                            <tr key={index}
-                                                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                                <th scope="row"
-                                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    {index + 1}
-                                                </th>
-                                                <td className="px-6 py-4">
-                                                    <input onChange={(e) => estimateRows[index].partNo = e.target.value}
-                                                        className={"border-none outline-none"} />
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <input onChange={(e) => estimateRows[index].partDesc = e.target.value}
-                                                        className={"border-none outline-none"} />
-                                                </td>
-                                                <td className={"px-6 py-4"}>
-                                                    <input type={"number"} onChange={(e) => {
-                                                        estimateRows[index].partPrice = parseInt(e.target.value);
-                                                        estimateRows[index].partTotalPrice = (estimateRows[index].partPrice) * (estimateRows[index].partQty);
-                                                        console.log(estimateRows);
-                                                    }} className={"border-none outline-none"}
-                                                        style={{ width: dynamicWidth }} /> Rs
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <input type={"number"} onChange={(e) => {
-                                                        estimateRows[index].partQty = parseInt(e.target.value);
-                                                        estimateRows[index].partTotalPrice = (estimateRows[index].partPrice) * (estimateRows[index].partQty);
-                                                        console.log(estimateRows);
-
-                                                    }} className={"border-none outline-none w-[56px]"}
-                                                        defaultValue={item.partQty} />
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <div className={"gap-2 flex"}>
-                                                        <button type={"button"}
-                                                            onClick={() => handleRemoveEstimateRow(index)}
-                                                            className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                </tbody>
-                            </table>
-
-                            <div className={"flex flex-row gap-2"}>
-                                <Button type={"button"} className={"mt-2 w-2/6"} onChange={(e) => e.preventDefault()}
-                                    onClick={() => handleAddEstimateRow()}>Add Row</Button>
-                                <Input placeholder={"Parts Discount %"}
-                                    onChange={(e) => setEstimateDiscount(parseFloat(e.target.value))}
-                                    className={"mt-2 flex justify-end ml-auto w-[2/6]"} />
+            {
+                !isPrinting && (
+                    <div>
+                        <Navbar />
+                        <div className="flex-grow w-full container flex flex-col gap-2">
+                            <div className="flex justify-center w-full">
+                                <h1 className="text-3xl font-bold">Estimate Sheet</h1>
                             </div>
-                        </div>
-                        <div>
-                            <Label className={"mb-2 font-bold flex justify-center"}>Services Details and Charges</Label>
-                            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead
-                                    className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" className="px-6 py-3">
-                                            Serial No
-                                        </th>
-                                        <th scope="col" className="px-6 py-3">
-                                            Services
-                                        </th>
-                                        <th scope="col" className="px-6 py-3">
-                                            Charges
-                                        </th>
-                                        <th scope="col" className="px-6 py-3">
-                                            Action
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        servicesDetailsRows.map((item, index) => (
-                                            <tr key={index}
-                                                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                                <th scope="row"
-                                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    {index + 1}
-                                                </th>
-                                                <td className="px-6 py-4">
-                                                    <input
-                                                        onChange={(e) => servicesDetailsRows[index].details = e.target.value}
-                                                        className={"border-none outline-none w-full"} />
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <input
-                                                        onChange={(e) => servicesDetailsRows[index].charges = parseInt(e.target.value)}
-                                                        className={"border-none outline-none w-full"} />
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <div className={"gap-2 flex"}>
-                                                        <button type={"button"}
-                                                            onClick={() => handleRemoveServicesDetailsRow(index)}
-                                                            className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                                            Delete
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                </tbody>
-                            </table>
-                            <div className={"gap-2 flex flex-row"}>
-                                <Button type={"button"} className={"mt-2 w-1/6"} onChange={(e) => e.preventDefault()}
-                                    onClick={() => handleAddServicesDetailsRow()}>Add Row</Button>
-                                <Button type={"button"} onClick={() => handleGenerateSummary()} className={"mt-2 w-1/6"}
-                                    onChange={(e) => e.preventDefault()}>
-                                    Generate Summary
-                                </Button>
-                                <Input onChange={(e) => setServicesDiscount(parseFloat(e.target.value))}
-                                    className={"mt-2 flex w-1/6 ml-auto"} placeholder={"Discount Services %"} />
-                            </div>
-                        </div>
-                        {
-                            isGenerateSummary &&
-                            (
-                                <div className={"flex flex-col"}>
-                                    <div className={"mt-10 flex w-full justify-center flex-col"}>
-                                        <Label className={"w-full items-center flex justify-center mb-2"}>Estimate
-                                            Summary</Label>
-                                        <table
-                                            className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <form className="flex flex-col items-center justify-center gap-2 mt-10">
+                                <div className="flex flex-row gap-2">
+                                    <div className="flex-grow max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="Customer Name">Customer Name</Label>
+                                        <Input onChange={(e) => {
+                                            setValue('customerName', e.target.value);
+                                            setCustomerName(e.target.value);
+                                        }} type="text" id="text" placeholder="Customer Name"
+                                            required />
+                                    </div>
+                                    <div className="flex-grow max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="Customer Name">Estimate Number</Label>
+                                        <Input type="text" id="text" placeholder="Estimate Number" disabled />
+                                    </div>
+                                </div>
+                                <div className="flex flex-row gap-2">
+                                    <div className="flex-grow max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="Customer Name">Date</Label>
+                                        <Input {...register('CreatedAt')} type="text" id="text" placeholder="Date"
+                                            value={formattedDate} disabled />
+                                    </div>
+                                    <div className="flex-grow max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="Customer Name">NTN</Label>
+                                        <Input type="text" id="text" placeholder="NTN" value={"3268859-8"} disabled />
+                                    </div>
+                                </div>
+                                <div className="flex flex-row gap-2">
+                                    <div className="flex-grow max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="Customer Name">Make</Label>
+                                        <Input onChange={(e) => {
+                                            setValue('make', e.target.value);
+                                            setMake(e.target.value);
+                                        }} type="text" id="text" placeholder="Make" required />
+                                    </div>
+                                    <div className="flex-grow max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="Customer Name">Model</Label>
+                                        <Input onChange={(e) => {
+                                            setValue('model', e.target.value);
+                                            setModel(e.target.value);
+                                        }} type="text" id="text" placeholder="Model" required />
+                                    </div>
+                                </div>
+                                <div className="flex flex-row gap-2">
+                                    <div className="flex-grow max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="Customer Name">Vehicle Reg No</Label>
+                                        <Input onChange={(e) => {
+                                            setValue('carRegistration', e.target.value);
+                                            setCarRegistration(e.target.value);
+                                        }} type="text" id="text" placeholder="Vehicle Reg No"
+                                            required />
+                                    </div>
+                                    <div className="flex-grow max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="Customer Name">Job Card Id</Label>
+                                        <Input onChange={(e) => {
+                                            setValue('JobId', e.target.value);
+                                            setJobId(e.target.value);
+                                        }} type="text" id="text" placeholder="Job Card ID (If Exist)" />
+                                    </div>
+                                </div>
+                                <div className="flex flex-row gap-2 mt-2">
+                                    <div className="w-full max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="Customer Name">KiloMeters</Label>
+                                        <Input onChange={(e) => {
+                                            setValue('Kilometers', parseInt(e.target.value));
+                                            setKiloMeters(parseInt(e.target.value));
+                                        }} type="number" id="number" placeholder="Km" />
+                                    </div>
+                                    <div className="max-w-sm items-center gap-1.5 w-full">
+                                        <Label>Payment Mode</Label>
+                                        <select onChange={(value) => {
+                                            setValue('paymentMode', value.target.value);
+                                            setPaymentMode(value.target.value);
+                                        }} className="border-none focus:outline-none">
+                                            <option value="" disabled selected>Payment Mode</option>
+                                            <option value="CHEQUE">CHEQUE</option>
+                                            <option value="CASH">CASH</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className={"mt-32 h-full w-full flex flex-col gap-4"}>
+                                    <div>
+                                        {/* @ts-ignore */}
+                                        <Label className={"mb-2 font-bold flex justify-center"}>Estimated Cost Work</Label>
+                                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                             <thead
                                                 className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                                 <tr>
@@ -445,7 +327,7 @@ export default function PAGE() {
                                                         Qty
                                                     </th>
                                                     <th scope="col" className="px-6 py-3">
-                                                        Total Price
+                                                        Action
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -459,42 +341,55 @@ export default function PAGE() {
                                                                 {index + 1}
                                                             </th>
                                                             <td className="px-6 py-4">
-                                                                {item?.partNo}
+                                                                <input onChange={(e) => estimateRows[index].partNo = e.target.value}
+                                                                    className={"border-none outline-none"} />
                                                             </td>
                                                             <td className="px-6 py-4">
-                                                                {item?.partDesc}
+                                                                <input onChange={(e) => estimateRows[index].partDesc = e.target.value}
+                                                                    className={"border-none outline-none"} />
                                                             </td>
                                                             <td className={"px-6 py-4"}>
-                                                                {item?.partPrice.toLocaleString()} Rs
+                                                                <input type={"number"} onChange={(e) => {
+                                                                    estimateRows[index].partPrice = parseInt(e.target.value);
+                                                                    estimateRows[index].partTotalPrice = (estimateRows[index].partPrice) * (estimateRows[index].partQty);
+                                                                    console.log(estimateRows);
+                                                                }} className={"border-none outline-none"}
+                                                                    style={{ width: dynamicWidth }} /> Rs
                                                             </td>
                                                             <td className="px-6 py-4">
-                                                                {item?.partQty}
+                                                                <input type={"number"} onChange={(e) => {
+                                                                
+                                                                    estimateRows[index].partQty = parseInt(e.target.value);
+                                                                    estimateRows[index].partTotalPrice = (estimateRows[index].partPrice) * (estimateRows[index].partQty);
+                                                                    console.log(estimateRows);
+
+                                                                }} className={"border-none outline-none w-[56px]"}
+                                                                    defaultValue={item.partQty} />
                                                             </td>
-                                                            <td className={"px-6 py-4"}>
-                                                                {item?.partTotalPrice.toLocaleString()} Rs
+                                                            <td className="px-6 py-4">
+                                                                <div className={"gap-2 flex"}>
+                                                                    <button type={"button"}
+                                                                        onClick={() => handleRemoveEstimateRow(index)}
+                                                                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete
+                                                                    </button>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     ))}
                                             </tbody>
                                         </table>
-                                        <div className={"mt-2 flex justify-end flex-col gap-2"}>
-                                            <Label className={"flex justify-end"}>
-                                                Parts
-                                                Total: {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs
-                                            </Label>
-                                            {
-                                                estimateDiscount !== 0 && !isNaN(estimateDiscount) &&
-                                                <Label className={"flex justify-end"}>
-                                                    Discount: {handleEstimateDiscount(handleEstimateTotalPrice(estimateRows)).toLocaleString()} Rs
-                                                </Label>
-                                            }
+
+                                        <div className={"flex flex-row gap-2"}>
+                                            <Button type={"button"} className={"mt-2 w-2/6"} onChange={(e) => e.preventDefault()}
+                                                onClick={() => handleAddEstimateRow()}>Add Row</Button>
+                                            <Input placeholder={"Parts Discount %"}
+                                                onChange={(e) => setEstimateDiscount(parseFloat(e.target.value))}
+                                                className={"mt-2 flex justify-end ml-auto w-[2/6]"} />
                                         </div>
                                     </div>
                                     <div>
-                                        <Label className={"w-full items-center flex justify-center mb-2"}>Services
-                                            Summary</Label>
-                                        <table
-                                            className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <Label className={"mb-2 font-bold flex justify-center"}>Services Details and Charges</Label>
+                                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                             <thead
                                                 className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                                 <tr>
@@ -506,6 +401,9 @@ export default function PAGE() {
                                                     </th>
                                                     <th scope="col" className="px-6 py-3">
                                                         Charges
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-3">
+                                                        Action
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -519,120 +417,263 @@ export default function PAGE() {
                                                                 {index + 1}
                                                             </th>
                                                             <td className="px-6 py-4">
-                                                                {item?.details}
+                                                                <input
+                                                                    onChange={(e) => servicesDetailsRows[index].details = e.target.value}
+                                                                    className={"border-none outline-none w-full"} />
                                                             </td>
                                                             <td className="px-6 py-4">
-                                                                {item?.charges.toLocaleString()} Rs
+                                                                <input
+                                                                    onChange={(e) => servicesDetailsRows[index].charges = parseInt(e.target.value)}
+                                                                    className={"border-none outline-none w-full"} />
+                                                            </td>
+                                                            <td className="px-6 py-4">
+                                                                <div className={"gap-2 flex"}>
+                                                                    <button type={"button"}
+                                                                        onClick={() => handleRemoveServicesDetailsRow(index)}
+                                                                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                                                        Delete
+                                                                    </button>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     ))}
                                             </tbody>
                                         </table>
-                                        <div className={"mt-2 flex justify-end flex-col gap-2"}>
-                                            <Label className={"mt-2 flex justify-end"}>
-                                                Services
-                                                Total: {handleServicesTotalPrice(servicesDetailsRows).toLocaleString()} Rs
-                                            </Label>
-                                            {servicesDiscount !== 0 && !isNaN(servicesDiscount) &&
-                                                <Label className={"mt-2 flex justify-end"}>
-                                                    Discount: {handleServicesDiscount(handleServicesTotalPrice(servicesDetailsRows)).toLocaleString()} Rs
-                                                </Label>
-                                            }
-                                        </div>
-
-                                        <div className={"mt-16 flex justify-center items-end flex-col gap-2 h-auto"}>
-                                            <div className={"relative w-auto h-auto"}>
-                                                <hr className={"border-t-1 border-black flex w-auto h-auto"} />
-                                                <Label className={"mt-2 flex justify-center mb-2 font-bold"}>
-                                                    Overall Summary
-                                                </Label>
-                                                <hr className={"border-t-1 border-black flex"} />
-                                                <div className={"relative mt-2 flex flex-col gap-1"}>
-                                                    <Label className={"flex flex-row gap-1"}>
-                                                        <p className={"font-bold"}>Cost of Parts:</p>{" "}
-                                                        {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs
-                                                    </Label>
-                                                    {estimateDiscount !== 0 && !isNaN(estimateDiscount) && (
-                                                        <Label className={"flex flex-row gap-1"}>
-                                                            <p className={"font-bold"}>{estimateDiscount} % Discount on
-                                                                Parts:</p>{" "}
-                                                            {handleEstimateDiscount(
-                                                                handleEstimateTotalPrice(estimateRows)
-                                                            ).toLocaleString()}{" "}
-                                                            Rs
-                                                        </Label>
-                                                    )}
-                                                    <Label className={"flex flex-row gap-1"}>
-                                                        <p className={"font-bold"}>Services / Labor Cost: </p>
-                                                        {handleServicesTotalPrice(servicesDetailsRows).toLocaleString()} Rs
-                                                    </Label>
-                                                    {
-                                                        servicesDiscount !== 0 && !isNaN(servicesDiscount) && (
-                                                            <Label className={"flex flex-row gap-1"}>
-                                                                <p className={"font-bold"}>{servicesDiscount} % Discount on
-                                                                    Services:</p>{" "}
-                                                                {handleServicesDiscount(
-                                                                    handleServicesTotalPrice(servicesDetailsRows)
-                                                                ).toLocaleString()} Rs
-                                                            </Label>
-                                                        )
-                                                    }
-
-                                                    <hr className={"border-t-1 border-black flex w-auto h-auto mt-3"} />
-                                                    <Label className={"mt-1 flex justify-center mb-1 font-bold"}>
-                                                        Overall Bill
-                                                    </Label>
-                                                    <hr className={"border-t-1 border-black flex"} />
-                                                    <Label className={"flex flex-row gap-1"}>
-                                                        Parts Price{
-                                                            estimateDiscount !== 0 && !isNaN(estimateDiscount) ? (
-                                                                <p className={"font-bold"}>
-                                                                    (Discount): {overAllBillEstimate(handleEstimateTotalPrice(estimateRows)).toLocaleString()} Rs
-                                                                </p>
-                                                            ) : (
-                                                                <p>
-                                                                    <p>: {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs</p>
-                                                                </p>
-                                                            )
-                                                        }
-                                                    </Label>
-                                                    <Label className={"flex flex-row gap-1"}>
-                                                        Services Price{
-                                                            servicesDiscount !== 0 && !isNaN(servicesDiscount) ? (
-                                                                <p className={"font-bold"}>
-                                                                    (Discount): {overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)).toLocaleString()} Rs
-                                                                </p>
-                                                            ) : (
-                                                                <p>
-                                                                    <p>: {handleServicesTotalPrice(servicesDetailsRows).toLocaleString()} Rs</p>
-                                                                </p>
-                                                            )
-                                                        }
-                                                    </Label>
-
-                                                    <Label className={"flex flex-row gap-1"}>
-                                                        Total Bill: <p
-                                                            className={"font-bold"}>{handleOverAllBill().toLocaleString()} Rs</p>
-                                                    </Label>
-                                                </div>
-                                            </div>
+                                        <div className={"gap-2 flex flex-row"}>
+                                            <Button type={"button"} className={"mt-2 w-1/6"} onChange={(e) => e.preventDefault()}
+                                                onClick={() => handleAddServicesDetailsRow()}>Add Row</Button>
+                                            <Button type={"button"} onClick={() => handleGenerateSummary()} className={"mt-2 w-1/6"}
+                                                onChange={(e) => e.preventDefault()}>
+                                                Generate Summary
+                                            </Button>
+                                            <Input onChange={(e) => setServicesDiscount(parseFloat(e.target.value))}
+                                                className={"mt-2 flex w-1/6 ml-auto"} placeholder={"Discount Services %"} />
                                         </div>
                                     </div>
+                                    {
+                                        isGenerateSummary &&
+                                        (
+                                            <div className={"flex flex-col"}>
+                                                <div className={"mt-10 flex w-full justify-center flex-col"}>
+                                                    <Label className={"w-full items-center flex justify-center mb-2"}>Estimate
+                                                        Summary</Label>
+                                                    <table
+                                                        className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                                        <thead
+                                                            className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                            <tr>
+                                                                <th scope="col" className="px-6 py-3">
+                                                                    Serial No
+                                                                </th>
+                                                                <th scope="col" className="px-6 py-3">
+                                                                    Part No
+                                                                </th>
+                                                                <th scope="col" className="px-6 py-3">
+                                                                    Part Desc
+                                                                </th>
+                                                                <th scope="col" className="px-6 py-3">
+                                                                    Part Price
+                                                                </th>
+                                                                <th scope="col" className="px-6 py-3">
+                                                                    Qty
+                                                                </th>
+                                                                <th scope="col" className="px-6 py-3">
+                                                                    Total Price
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {
+                                                                estimateRows.map((item, index) => (
+                                                                    <tr key={index}
+                                                                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                        <th scope="row"
+                                                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                                            {index + 1}
+                                                                        </th>
+                                                                        <td className="px-6 py-4">
+                                                                            {item?.partNo}
+                                                                        </td>
+                                                                        <td className="px-6 py-4">
+                                                                            {item?.partDesc}
+                                                                        </td>
+                                                                        <td className={"px-6 py-4"}>
+                                                                            {item?.partPrice.toLocaleString()} Rs
+                                                                        </td>
+                                                                        <td className="px-6 py-4">
+                                                                            {item?.partQty}
+                                                                        </td>
+                                                                        <td className={"px-6 py-4"}>
+                                                                            {item?.partTotalPrice.toLocaleString()} Rs
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                        </tbody>
+                                                    </table>
+                                                    <div className={"mt-2 flex justify-end flex-col gap-2"}>
+                                                        <Label className={"flex justify-end"}>
+                                                            Parts
+                                                            Total: {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs
+                                                        </Label>
+                                                        {
+                                                            estimateDiscount !== 0 && !isNaN(estimateDiscount) &&
+                                                            <Label className={"flex justify-end"}>
+                                                                Discount: {handleEstimateDiscount(handleEstimateTotalPrice(estimateRows)).toLocaleString()} Rs
+                                                            </Label>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <Label className={"w-full items-center flex justify-center mb-2"}>Services
+                                                        Summary</Label>
+                                                    <table
+                                                        className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                                        <thead
+                                                            className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                            <tr>
+                                                                <th scope="col" className="px-6 py-3">
+                                                                    Serial No
+                                                                </th>
+                                                                <th scope="col" className="px-6 py-3">
+                                                                    Services
+                                                                </th>
+                                                                <th scope="col" className="px-6 py-3">
+                                                                    Charges
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {
+                                                                servicesDetailsRows.map((item, index) => (
+                                                                    <tr key={index}
+                                                                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                        <th scope="row"
+                                                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                                            {index + 1}
+                                                                        </th>
+                                                                        <td className="px-6 py-4">
+                                                                            {item?.details}
+                                                                        </td>
+                                                                        <td className="px-6 py-4">
+                                                                            {item?.charges.toLocaleString()} Rs
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                        </tbody>
+                                                    </table>
+                                                    <div className={"mt-2 flex justify-end flex-col gap-2"}>
+                                                        <Label className={"mt-2 flex justify-end"}>
+                                                            Services
+                                                            Total: {handleServicesTotalPrice(servicesDetailsRows).toLocaleString()} Rs
+                                                        </Label>
+                                                        {servicesDiscount !== 0 && !isNaN(servicesDiscount) &&
+                                                            <Label className={"mt-2 flex justify-end"}>
+                                                                Discount: {handleServicesDiscount(handleServicesTotalPrice(servicesDetailsRows)).toLocaleString()} Rs
+                                                            </Label>
+                                                        }
+                                                    </div>
+
+                                                    <div className={"mt-16 flex justify-center items-end flex-col gap-2 h-auto"}>
+                                                        <div className={"relative w-auto h-auto"}>
+                                                            <hr className={"border-t-1 border-black flex w-auto h-auto"} />
+                                                            <Label className={"mt-2 flex justify-center mb-2 font-bold"}>
+                                                                Overall Summary
+                                                            </Label>
+                                                            <hr className={"border-t-1 border-black flex"} />
+                                                            <div className={"relative mt-2 flex flex-col gap-1"}>
+                                                                <Label className={"flex flex-row gap-1"}>
+                                                                    <p className={"font-bold"}>Cost of Parts:</p>{" "}
+                                                                    {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs
+                                                                </Label>
+                                                                {estimateDiscount !== 0 && !isNaN(estimateDiscount) && (
+                                                                    <Label className={"flex flex-row gap-1"}>
+                                                                        <p className={"font-bold"}>{estimateDiscount} % Discount on
+                                                                            Parts:</p>{" "}
+                                                                        {handleEstimateDiscount(
+                                                                            handleEstimateTotalPrice(estimateRows)
+                                                                        ).toLocaleString()}{" "}
+                                                                        Rs
+                                                                    </Label>
+                                                                )}
+                                                                <Label className={"flex flex-row gap-1"}>
+                                                                    <p className={"font-bold"}>Services / Labor Cost: </p>
+                                                                    {handleServicesTotalPrice(servicesDetailsRows).toLocaleString()} Rs
+                                                                </Label>
+                                                                {
+                                                                    servicesDiscount !== 0 && !isNaN(servicesDiscount) && (
+                                                                        <Label className={"flex flex-row gap-1"}>
+                                                                            <p className={"font-bold"}>{servicesDiscount} % Discount on
+                                                                                Services:</p>{" "}
+                                                                            {handleServicesDiscount(
+                                                                                handleServicesTotalPrice(servicesDetailsRows)
+                                                                            ).toLocaleString()} Rs
+                                                                        </Label>
+                                                                    )
+                                                                }
+
+                                                                <hr className={"border-t-1 border-black flex w-auto h-auto mt-3"} />
+                                                                <Label className={"mt-1 flex justify-center mb-1 font-bold"}>
+                                                                    Overall Bill
+                                                                </Label>
+                                                                <hr className={"border-t-1 border-black flex"} />
+                                                                <Label className={"flex flex-row gap-1"}>
+                                                                    Parts Price{
+                                                                        estimateDiscount !== 0 && !isNaN(estimateDiscount) ? (
+                                                                            <p className={"font-bold"}>
+                                                                                (Discount): {overAllBillEstimate(handleEstimateTotalPrice(estimateRows)).toLocaleString()} Rs
+                                                                            </p>
+                                                                        ) : (
+                                                                            <p>
+                                                                                <p>: {handleEstimateTotalPrice(estimateRows).toLocaleString()} Rs</p>
+                                                                            </p>
+                                                                        )
+                                                                    }
+                                                                </Label>
+                                                                <Label className={"flex flex-row gap-1"}>
+                                                                    Services Price{
+                                                                        servicesDiscount !== 0 && !isNaN(servicesDiscount) ? (
+                                                                            <p className={"font-bold"}>
+                                                                                (Discount): {overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)).toLocaleString()} Rs
+                                                                            </p>
+                                                                        ) : (
+                                                                            <p>
+                                                                                <p>: {handleServicesTotalPrice(servicesDetailsRows).toLocaleString()} Rs</p>
+                                                                            </p>
+                                                                        )
+                                                                    }
+                                                                </Label>
+
+                                                                <Label className={"flex flex-row gap-1"}>
+                                                                    Total Bill: <p
+                                                                        className={"font-bold"}>{handleOverAllBill().toLocaleString()} Rs</p>
+                                                                </Label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
                                 </div>
-                            )
-                        }
+                                <div className={"flex flex-row mt-2 gap-2"}>
+                                    <Button type={"button"}>
+                                        Submit
+                                    </Button>
+                                    <Button onClick={() => setIsPrinting(true)} variant={"outline"} type={"button"}>
+                                        Preview
+                                    </Button>
+                                </div>
+                            </form>
+                        </div>
+                        <Footer />
                     </div>
-                    <div className={"flex flex-row mt-2 gap-2"}>
-                        <Button type={"button"}>
-                            Submit
-                        </Button>
-                        <Button variant={"outline"} type={"button"}>
-                            Print
-                        </Button>
-                    </div>
-                </form>
-            </div>
-            <Footer />
+                )
+            }
+            {
+                isPrinting &&
+                <PrintEstimate data={data} />
+            }
+
         </>
     )
     //     @ts-ignore
