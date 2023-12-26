@@ -502,5 +502,4 @@ export default function PAGE() {
 
         </>
     )
-    //     @ts-ignore
 }
