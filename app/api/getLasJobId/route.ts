@@ -1,7 +1,7 @@
 import prisma from "@/app/lib/prismadb";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET() {
     try {
         const lastJobCard = await prisma.jobCard.findFirst({
             orderBy: {
@@ -13,7 +13,7 @@ export async function GET(request: Request) {
             return NextResponse.json({ error: 'No JobCard found' }, { status: 404 });
         }
 
-        // Extract and return the serial number
+        // Extract and return the seriapl number
         const { SerialNo } = lastJobCard;
 
         return NextResponse.json({ serialNumber: SerialNo });

@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import TableSummaries from "./Summary";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { NextResponse } from "next/server";
+import Loader from "@/app/components/ui/loader";
 
 
 export interface EstimateRowType {
@@ -51,7 +51,6 @@ export interface EstimateForm {
     paymentMode: string;
     OverAllAmount: number;
 }
-// @ts-ignore
 export default function PAGE() {
     // Get the current date
     const currentDate = new Date();
@@ -205,7 +204,7 @@ export default function PAGE() {
             JobId: JobId,
             make: make,
             model: model,
-            EstimateTableData: {},  
+            EstimateTableData: {},
             ServicesDetailsTableData: {},
             ServicesDiscount: 0,
             EstimateDiscount: estimateDiscount,
@@ -310,7 +309,7 @@ export default function PAGE() {
                                         <Input onChange={(e) => {
                                             setValue('Kilometers', parseInt(e.target.value));
                                             setKiloMeters(parseInt(e.target.value));
-                                        }} type="number" id="number" placeholder="Km" required/>
+                                        }} type="number" id="number" placeholder="Km" required />
                                     </div>
                                     <div className="max-w-sm items-center gap-1.5 w-full flex-col flex">
                                         <Label className="mt-2">Payment Mode</Label>
@@ -377,7 +376,7 @@ export default function PAGE() {
                                                                     setEstimateRows(updatedRows);
                                                                     setValue('EstimateTableData', updatedRows);
                                                                 }}
-                                                                    className={"border-none outline-none"} required/>
+                                                                    className={"border-none outline-none"} required />
                                                             </td>
                                                             <td className={"px-6 py-4"}>
                                                                 <input type={"number"} onChange={(e) => {
@@ -387,7 +386,7 @@ export default function PAGE() {
                                                                     setEstimateRows(updatedRows);
                                                                     setValue('EstimateTableData', updatedRows);
                                                                 }} className={"border-none outline-none"}
-                                                                    style={{ width: dynamicWidth }} required/> Rs
+                                                                    style={{ width: dynamicWidth }} required /> Rs
                                                             </td>
                                                             <td className="px-6 py-4">
                                                                 <input type={"number"} onChange={(e) => {
@@ -514,8 +513,10 @@ export default function PAGE() {
                                         )
                                     }
                                     <div className={"flex flex-row mt-2 gap-2"}>
-                                        <Button disabled={isLoading || !isGenerateSummary}>
+                                        <Button disabled={isLoading || !isGenerateSummary} className="flex gap-1">
                                             Submit
+
+                                            <Loader isLoading={isLoading}/>
                                         </Button>
                                         <Button onClick={() => setIsPrinting(true)} variant={"outline"} type={"button"}>
                                             Preview

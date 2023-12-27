@@ -8,6 +8,10 @@ import axios from "axios";
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import { useSearchParams } from 'next/navigation'
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import Loader from "@/app/components/ui/loader";
+import moment from "moment";
 
 export type JOBFormData = {
     CustomerName: string,
@@ -44,10 +48,23 @@ export type JOBFormData = {
 
 export default function Page() {
     // Date Time Selection
-    const [inDate, setInDate] = useState<any>(undefined);
-    const [outDate, setOutDate] = useState<any>(undefined);
+    const [inDate, setInDate] = useState('');
+    const [outDate, setOutDate] = useState('');
     const [isLoading, setLoading] = useState(false);
     const searchParams = useSearchParams();
+
+    const handleInDateChange = (date: any) => {
+        const formattedDate = moment(date).format('YYYY-MM-DD');
+        setInDate(formattedDate.toString());
+        console.log(inDate);
+    }
+
+    const handleOutDateChange = (date: any) => {
+        const formattedDate = moment(date).format('YYYY-MM-DD');
+        setOutDate(formattedDate.toString());
+
+        console.log(outDate);
+    }
 
     const {
         register,
@@ -83,29 +100,39 @@ export default function Page() {
             BatteryNumber: searchParams.get('BatteryNumber')?.toString(),
             InReceivedBy: searchParams.get('InReceivedBy')?.toString(),
             InReceivedFrom: searchParams.get('InReceivedFrom')?.toString(),
-            InReceivedTime: searchParams.get('InTime')?.toString(),
+            InReceivedTime: inDate,
             OutReceivedBy: searchParams.get('OutReceivedBy')?.toString(),
             OutReceivedFrom: searchParams.get('OutReceivedFrom')?.toString(),
-            OutReceivedTime: searchParams.get('OutTime')?.toString(),
+            OutReceivedTime: outDate,
         },
     });
 
 
     const onSubmit: SubmitHandler<JOBFormData> = async (data: JOBFormData) => {
-        console.log(data);
+        setLoading(true);
+        axios.post("/api/updateJobCard", data)
+            .then(() => {
+                toast.success("Estimate Created!")
+            })
+            .catch((response: any) => {
+                let error = response?.response?.data?.Message;
+                toast.error(error);
+            })
+            .finally(() => {
+                setLoading(false);
+            })
     }
 
 
     return (
         <>
-
             <Navbar />
             <div className="flex items-center justify-center ">
                 <h1 className="font-bold text-3xl self-center items-center text-center justify-center mb-10 container">
                     Job Card Updation
                 </h1>
             </div>
-            <div className="items-center justify-center text-center gap-10 container">
+            <div className="items-center justify-center text-center gap-10 container h-full">
                 <div className="overflow-x-auto flex items-center justfiy-center">
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-2">
                         <div className="grid grid-cols-2 gap-2">
@@ -127,7 +154,7 @@ export default function Page() {
                                                 Serial No
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder="Customer Name" className="border-none focus:outline-none" disabled value={searchParams.get('SerialNo')?.toString()} />
+                                                <Label>{searchParams.get('SerialNo')?.toString()}</Label>
                                             </td>
                                         </tr>
                                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -135,7 +162,7 @@ export default function Page() {
                                                 Customer Name
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder={searchParams.get('CustomerName')?.toString()} {...register('CustomerName')} className="border-none focus:outline-none" />
+                                                <input defaultValue={searchParams.get('CustomerName')?.toString()} {...register('CustomerName')} className="border-none focus:outline-none" />
                                             </td>
                                         </tr>
                                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -143,7 +170,7 @@ export default function Page() {
                                                 Driver | User
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder={searchParams.get('DriverUser')?.toString()} onChange={(value) => {
+                                                <input defaultValue={searchParams.get('DriverUser')?.toString()} onChange={(value) => {
                                                     setValue('DriverUser', value.target.value);
                                                 }} className="border-none focus:outline-none"></input>
                                             </td>
@@ -153,7 +180,7 @@ export default function Page() {
                                                 Contact Number
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder={searchParams.get('CustomerContact')?.toString()} onChange={(value) => {
+                                                <input defaultValue={searchParams.get('CustomerContact')?.toString()} onChange={(value) => {
                                                     setValue('CellNo', value.target.value);
                                                 }} className="border-none focus:outline-none"></input>
                                             </td>
@@ -163,7 +190,7 @@ export default function Page() {
                                                 Job Checked By
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder={searchParams.get('JobCheckedBy')?.toString()} onChange={(value) => {
+                                                <input defaultValue={searchParams.get('JobCheckedBy')?.toString()} onChange={(value) => {
                                                     setValue('JobCheckedBy', value.target.value);
                                                 }} className="border-none focus:outline-none"></input>
                                             </td>
@@ -241,7 +268,7 @@ export default function Page() {
                                                 Registration
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder={searchParams.get('RegistrationNumber')?.toString()} onChange={(value) => {
+                                                <input defaultValue={searchParams.get('RegistrationNumber')?.toString()} onChange={(value) => {
                                                     setValue('RegistrationNumber', value.target.value);
                                                 }} className="border-none focus:outline-none"></input>
                                             </td>
@@ -251,7 +278,7 @@ export default function Page() {
                                                 Battery Number
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder={searchParams.get('BatteryNumber')?.toString()} onChange={(value) => {
+                                                <input defaultValue={searchParams.get('BatteryNumber')?.toString()} onChange={(value) => {
                                                     setValue('BatteryNumber', value.target.value);
                                                 }} className="border-none focus:outline-none"></input>
                                             </td>
@@ -261,7 +288,7 @@ export default function Page() {
                                                 Frame Number
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder={searchParams.get('FrameNumber')?.toString()} onChange={(value) => {
+                                                <input defaultValue={searchParams.get('FrameNumber')?.toString()} onChange={(value) => {
                                                     setValue('FrameNo', value.target.value);
                                                 }} className="border-none focus:outline-none"></input>
                                             </td>
@@ -288,7 +315,7 @@ export default function Page() {
                                                 Fuel
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder={searchParams.get('Fuel')?.toString()} onChange={(value) => {
+                                                <input defaultValue={searchParams.get('Fuel')?.toString()} onChange={(value) => {
                                                     setValue('Fuel', value.target.value);
                                                 }} className="border-none focus:outline-none"></input>
                                             </td>
@@ -298,7 +325,7 @@ export default function Page() {
                                                 Mileage
                                             </th>
                                             <td className="px-6 py-4">
-                                                <input placeholder={searchParams.get('Mileage')?.toString()} onChange={(value) => {
+                                                <input defaultValue={searchParams.get('Mileage')?.toString()} onChange={(value) => {
                                                     setValue('Mileage', value.target.value);
                                                 }} className="border-none focus:outline-none"></input>
                                             </td>
@@ -458,9 +485,9 @@ export default function Page() {
                                 <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Required Work Details</label>
                                 <textarea onChange={(e) => {
                                     setValue('RequiredWorkDetails', e.target.value);
-                                }} placeholder={searchParams.get('RequiredWorkDetails')?.toString()} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                                }} defaultValue={searchParams.get('RequiredWorkDetails')?.toString()} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                                 <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Addtional Work Details (If Required)</label>
-                                <textarea placeholder={searchParams.get('AdditionalWorkDetails')?.toString()} onChange={(e) => {
+                                <textarea defaultValue={searchParams.get('AdditionalWorkDetails')?.toString()} onChange={(e) => {
                                     setValue('OtherAdditionalWorkDetails', e.target.value);
                                 }} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                                 <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
@@ -485,12 +512,12 @@ export default function Page() {
                                             </th>
                                             <td className="px-6 py-4">
                                                 <div className="flex flex-col">
-                                                    <input placeholder={searchParams.get('InReceivedBy')?.toString()} onChange={
+                                                    <input defaultValue={searchParams.get('InReceivedBy')?.toString()} onChange={
                                                         (e) => {
                                                             setValue('InReceivedBy', e.target.value);
                                                         }
                                                     } className="border-none focus:outline-none border-b"></input>
-                                                    <input placeholder={searchParams.get('InReceivedFrom')?.toString()} onChange={
+                                                    <input defaultValue={searchParams.get('InReceivedFrom')?.toString()} onChange={
                                                         (e) => {
                                                             setValue('InReceivedFrom', e.target.value);
                                                         }
@@ -500,14 +527,9 @@ export default function Page() {
                                             <td className="px-6 py-4">
                                                 <div className="flex flex-row text-center justify-center gap-2">
                                                     <Datetime
-                                                        initialValue={`${searchParams.get('InTime')?.toString()}`}
-                                                        value={inDate}
-                                                        onChange={(date) => {
-                                                            setInDate(date);
-                                                            setValue('InReceivedTime', inDate);
-                                                        }
-                                                        }
-                                                        dateFormat="MM/D/YY"
+                                                        timeFormat={false}
+                                                        dateFormat="YYYY-MM-DD"
+                                                        onChange={handleInDateChange}
                                                     />
                                                 </div>
                                             </td>
@@ -518,12 +540,12 @@ export default function Page() {
                                             </th>
                                             <td className="px-6 py-4">
                                                 <div className="flex flex-col">
-                                                    <input placeholder={searchParams.get('OutReceivedBy')?.toString()} onChange={
+                                                    <input defaultValue={searchParams.get('OutReceivedBy')?.toString()} onChange={
                                                         (e) => {
                                                             setValue('OutReceivedBy', e.target.value);
                                                         }
                                                     } className="border-none focus:outline-none border-b"></input>
-                                                    <input placeholder={searchParams.get('OutReceivedFrom')?.toString()} onChange={
+                                                    <input defaultValue={searchParams.get('OutReceivedFrom')?.toString()} onChange={
                                                         (e) => {
                                                             setValue('OutReceivedFrom', e.target.value);
                                                         }
@@ -532,16 +554,9 @@ export default function Page() {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <Datetime
-                                                    initialValue={`${searchParams.get('OutTime')?.toString()}`}
                                                     className="border-none outline-none focus:border-none focus:outline-none"
-                                                    value={outDate}
-                                                    onChange={(date) => {
-                                                        setOutDate(date);
-                                                        setValue('OutReceivedTime', outDate);
-                                                    }
-                                                    }
-                                                    dateFormat="MM/D/YY"
-                                                    timeFormat="hh:mm A"
+                                                    timeFormat={false}
+                                                    onChange={(date) => handleOutDateChange(date)}
                                                 />
                                             </td>
                                         </tr>
@@ -549,22 +564,12 @@ export default function Page() {
                                 </table>
                             </div>
                         </div>
-                        <button type="submit" disabled={isLoading} className="relative inline-block px-4 py-2 font-medium group overflow-hidden">
-                            <span className="absolute inset-0  h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                            <span className="absolute inset-0 h-full bg-white border-2 border-black group-hover:bg-black"></span>
-                            <span className={`relative z-10 text-black group-hover:text-white ${isLoading && 'flex items-center gap-2'}`}>
-                                Update
-                                {
-                                    isLoading &&
-                                    <div role="status" className='flex items-center'>
-                                        <svg aria-hidden="true" className="w-8 h-8 text-white animate-spin dark:text-gray-600 fill-black" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                                        </svg>
-                                    </div>
-                                }
-                            </span>
-                        </button>
+                        <div className="flex items-center justify-center">
+                            <Button className="flex gap-1" disabled={isLoading}>
+                                Update Job Card
+                                <Loader isLoading={isLoading} />
+                            </Button>
+                        </div>
                     </form>
                 </div >
 

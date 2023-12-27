@@ -24,18 +24,19 @@ import AnotherPrintJobs from "../../users/jobCards/printable/jobprintable";
 
 export type JobTable = {
     SerialNo: number;
-    CustomerName: String;
-    DriverUser: String;
-    CellNo: String;
-    JobCheckedBy: String;
-    WorkType: String;
-    Insurance: String;
-    carRegistration: String;
-    FrameNo: String;
-    BatteryNumber: String;
-    RequiredWorkDetails: String;
+    CustomerName: string;
+    DriverUser: string;
+    CellNo: string;
+    JobCheckedBy: string;
+    WorkType: string;
+    Insurance: string;
+    carRegistration: string;
+    FrameNo: string;
+    BatteryNumber: string;
+    RequiredWorkDetails: string;
+    EstimateNumber: number;
     AdditionalWorkDetails: string;
-    OtherAdditionalWorkDetails: String;
+    OtherAdditionalWorkDetails: string;
     Fuel: string;
     Mileage: string;
     Lighter: boolean;
@@ -63,6 +64,10 @@ export const columns: ColumnDef<JobTable>[] = [
     {
         accessorKey: 'SerialNo',
         header: 'Serial No'
+    },
+    {
+        accessorKey: 'EstimateNumber',
+        header: 'Est #'
     },
     {
         accessorKey: 'CustomerName',
@@ -132,9 +137,10 @@ export const columns: ColumnDef<JobTable>[] = [
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <Link href={{
-                                    pathname: '../components/editJob',
+                                    pathname: '/users/jobCards/editJob',
                                     query: {
                                         SerialNo: `${job.SerialNo}`,
+                                        EstimateNumber: `${job.EstimateNumber}`,
                                         CustomerName: `${job.CustomerName}`,
                                         CustomerContact: `${job.CellNo}`,
                                         JobCheckedBy: `${job.JobCheckedBy}`,
