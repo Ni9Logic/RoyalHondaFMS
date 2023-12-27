@@ -2,7 +2,11 @@ import prisma from "@/app/lib/prismadb";
 
 const getAllJobCards = async () => {
     try {
-        const allJobCards = await prisma.jobCard.findMany();
+        const allJobCards = await prisma.jobCard.findMany({
+            orderBy: {
+                SerialNo: 'desc'
+            }
+        });
 
         if (!allJobCards) {
             return null;

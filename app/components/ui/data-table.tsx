@@ -27,7 +27,7 @@ import { Button } from "./button"
 import React, { useEffect, useState } from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
-import { MoreHorizontal,ArrowUpDown } from "lucide-react"
+import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({
             table.setPageSize(7);
     }, [])
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col overflow-x-auto w-full flex-grow">
             <div className="flex flex-row items-center gap-2">
                 <div className="flex items-center py-4">
                     <Input

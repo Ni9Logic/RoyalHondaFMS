@@ -35,20 +35,21 @@ interface ServiceRowObject {
 }
 
 export interface EstimateForm {
-    customerName: string;
-    JobId: string;
-    make: string;
-    model: string;
+    id: number;
+    cName: string;
+    jobId: string;
+    cMake: string;
+    cModel: string;
     EstimateTableData: EstimateRowObject;
     ServicesDetailsTableData: ServiceRowObject;
-    ServicesDiscount: number;
-    EstimateDiscount: number;
+    DiscountServices: number;
+    DiscountEstimate: number;
     TotalServiceFee: number;
     TotalEstimateFee: number;
-    Kilometers: number;
+    cKiloMeters: number;
     CreatedAt: string;
-    carRegistration: string;
-    paymentMode: string;
+    cRegistration: string;
+    PaymentMode: string;
     OverAllAmount: number;
 }
 export default function PAGE() {
@@ -62,15 +63,15 @@ export default function PAGE() {
 
     // Format the date as a string (e.g., "2023-12-23")
     const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    const [customerName, setCustomerName] = useState('');
+    const [cName, setcName] = useState('');
 
     // Convert this to integer later in the api
-    const [JobId, setJobId] = useState('');
-    const [make, setMake] = useState('');
-    const [kiloMeters, setKiloMeters] = useState(0);
-    const [model, setModel] = useState('');
-    const [carRegistration, setCarRegistration] = useState('');
-    const [paymentMode, setPaymentMode] = useState('');
+    const [jobId, setjobId] = useState('');
+    const [cMake, setcMake] = useState('');
+    const [ckiloMeters, setcKiloMeters] = useState(0);
+    const [cModel, setcModel] = useState('');
+    const [cRegistration, setcRegistration] = useState('');
+    const [PaymentMode, setPaymentMode] = useState('');
 
     const [servicesDetailsRows, setServicesDetailsRow] = useState<ServiceRowObject>({})
     const [estimateRows, setEstimateRows] = useState<EstimateRowObject>({});
@@ -139,34 +140,34 @@ export default function PAGE() {
     }
 
 
-    const [servicesDiscount, setServicesDiscount] = useState(0);
-    const [estimateDiscount, setEstimateDiscount] = useState(0);
+    const [DiscountServices, setDiscountServices] = useState(0);
+    const [DiscountEstimate, setDiscountEstimate] = useState(0);
 
     const [estimateFee, setEstimateFee] = useState(0);
     const [serviceFee, setServiceFee] = useState(0);
 
     const [overAllPrice, setOverAllPrice] = useState(0);
 
-    function handleEstimateDiscount(totalEstimatePrice: number) {
-        if (isNaN(estimateDiscount))
-            setEstimateDiscount(0);
+    function handleDiscountEstimate(totalEstimatePrice: number) {
+        if (isNaN(DiscountEstimate))
+            setDiscountEstimate(0);
 
-        return (estimateDiscount / 100) * totalEstimatePrice;
+        return (DiscountEstimate / 100) * totalEstimatePrice;
     }
 
-    function handleServicesDiscount(totalServicesPrice: number) {
-        if (isNaN(servicesDiscount))
-            setServicesDiscount(0);
+    function handleDiscountServices(totalServicesPrice: number) {
+        if (isNaN(DiscountServices))
+            setDiscountServices(0);
 
-        return (servicesDiscount / 100) * totalServicesPrice;
+        return (DiscountServices / 100) * totalServicesPrice;
     }
 
     function overAllBillEstimate(totalEstimatePrice: number) {
-        return totalEstimatePrice - handleEstimateDiscount(totalEstimatePrice);
+        return totalEstimatePrice - handleDiscountEstimate(totalEstimatePrice);
     }
 
     function overAllBillServices(totalServicesPrice: number) {
-        return totalServicesPrice - handleServicesDiscount(totalServicesPrice);
+        return totalServicesPrice - handleDiscountServices(totalServicesPrice);
     }
 
     function handleOverAllBill() {
@@ -177,20 +178,20 @@ export default function PAGE() {
 
     // @ts-ignore
     const data: EstimateForm = {
-        customerName: customerName,
-        JobId: JobId,
-        make: make,
-        model: model,
+        cName: cName,
+        jobId: jobId,
+        cMake: cMake,
+        cModel: cModel,
         EstimateTableData: estimateRows,
         ServicesDetailsTableData: servicesDetailsRows,
-        ServicesDiscount: servicesDiscount,
-        EstimateDiscount: estimateDiscount,
+        DiscountServices: DiscountServices,
+        DiscountEstimate: DiscountEstimate,
         TotalServiceFee: handleServicesTotalPrice(servicesDetailsRows),
         TotalEstimateFee: handleEstimateTotalPrice(estimateRows),
-        Kilometers: kiloMeters,
+        cKiloMeters: ckiloMeters,
         CreatedAt: formattedDate,
-        carRegistration: carRegistration,
-        paymentMode: paymentMode,
+        cRegistration: cRegistration,
+        PaymentMode: PaymentMode,
         OverAllAmount: handleOverAllBill(),
     }
 
@@ -200,20 +201,20 @@ export default function PAGE() {
         setValue,
     } = useForm<EstimateForm>({
         defaultValues: {
-            customerName: customerName,
-            JobId: JobId,
-            make: make,
-            model: model,
+            cName: cName,
+            jobId: jobId,
+            cMake: cMake,
+            cModel: cModel,
             EstimateTableData: {},
             ServicesDetailsTableData: {},
-            ServicesDiscount: 0,
-            EstimateDiscount: estimateDiscount,
+            DiscountServices: 0,
+            DiscountEstimate: DiscountEstimate,
             TotalServiceFee: 0,
             TotalEstimateFee: 0,
-            Kilometers: kiloMeters,
+            cKiloMeters: ckiloMeters,
             CreatedAt: formattedDate,
-            carRegistration: carRegistration,
-            paymentMode: paymentMode,
+            cRegistration: cRegistration,
+            PaymentMode: PaymentMode,
             OverAllAmount: 0,
         }
     })
@@ -249,8 +250,8 @@ export default function PAGE() {
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
                                         <Label htmlFor="Customer Name">Customer Name</Label>
                                         <Input onChange={(e) => {
-                                            setValue('customerName', e.target.value);
-                                            setCustomerName(e.target.value);
+                                            setValue('cName', e.target.value);
+                                            setcName(e.target.value);
                                         }} type="text" id="text" placeholder="Customer Name"
                                             required />
                                     </div>
@@ -272,49 +273,49 @@ export default function PAGE() {
                                 </div>
                                 <div className="flex flex-row gap-2">
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">Make</Label>
+                                        <Label htmlFor="Customer Name">cMake</Label>
                                         <Input onChange={(e) => {
-                                            setValue('make', e.target.value);
-                                            setMake(e.target.value);
-                                        }} type="text" id="text" placeholder="Make" required />
+                                            setValue('cMake', e.target.value);
+                                            setcMake(e.target.value);
+                                        }} type="text" id="text" placeholder="cMake" required />
                                     </div>
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">Model</Label>
+                                        <Label htmlFor="Customer Name">cModel</Label>
                                         <Input onChange={(e) => {
-                                            setValue('model', e.target.value);
-                                            setModel(e.target.value);
-                                        }} type="text" id="text" placeholder="Model" required />
+                                            setValue('cModel', e.target.value);
+                                            setcModel(e.target.value);
+                                        }} type="text" id="text" placeholder="cModel" required />
                                     </div>
                                 </div>
                                 <div className="flex flex-row gap-2">
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
                                         <Label htmlFor="Customer Name">Vehicle Reg No</Label>
                                         <Input onChange={(e) => {
-                                            setValue('carRegistration', e.target.value);
-                                            setCarRegistration(e.target.value);
+                                            setValue('cRegistration', e.target.value);
+                                            setcRegistration(e.target.value);
                                         }} type="text" id="text" placeholder="Vehicle Reg No"
                                             required />
                                     </div>
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
                                         <Label htmlFor="Customer Name">Job Card Id</Label>
                                         <Input onChange={(e) => {
-                                            setValue('JobId', e.target.value);
-                                            setJobId(e.target.value);
+                                            setValue('jobId', e.target.value);
+                                            setjobId(e.target.value);
                                         }} type="number" id="text" placeholder="Job Card ID (If Exist)" />
                                     </div>
                                 </div>
                                 <div className="flex flex-row gap-2 mt-2">
                                     <div className="w-full max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">KiloMeters</Label>
+                                        <Label htmlFor="Customer Name">cKiloMeters</Label>
                                         <Input onChange={(e) => {
-                                            setValue('Kilometers', parseInt(e.target.value));
-                                            setKiloMeters(parseInt(e.target.value));
+                                            setValue('cKiloMeters', parseInt(e.target.value));
+                                            setcKiloMeters(parseInt(e.target.value));
                                         }} type="number" id="number" placeholder="Km" required />
                                     </div>
                                     <div className="max-w-sm items-center gap-1.5 w-full flex-col flex">
                                         <Label className="mt-2">Payment Mode</Label>
                                         <select defaultValue={"CHEQUE"} onChange={(value) => {
-                                            setValue('paymentMode', value.target.value);
+                                            setValue('PaymentMode', value.target.value);
                                             setPaymentMode(value.target.value);
                                         }} className="border-none focus:outline-none mt-1" required>
                                             <option value="CHEQUE">CHEQUE</option>
@@ -418,8 +419,8 @@ export default function PAGE() {
                                                 onClick={() => handleAddEstimateRow()}>Add Row</Button>
                                             <Input type="number" placeholder={"Parts Discount %"}
                                                 onChange={(e) => {
-                                                    setEstimateDiscount(parseFloat(e.target.value));
-                                                    setValue('EstimateDiscount', parseInt(e.target.value));
+                                                    setDiscountEstimate(parseFloat(e.target.value));
+                                                    setValue('DiscountEstimate', parseInt(e.target.value));
                                                 }}
                                                 className={"mt-2 flex justify-end ml-auto w-[2/6]"} />
                                         </div>
@@ -492,7 +493,7 @@ export default function PAGE() {
                                             <Button type={"button"} onClick={() => {
                                                 handleGenerateSummary();
                                                 let completeAmount = overAllBillEstimate(handleEstimateTotalPrice(estimateRows)) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows));
-                                                setValue('TotalEstimateFee', overAllBillEstimate(handleEstimateTotalPrice(estimateRows)));
+                                                setValue(('TotalEstimateFee'), overAllBillEstimate(handleEstimateTotalPrice(estimateRows)));
                                                 setValue(('TotalServiceFee'), overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)));
                                                 setValue('OverAllAmount', completeAmount);
                                             }} className={"mt-2 w-1/6"}
@@ -500,8 +501,8 @@ export default function PAGE() {
                                                 Generate Summary
                                             </Button>
                                             <Input onChange={(e) => {
-                                                setServicesDiscount(parseInt(e.target.value));
-                                                setValue('ServicesDiscount', parseInt(e.target.value));
+                                                setDiscountServices(parseInt(e.target.value));
+                                                setValue('DiscountServices', parseInt(e.target.value));
                                             }}
                                                 className={"mt-2 flex w-1/6 ml-auto"} type="number" placeholder={"Discount Services %"} />
                                         </div>
@@ -516,7 +517,7 @@ export default function PAGE() {
                                         <Button disabled={isLoading || !isGenerateSummary} className="flex gap-1">
                                             Submit
 
-                                            <Loader isLoading={isLoading}/>
+                                            <Loader isLoading={isLoading} />
                                         </Button>
                                         <Button onClick={() => setIsPrinting(true)} variant={"outline"} type={"button"}>
                                             Preview

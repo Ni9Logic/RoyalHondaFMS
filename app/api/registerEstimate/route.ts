@@ -9,22 +9,25 @@ export async function POST(request: Request) {
         const EstimateTableData = JSON.stringify(body.EstimateTableData);
         const ServiceTableData = JSON.stringify(body.ServicesDetailsTableData);
 
+
         // If No Job id is given create an estimate with empty id.
-        if (body.JobId.length == 0) {
+        if (body.jobId.length == 0) {
             const isCreated = await prisma.estimatedCostWork.create({
                 data: {
-                    cName: body.customerName,
-                    cMake: body.make,
-                    cModel: body.model,
-                    cKiloMeters: body.Kilometers,
-                    createdAt: body.CreatedAt,
-                    cRegistration: body.carRegistration,
-                    DiscountEstimate: body.EstimateDiscount,
-                    DiscountServices: body.ServicesDiscount,
+                    cName: body.cName,
+                    cMake: body.cMake,
+                    cModel: body.cModel,
+                    cKiloMeters: body.cKiloMeters,
+                    CreatedAt: body.CreatedAt,
+                    cRegistration: body.cRegistration,
+                    DiscountEstimate: body.DiscountEstimate,
+                    DiscountServices: body.DiscountServices,
                     EstimateTableData: EstimateTableData,
                     ServicesTableData: ServiceTableData,
-                    PaymentMode: body.paymentMode,
+                    PaymentMode: body.PaymentMode,
                     OverAllAmount: body.OverAllAmount,
+                    TotalEstimateFee: body.TotalEstimateFee,
+                    TotalServiceFee: body.TotalServiceFee,
                 }
             })
             if (!isCreated)
@@ -36,7 +39,7 @@ export async function POST(request: Request) {
             // Job Id Given searches for jobCard with given id
             const findJob = await prisma.jobCard.findUnique({
                 where: {
-                    SerialNo: parseInt(body.JobId)
+                    SerialNo: parseInt(body.jobId)
                 }
             })
 
@@ -50,18 +53,20 @@ export async function POST(request: Request) {
             // Creating Estimate
             const createEstimate = await prisma.estimatedCostWork.create({
                 data: {
-                    cName: body.customerName,
-                    cMake: body.make,
-                    cModel: body.model,
-                    cKiloMeters: body.Kilometers,
-                    createdAt: body.CreatedAt,
-                    cRegistration: body.carRegistration,
-                    DiscountEstimate: body.EstimateDiscount,
-                    DiscountServices: body.ServicesDiscount,
+                    cName: body.cName,
+                    cMake: body.cMake,
+                    cModel: body.cModel,
+                    cKiloMeters: body.cKiloMeters,
+                    CreatedAt: body.CreatedAt,
+                    cRegistration: body.cRegistration,
+                    DiscountEstimate: body.DiscountEstimate,
+                    DiscountServices: body.DiscountServices,
                     EstimateTableData: EstimateTableData,
                     ServicesTableData: ServiceTableData,
-                    PaymentMode: body.paymentMode,
+                    PaymentMode: body.PaymentMode,
                     OverAllAmount: body.OverAllAmount,
+                    TotalEstimateFee: body.TotalEstimateFee,
+                    TotalServiceFee: body.TotalServiceFee,
                     jobId: jobids,
                 }
             })
@@ -69,14 +74,14 @@ export async function POST(request: Request) {
             // Now Find the estimate with following job id
             const createdEstimate = await prisma.estimatedCostWork.findFirst({
                 where: {
-                    jobId: parseInt(body?.JobId)
+                    jobId: parseInt(body?.jobId)
                 }
             })
 
             // Now lets update that job id with following estimate number
             const updateJobCard = await prisma.jobCard.update({
                 where: {
-                    SerialNo: parseInt(body?.JobId)
+                    SerialNo: parseInt(body?.jobId)
                 },
                 data: {
                     EstimateNumber: createEstimate?.id,

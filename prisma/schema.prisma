@@ -65,13 +65,15 @@ model EstimatedCostWork {
   cModel            String?
   cRegistration     String?
   cKiloMeters       Float?
+  TotalServiceFee   Float?
+  TotalEstimateFee  Float?
   PaymentMode       String?
   EstimateTableData Json?
   ServicesTableData Json?
   DiscountServices  Float?
   DiscountEstimate  Float?
   OverAllAmount     Float?
-  createdAt         String?
+  CreatedAt         String?
 }
 
 model PriceSheet {

@@ -108,7 +108,7 @@ export const columns: ColumnDef<JobTable>[] = [
 
     {
         accessorKey: 'CreatedAt',
-        header: 'Creation Time'
+        header: 'Date'
     },
     {
         id: "actions",
