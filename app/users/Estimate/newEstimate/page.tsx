@@ -224,7 +224,7 @@ export default function PAGE() {
     const onSubmit: SubmitHandler<EstimateForm> = async (data: EstimateForm) => {
         setLoading(true);
         axios.post("../../../api/registerEstimate", data)
-            .then((response) => {
+            .then(() => {
                 toast.success("Estimate Created!")
             })
             .catch((response: any) => {
@@ -312,13 +312,12 @@ export default function PAGE() {
                                             setKiloMeters(parseInt(e.target.value));
                                         }} type="number" id="number" placeholder="Km" required/>
                                     </div>
-                                    <div className="max-w-sm items-center gap-1.5 w-full">
-                                        <Label>Payment Mode</Label>
-                                        <select onChange={(value) => {
+                                    <div className="max-w-sm items-center gap-1.5 w-full flex-col flex">
+                                        <Label className="mt-2">Payment Mode</Label>
+                                        <select defaultValue={"CHEQUE"} onChange={(value) => {
                                             setValue('paymentMode', value.target.value);
                                             setPaymentMode(value.target.value);
-                                        }} className="border-none focus:outline-none" required>
-                                            <option value="" disabled selected>Payment Mode</option>
+                                        }} className="border-none focus:outline-none mt-1" required>
                                             <option value="CHEQUE">CHEQUE</option>
                                             <option value="CASH">CASH</option>
                                         </select>
@@ -497,7 +496,6 @@ export default function PAGE() {
                                                 setValue('TotalEstimateFee', overAllBillEstimate(handleEstimateTotalPrice(estimateRows)));
                                                 setValue(('TotalServiceFee'), overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)));
                                                 setValue('OverAllAmount', completeAmount);
-                                                handleOverAllBill();
                                             }} className={"mt-2 w-1/6"}
                                                 onChange={(e) => e.preventDefault()}>
                                                 Generate Summary
