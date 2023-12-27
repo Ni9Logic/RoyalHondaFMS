@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
+import logo from "@/app/components/images/logo.png";
 
 export default function Hero() {
     const router = useRouter();

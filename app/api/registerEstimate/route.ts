@@ -1,28 +1,104 @@
+import { EstimateForm, EstimateRowType } from "@/app/users/Estimate/newEstimate/page";
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prismadb";
 
 export async function POST(request: Request) {
     try {
-        const body = await request.json();
-        const { customerName, customerContact, requiredWorkDetails } = body;
+        const body: EstimateForm = await request.json();
 
-        if (!customerName || !customerContact || !requiredWorkDetails)
-            return NextResponse.json({ error: 'Missing Details' }, { status: 400 })
+        const EstimateTableData = JSON.stringify(body.EstimateTableData);
+        const ServiceTableData = JSON.stringify(body.ServicesDetailsTableData);
 
-        // Create EstimatedCostWork record
-        const estimatedWorkResult = await prisma.estimatedCostWork.create({
-            data: {
-                cName: customerName,
-                cContact: customerContact,
-                requiredWorkDetails: JSON.stringify(requiredWorkDetails),
-            },
-        });
+        // If No Job id is given create an estimate with empty id.
+        if (body.JobId.length == 0) {
+            const isCreated = await prisma.estimatedCostWork.create({
+                data: {
+                    cName: body.customerName,
+                    cMake: body.make,
+                    cModel: body.model,
+                    cKiloMeters: body.Kilometers,
+                    createdAt: body.CreatedAt,
+                    cRegistration: body.carRegistration,
+                    DiscountEstimate: body.EstimateDiscount,
+                    DiscountServices: body.ServicesDiscount,
+                    EstimateTableData: EstimateTableData,
+                    ServicesTableData: ServiceTableData,
+                    PaymentMode: body.paymentMode,
+                    OverAllAmount: body.OverAllAmount,
+                }
+            })
+            if (!isCreated)
+                return NextResponse.json({ Message: "Some error occurred!" }, { status: 404 });
 
-        if (!estimatedWorkResult)
-            return NextResponse.json({ error: 'Internal Server Error' }, { status: 400 })
+            return NextResponse.json({ Message: "Estimate Created" }, { status: 200 });
+        }
+        else {
+            // Job Id Given searches for jobCard with given id
+            const findJob = await prisma.jobCard.findUnique({
+                where: {
+                    SerialNo: parseInt(body.JobId)
+                }
+            })
 
-        return NextResponse.json(estimatedWorkResult);
+            // Job Id Not Found Return Error
+            if (!findJob)
+                return NextResponse.json({ Message: "Invalid Job Id Provided" }, { status: 404 });
+
+            // Store the job id inside jobids if job id is found inside FindJob Variable
+            let jobids = findJob.SerialNo;
+
+            // Creating Estimate
+            const createEstimate = await prisma.estimatedCostWork.create({
+                data: {
+                    cName: body.customerName,
+                    cMake: body.make,
+                    cModel: body.model,
+                    cKiloMeters: body.Kilometers,
+                    createdAt: body.CreatedAt,
+                    cRegistration: body.carRegistration,
+                    DiscountEstimate: body.EstimateDiscount,
+                    DiscountServices: body.ServicesDiscount,
+                    EstimateTableData: EstimateTableData,
+                    ServicesTableData: ServiceTableData,
+                    PaymentMode: body.paymentMode,
+                    OverAllAmount: body.OverAllAmount,
+                    jobId: jobids,
+                }
+            })
+
+            // Now Find the estimate with following job id
+            const createdEstimate = await prisma.estimatedCostWork.findFirst({
+                where: {
+                    jobId: parseInt(body?.JobId)
+                }
+            })
+
+            // Now lets update that job id with following estimate number
+            const updateJobCard = await prisma.jobCard.update({
+                where: {
+                    SerialNo: parseInt(body?.JobId)
+                },
+                data: {
+                    EstimateNumber: createEstimate?.id,
+                    isEstimate: true,
+                }
+            })
+
+            if (!createEstimate)
+                return NextResponse.json({ Message: "Error Creating Estimate" }, { status: 404 });
+
+            if (!createdEstimate)
+                return NextResponse.json({ Message: "Error Finding Estimate ID" }, { status: 404 });
+
+            if (!updateJobCard)
+                return NextResponse.json({ Message: "Error Updating Job Card" }, { status: 404 });
+
+
+
+
+            return NextResponse.json({ Message: "Job Card Created" }, { status: 200 })
+        }
     } catch (error: any) {
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        return NextResponse.json({ Message: 'Internal Server Error' }, { status: 500 });
     }
 }

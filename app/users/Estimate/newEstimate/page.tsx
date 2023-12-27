@@ -5,13 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/app/components/ui/button";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import PrintEstimate from "../printableEstimate/PrintableEstimate";
 import { v4 as uuidv4 } from 'uuid';
 import TableSummaries from "./Summary";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { NextResponse } from "next/server";
 
 
-interface EstimateRowType {
+export interface EstimateRowType {
     partNo: string;
     partDesc: string;
     partQty: number;
@@ -22,7 +25,7 @@ interface EstimateRowObject {
     [key: string]: EstimateRowType;
 };
 
-interface ServicesDetailsType {
+export interface ServicesDetailsType {
     details: string;
     charges: number;
 }
@@ -69,14 +72,9 @@ export default function PAGE() {
     const [model, setModel] = useState('');
     const [carRegistration, setCarRegistration] = useState('');
     const [paymentMode, setPaymentMode] = useState('');
-    const [servicesDetailsRows, setServicesDetailsRow] = useState<ServiceRowObject>({})
 
-    // Array of rows
-    // const [estimateRows, setEstimateRows] = useState<EstimateRowType[]>([]);
+    const [servicesDetailsRows, setServicesDetailsRow] = useState<ServiceRowObject>({})
     const [estimateRows, setEstimateRows] = useState<EstimateRowObject>({});
-    useEffect(() => {
-        console.log(estimateRows);
-    }, [estimateRows]);
 
     const handleAddEstimateRow = () => {
         const obj = { ...estimateRows };
@@ -173,29 +171,10 @@ export default function PAGE() {
     }
 
     function handleOverAllBill() {
-        return overAllBillEstimate(handleEstimateTotalPrice(estimateRows)) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows));
+        return overAllBillEstimate(overAllBillEstimate(handleEstimateTotalPrice(estimateRows))) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows));
     }
 
-    const {
-        register,
-        handleSubmit,
-        setValue,
-    } = useForm<EstimateForm>({
-        defaultValues: {
-            customerName: '',
-            make: '',
-            model: '',
-            EstimateDiscount: estimateDiscount,
-            ServicesDiscount: servicesDiscount,
-            Kilometers: 0,
-            EstimateTableData: estimateRows,
-            ServicesDetailsTableData: servicesDetailsRows,
-            JobId: '',
-            paymentMode: '',
-            OverAllAmount: overAllPrice,
-            CreatedAt: '',
-        }
-    })
+
 
     // @ts-ignore
     const data: EstimateForm = {
@@ -216,7 +195,46 @@ export default function PAGE() {
         OverAllAmount: handleOverAllBill(),
     }
 
+    const {
+        register,
+        handleSubmit,
+        setValue,
+    } = useForm<EstimateForm>({
+        defaultValues: {
+            customerName: customerName,
+            JobId: JobId,
+            make: make,
+            model: model,
+            EstimateTableData: {},  
+            ServicesDetailsTableData: {},
+            ServicesDiscount: 0,
+            EstimateDiscount: estimateDiscount,
+            TotalServiceFee: 0,
+            TotalEstimateFee: 0,
+            Kilometers: kiloMeters,
+            CreatedAt: formattedDate,
+            carRegistration: carRegistration,
+            paymentMode: paymentMode,
+            OverAllAmount: 0,
+        }
+    })
     const [isPrinting, setIsPrinting] = useState(false);
+
+    const [isLoading, setLoading] = useState(false);
+    const onSubmit: SubmitHandler<EstimateForm> = async (data: EstimateForm) => {
+        setLoading(true);
+        axios.post("../../../api/registerEstimate", data)
+            .then((response) => {
+                toast.success("Estimate Created!")
+            })
+            .catch((response: any) => {
+                let error = response?.response?.data?.Message;
+                toast.error(error);
+            })
+            .finally(() => {
+                setLoading(false);
+            })
+    }
     return (
         <>
             {
@@ -227,7 +245,7 @@ export default function PAGE() {
                             <div className="flex justify-center w-full">
                                 <h1 className="text-3xl font-bold">Estimate Sheet</h1>
                             </div>
-                            <form className="flex flex-col items-center justify-center gap-2 mt-10">
+                            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center justify-center gap-2 mt-10">
                                 <div className="flex flex-row gap-2">
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
                                         <Label htmlFor="Customer Name">Customer Name</Label>
@@ -292,14 +310,14 @@ export default function PAGE() {
                                         <Input onChange={(e) => {
                                             setValue('Kilometers', parseInt(e.target.value));
                                             setKiloMeters(parseInt(e.target.value));
-                                        }} type="number" id="number" placeholder="Km" />
+                                        }} type="number" id="number" placeholder="Km" required/>
                                     </div>
                                     <div className="max-w-sm items-center gap-1.5 w-full">
                                         <Label>Payment Mode</Label>
                                         <select onChange={(value) => {
                                             setValue('paymentMode', value.target.value);
                                             setPaymentMode(value.target.value);
-                                        }} className="border-none focus:outline-none">
+                                        }} className="border-none focus:outline-none" required>
                                             <option value="" disabled selected>Payment Mode</option>
                                             <option value="CHEQUE">CHEQUE</option>
                                             <option value="CASH">CASH</option>
@@ -349,6 +367,7 @@ export default function PAGE() {
                                                                     const updatedRows = { ...estimateRows };
                                                                     updatedRows[key].partNo = e.target.value;
                                                                     setEstimateRows(updatedRows);
+                                                                    setValue('EstimateTableData', updatedRows);
                                                                 }}
                                                                     className={"border-none outline-none"} />
                                                             </td>
@@ -357,8 +376,9 @@ export default function PAGE() {
                                                                     const updatedRows = { ...estimateRows };
                                                                     updatedRows[key].partDesc = e.target.value;
                                                                     setEstimateRows(updatedRows);
+                                                                    setValue('EstimateTableData', updatedRows);
                                                                 }}
-                                                                    className={"border-none outline-none"} />
+                                                                    className={"border-none outline-none"} required/>
                                                             </td>
                                                             <td className={"px-6 py-4"}>
                                                                 <input type={"number"} onChange={(e) => {
@@ -366,8 +386,9 @@ export default function PAGE() {
                                                                     updatedRows[key].partPrice = parseInt(e.target.value);
                                                                     updatedRows[key].partTotalPrice = (updatedRows[key].partPrice) * (updatedRows[key].partQty);
                                                                     setEstimateRows(updatedRows);
+                                                                    setValue('EstimateTableData', updatedRows);
                                                                 }} className={"border-none outline-none"}
-                                                                    style={{ width: dynamicWidth }} /> Rs
+                                                                    style={{ width: dynamicWidth }} required/> Rs
                                                             </td>
                                                             <td className="px-6 py-4">
                                                                 <input type={"number"} onChange={(e) => {
@@ -376,7 +397,7 @@ export default function PAGE() {
                                                                     updatedRows[key].partQty = parseInt(e.target.value);
                                                                     updatedRows[key].partTotalPrice = (updatedRows[key].partPrice) * (updatedRows[key].partQty);
                                                                     setEstimateRows(updatedRows);
-                                                                    console.log(estimateRows);
+                                                                    setValue('EstimateTableData', updatedRows);
 
                                                                 }} className={"border-none outline-none w-[56px]"}
                                                                     defaultValue={estimateRows[key].partQty} />
@@ -398,7 +419,10 @@ export default function PAGE() {
                                             <Button type={"button"} className={"mt-2 w-2/6"} onChange={(e) => e.preventDefault()}
                                                 onClick={() => handleAddEstimateRow()}>Add Row</Button>
                                             <Input type="number" placeholder={"Parts Discount %"}
-                                                onChange={(e) => setEstimateDiscount(parseFloat(e.target.value))}
+                                                onChange={(e) => {
+                                                    setEstimateDiscount(parseFloat(e.target.value));
+                                                    setValue('EstimateDiscount', parseInt(e.target.value));
+                                                }}
                                                 className={"mt-2 flex justify-end ml-auto w-[2/6]"} />
                                         </div>
                                     </div>
@@ -433,12 +457,22 @@ export default function PAGE() {
                                                             </th>
                                                             <td className="px-6 py-4">
                                                                 <input
-                                                                    onChange={(e) => servicesDetailsRows[key].details = e.target.value}
+                                                                    onChange={(e) => {
+                                                                        servicesDetailsRows[key].details = e.target.value;
+                                                                        const updatedRows = { ...servicesDetailsRows }
+                                                                        setServicesDetailsRow(updatedRows);
+                                                                        setValue('ServicesDetailsTableData', updatedRows);
+                                                                    }}
                                                                     className={"border-none outline-none w-full"} />
                                                             </td>
                                                             <td className="px-6 py-4">
                                                                 <input type="number"
-                                                                    onChange={(e) => servicesDetailsRows[key].charges = parseInt(e.target.value)}
+                                                                    onChange={(e) => {
+                                                                        const updatedRows = { ...servicesDetailsRows }
+                                                                        servicesDetailsRows[key].charges = parseInt(e.target.value)
+                                                                        setServicesDetailsRow(updatedRows);
+                                                                        setValue('ServicesDetailsTableData', updatedRows);
+                                                                    }}
                                                                     className={"border-none outline-none w-full"} />
                                                             </td>
                                                             <td className="px-6 py-4">
@@ -457,11 +491,21 @@ export default function PAGE() {
                                         <div className={"gap-2 flex flex-row"}>
                                             <Button type={"button"} className={"mt-2 w-1/6"} onChange={(e) => e.preventDefault()}
                                                 onClick={() => handleAddServicesDetailsRow()}>Add Row</Button>
-                                            <Button type={"button"} onClick={() => handleGenerateSummary()} className={"mt-2 w-1/6"}
+                                            <Button type={"button"} onClick={() => {
+                                                handleGenerateSummary();
+                                                let completeAmount = overAllBillEstimate(handleEstimateTotalPrice(estimateRows)) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows));
+                                                setValue('TotalEstimateFee', overAllBillEstimate(handleEstimateTotalPrice(estimateRows)));
+                                                setValue(('TotalServiceFee'), overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)));
+                                                setValue('OverAllAmount', completeAmount);
+                                                handleOverAllBill();
+                                            }} className={"mt-2 w-1/6"}
                                                 onChange={(e) => e.preventDefault()}>
                                                 Generate Summary
                                             </Button>
-                                            <Input onChange={(e) => setServicesDiscount(parseFloat(e.target.value))}
+                                            <Input onChange={(e) => {
+                                                setServicesDiscount(parseInt(e.target.value));
+                                                setValue('ServicesDiscount', parseInt(e.target.value));
+                                            }}
                                                 className={"mt-2 flex w-1/6 ml-auto"} type="number" placeholder={"Discount Services %"} />
                                         </div>
                                     </div>
@@ -472,7 +516,7 @@ export default function PAGE() {
                                         )
                                     }
                                     <div className={"flex flex-row mt-2 gap-2"}>
-                                        <Button type={"button"}>
+                                        <Button disabled={isLoading || !isGenerateSummary}>
                                             Submit
                                         </Button>
                                         <Button onClick={() => setIsPrinting(true)} variant={"outline"} type={"button"}>
