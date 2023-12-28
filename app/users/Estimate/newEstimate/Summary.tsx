@@ -20,26 +20,26 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
         return totalPrice;
     }
 
-    function handleEstimateDiscount(totalEstimatePrice: number) {
-        if (isNaN(data.EstimateDiscount))
-            data.EstimateDiscount = 0;
+    function handleDiscountEstimate(totalEstimatePrice: number) {
+        if (isNaN(data.DiscountEstimate))
+            data.DiscountEstimate = 0;
 
-        return (data?.EstimateDiscount / 100) * totalEstimatePrice;
+        return (data?.DiscountEstimate / 100) * totalEstimatePrice;
     }
 
-    function handleServicesDiscount(totalServicesPrice: number) {
-        if (isNaN(data.ServicesDiscount))
-            data.ServicesDiscount = 0;
+    function handleDiscountServices(totalServicesPrice: number) {
+        if (isNaN(data.DiscountServices))
+            data.DiscountServices = 0;
 
-        return (data?.ServicesDiscount / 100) * totalServicesPrice;
+        return (data?.DiscountServices / 100) * totalServicesPrice;
     }
 
     function overAllBillEstimate(totalEstimatePrice: number) {
-        return totalEstimatePrice - handleEstimateDiscount(totalEstimatePrice);
+        return totalEstimatePrice - handleDiscountEstimate(totalEstimatePrice);
     }
 
     function overAllBillServices(totalServicesPrice: number) {
-        return totalServicesPrice - handleServicesDiscount(totalServicesPrice);
+        return totalServicesPrice - handleDiscountServices(totalServicesPrice);
     }
 
     function handleOverAllBill() {
@@ -110,9 +110,9 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
                             Total: {handleEstimateTotalPrice(data?.EstimateTableData).toLocaleString()} Rs
                         </Label>
                         {
-                            data?.EstimateDiscount !== 0 && !isNaN(data?.EstimateDiscount) &&
+                            data?.DiscountEstimate !== 0 && !isNaN(data?.DiscountEstimate) &&
                             <Label className={"flex justify-end"}>
-                                Discount: {handleEstimateDiscount(handleEstimateTotalPrice(data?.EstimateTableData)).toLocaleString()} Rs
+                                Discount: {handleDiscountEstimate(handleEstimateTotalPrice(data?.EstimateTableData)).toLocaleString()} Rs
                             </Label>
                         }
                     </div>
@@ -160,9 +160,9 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
                             Services
                             Total: {handleServicesTotalPrice(data?.ServicesDetailsTableData).toLocaleString()} Rs
                         </Label>
-                        {data?.ServicesDiscount !== 0 && !isNaN(data?.ServicesDiscount) &&
+                        {data?.DiscountServices !== 0 && !isNaN(data?.DiscountServices) &&
                             <Label className={"mt-2 flex justify-end"}>
-                                Discount: {handleServicesDiscount(handleServicesTotalPrice(data?.ServicesDetailsTableData)).toLocaleString()} Rs
+                                Discount: {handleDiscountServices(handleServicesTotalPrice(data?.ServicesDetailsTableData)).toLocaleString()} Rs
                             </Label>
                         }
                     </div>
@@ -179,11 +179,11 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                     <p className={"font-bold"}>Cost of Parts:</p>{" "}
                                     {handleEstimateTotalPrice(data?.EstimateTableData).toLocaleString()} Rs
                                 </Label>
-                                {data?.EstimateDiscount !== 0 && !isNaN(data?.EstimateDiscount) && (
+                                {data?.DiscountEstimate !== 0 && !isNaN(data?.DiscountEstimate) && (
                                     <Label className={"flex flex-row gap-1"}>
-                                        <p className={"font-bold"}>{data?.EstimateDiscount} % Discount on
+                                        <p className={"font-bold"}>{data?.DiscountEstimate} % Discount on
                                             Parts:</p>{" "}
-                                        {handleEstimateDiscount(
+                                        {handleDiscountEstimate(
                                             handleEstimateTotalPrice(data?.EstimateTableData)
                                         ).toLocaleString()}{" "}
                                         Rs
@@ -194,11 +194,11 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                     {handleServicesTotalPrice(data?.ServicesDetailsTableData).toLocaleString()} Rs
                                 </Label>
                                 {
-                                    data?.ServicesDiscount !== 0 && !isNaN(data?.ServicesDiscount) && (
+                                    data?.DiscountServices !== 0 && !isNaN(data?.DiscountServices) && (
                                         <Label className={"flex flex-row gap-1"}>
-                                            <p className={"font-bold"}>{data?.ServicesDiscount} % Discount on
+                                            <p className={"font-bold"}>{data?.DiscountServices} % Discount on
                                                 Services:</p>{" "}
-                                            {handleServicesDiscount(
+                                            {handleDiscountServices(
                                                 handleServicesTotalPrice(data?.ServicesDetailsTableData)
                                             ).toLocaleString()} Rs
                                         </Label>
@@ -212,7 +212,7 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                 <hr className={"border-t-1 border-black flex"} />
                                 <Label className={"flex flex-row gap-1"}>
                                     Parts Price{
-                                        data?.EstimateDiscount !== 0 && !isNaN(data?.EstimateDiscount) ? (
+                                        data?.DiscountEstimate !== 0 && !isNaN(data?.DiscountEstimate) ? (
                                             <p className={"font-bold"}>
                                                 (Discount): {overAllBillEstimate(handleEstimateTotalPrice(data?.EstimateTableData)).toLocaleString()} Rs
                                             </p>
@@ -225,7 +225,7 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                 </Label>
                                 <Label className={"flex flex-row gap-1"}>
                                     Services Price{
-                                        data?.ServicesDiscount !== 0 && !isNaN(data?.ServicesDiscount) ? (
+                                        data?.DiscountServices !== 0 && !isNaN(data?.DiscountServices) ? (
                                             <p className={"font-bold"}>
                                                 (Discount): {overAllBillServices(handleServicesTotalPrice(data?.ServicesDetailsTableData)).toLocaleString()} Rs
                                             </p>

@@ -247,13 +247,17 @@ export default function PAGE() {
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center justify-center gap-2 mt-10">
                                 <div className="flex flex-row gap-2">
-                                    <div className="flex-grow max-w-sm items-center gap-1.5">
+                                    <div className="max-w-sm items-center gap-1.5">
                                         <Label htmlFor="Customer Name">Customer Name</Label>
-                                        <Input onChange={(e) => {
-                                            setValue('cName', e.target.value);
-                                            setcName(e.target.value);
-                                        }} type="text" id="text" placeholder="Customer Name"
-                                            required />
+                                        <div className="flex flex-row w-full">
+                                            <div className="">
+                                                <Input onChange={(e) => {
+                                                    setValue('cName', e.target.value);
+                                                    setcName(e.target.value);
+                                                }} type="text" id="text" placeholder="Customer Name"
+                                                    required />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
                                         <Label htmlFor="Customer Name">Estimate Number</Label>
@@ -273,14 +277,14 @@ export default function PAGE() {
                                 </div>
                                 <div className="flex flex-row gap-2">
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">cMake</Label>
+                                        <Label htmlFor="Customer Name">Make</Label>
                                         <Input onChange={(e) => {
                                             setValue('cMake', e.target.value);
                                             setcMake(e.target.value);
                                         }} type="text" id="text" placeholder="cMake" required />
                                     </div>
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">cModel</Label>
+                                        <Label htmlFor="Customer Name">Model</Label>
                                         <Input onChange={(e) => {
                                             setValue('cModel', e.target.value);
                                             setcModel(e.target.value);
@@ -306,7 +310,7 @@ export default function PAGE() {
                                 </div>
                                 <div className="flex flex-row gap-2 mt-2">
                                     <div className="w-full max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">cKiloMeters</Label>
+                                        <Label htmlFor="Customer Name">KiloMeters</Label>
                                         <Input onChange={(e) => {
                                             setValue('cKiloMeters', parseInt(e.target.value));
                                             setcKiloMeters(parseInt(e.target.value));
@@ -495,6 +499,8 @@ export default function PAGE() {
                                                 let completeAmount = overAllBillEstimate(handleEstimateTotalPrice(estimateRows)) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows));
                                                 setValue(('TotalEstimateFee'), overAllBillEstimate(handleEstimateTotalPrice(estimateRows)));
                                                 setValue(('TotalServiceFee'), overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)));
+
+                                                console.log(DiscountEstimate, DiscountServices)
                                                 setValue('OverAllAmount', completeAmount);
                                             }} className={"mt-2 w-1/6"}
                                                 onChange={(e) => e.preventDefault()}>

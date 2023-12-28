@@ -287,7 +287,7 @@ export default function Page() {
                                                         <input placeholder="Registration" onChange={(value) => {
                                                             setValue('RegistrationNumber', value.target.value);
                                                             setRegistrationNumber(value.target.value);
-                                                        }} className="border-none focus:outline-none" required></input>
+                                                        }} className="border-none focus:outline-none" type="number" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -298,7 +298,7 @@ export default function Page() {
                                                         <input placeholder="Battery #" onChange={(value) => {
                                                             setValue('BatteryNumber', value.target.value);
                                                             setBatteryNumber(value.target.value);
-                                                        }} className="border-none focus:outline-none" required></input>
+                                                        }} className="border-none focus:outline-none" type="number" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -309,7 +309,7 @@ export default function Page() {
                                                         <input placeholder="Frame #" onChange={(value) => {
                                                             setValue('FrameNo', value.target.value);
                                                             setFrameNo(value.target.value);
-                                                        }} className="border-none focus:outline-none" required></input>
+                                                        }} className="border-none focus:outline-none" type="number" required></input>
                                                     </td>
                                                 </tr>
                                             </tbody>

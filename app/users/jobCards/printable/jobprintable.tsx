@@ -56,7 +56,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
     }, [onClose]); // Re-run effect when onClose changes
     return (
         <>
-            <div className="container h-[99vh]">
+            <div className="ml-4 mr-4">
                 <div className="border border-black mt-2 flex flex-col">
                     <div className="flex flex-row">
                         <div className="w-full flex flex-col">
@@ -181,14 +181,16 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                     <hr className="border-t-1 border-black" />
                     <div className="ml-2 h-[10vh]">
                         <p className="text-sm">Other Additional Work (If Required)</p>
-                        <p>{data?.AdditionalWorkDetails}</p>
+                        <p>{data?.OtherAdditionalWork}</p>
                     </div>
                     <hr className="border-t-1 border-black" />
                     <div className="flex flex-row">
-                        <p className="ml-2 w-full border border-black border-l-0 border-b-0 border-t-0">User Signature</p>
-                        <p className="w-full ml-2 text-blue-600 text-center">
-                            <p className="text-red-500">Note:</p>
-                            I have personally verified the things mentioned above, and I have also checked all the belongings of my car. I am completely satisfied.
+                        <p className="ml-2 w-full border border-black h-32 border-l-0 border-b-0 border-t-0 font-bold">User Signature</p>
+                        <p className="w-full ml-2 text-blue-600 flex flex-row gap-1">
+                            <p className="text-red-500 text-[12px]">Note:</p>
+                            <p className="text-[12px]">
+                                I have personally verified the things mentioned above, and I have also checked all the belongings of my car. I am completely satisfied.
+                            </p>
                         </p>
                     </div>
                     <hr className="border-t-1 border-black" />
@@ -203,7 +205,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
 
                         <div className="w-full border border-b-0 border-t-0 border-r-0 border-black flex flex-row gap-2">
                             <p className="ml-2">Date Time: </p>
-                            {data?.InTime?.toString()}
+                            {data?.InTime}
                         </div>
                     </div>
 
@@ -219,7 +221,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
 
                         <div className="w-full border border-b-0 border-t-0 border-r-0 border-black flex flex-row gap-2">
                             <p className="ml-2">Date Time: </p>
-                            {data?.OutTime?.toString()}
+                            {data?.OutTime}
                         </div>
                     </div>
                 </div>
