@@ -31,7 +31,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                 <div className="mt-10 w-full">
                                     <p className="text-sm flex flex-row gap-1">Customer Name:
                                         <p className="border border-black w-auto h-auto text-sm">
-                                            <p className="px-2 font-sans">{data?.customerName}</p>
+                                            <p className="px-2 font-sans">{data?.cName}</p>
                                         </p>
                                     </p>
                                 </div>
@@ -76,7 +76,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                     <th scope="col" className="px-6 py-3 text-[10px] font-sans">
                                         Veh Reg No
                                     </th>
-                                    <th scope="col" className="px-6 py-3 text-[10px] font-sans">
+                                <th scope="col" className="px-6 py-3 text-[10px] font-sans">
                                         Job #
                                     </th>
                                     <th scope="col" className="px-6 py-3 text-[10px] font-sans">
@@ -91,27 +91,27 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="col"
                                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-[12px] font-sans">
-                                        {data?.make}
+                                        {data?.cMake}
                                     </th>
                                     <th scope="col"
                                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-[12px] font-sans">
-                                        {data?.model}
+                                        {data?.cModel}
                                     </th>
                                     <th scope="col"
                                         className="px-6 py-4 font-medium  whitespace-nowrap dark:text-white text-red-500">
-                                        {data?.carRegistration}
+                                        {data?.cRegistration}
                                     </th>
                                     <th scope="col"
                                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-[12px] font-sans">
-                                        {data?.JobId}
+                                        {data?.jobId}
                                     </th>
                                     <th scope="col"
                                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-[12px] font-sans">
-                                        {data?.Kilometers.toLocaleString()} KM
+                                        {data?.cKiloMeters.toLocaleString()} KM
                                     </th>
                                     <th scope="col"
                                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-[12px] font-sans">
-                                        {data?.paymentMode}
+                                        {data?.PaymentMode}
                                     </th>
                                 </tr>
                             </tbody>
@@ -220,12 +220,12 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                             <hr className={"border-t-1 border-black flex"} />
                             <div>
                                 <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Parts Price:</p> {data?.TotalEstimateFee.toLocaleString()} Rs</p>
-                                <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Parts:</p> {data?.EstimateDiscount} %</p>
-                                <p className="font-sans text-sm flex flex-row gap-1">Parts Price <p className="font-bold">(Discounted):</p> {(data?.TotalEstimateFee - (data?.TotalEstimateFee * data?.EstimateDiscount) / 100).toLocaleString()} Rs</p>
+                                <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Parts:</p> {data?.DiscountEstimate} %</p>
+                                <p className="font-sans text-sm flex flex-row gap-1">Parts Price <p className="font-bold">(Discounted):</p> {(data?.TotalEstimateFee - (data?.TotalEstimateFee * data?.DiscountEstimate) / 100).toLocaleString()} Rs</p>
                                 <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Labor Cost:</p> {data?.TotalServiceFee.toLocaleString()} Rs</p>
-                                <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Labor:</p> {data?.ServicesDiscount} %</p>
-                                <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(Discounted):</p> {(data?.TotalServiceFee - (data?.ServicesDiscount * data?.TotalServiceFee) / 100).toLocaleString()} Rs</p>
-                                <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Total Amount:</p> {((data?.TotalEstimateFee - (data?.TotalEstimateFee * data?.EstimateDiscount) / 100) + (data?.TotalServiceFee - (data?.ServicesDiscount * data?.TotalServiceFee) / 100)).toLocaleString()} Rs</p>
+                                <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Labor:</p> {data?.DiscountServices} %</p>
+                                <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(Discounted):</p> {(data?.TotalServiceFee - (data?.DiscountServices * data?.TotalServiceFee) / 100).toLocaleString()} Rs</p>
+                                <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Total Amount:</p> {((data?.TotalEstimateFee - (data?.TotalEstimateFee * data?.DiscountEstimate) / 100) + (data?.TotalServiceFee - (data?.DiscountServices * data?.TotalServiceFee) / 100)).toLocaleString()} Rs</p>
                             </div>
                         </div>
                     </div>

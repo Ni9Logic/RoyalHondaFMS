@@ -260,22 +260,21 @@ export default function Page() {
                                                             setInsurance(value.target.value);
                                                         }} className="border-none focus:outline-none">
                                                             <option value="" disabled selected>Select an insurance company</option>
-                                                            <option value="HABIB BANK LIMITED">HABIB BANK LIMITED</option>
-                                                            <option value="TPL Insurance Coampnay">TPL INSURANCE COMPANY</option>
-                                                            <option value="IGI GENERAL INSURNACE LIMITED">IGI GENERAL INSURNACE LIMITED </option>
-                                                            <option value="SALAAM TAKAFUL INS PAKISTAN LTD">SALAAM TAKAFUL INS PAKISTAN LTD</option>
-                                                            <option value="ALFALAH GENERAL INSURNACE COMPANY LTD">ALFALAH GENERAL INSURNACE COMPANY LTD</option>
+                                                            <option value="HABIB BANK LIMITED">HABIB INSURANCE COMPANY</option>
+                                                            <option value="TPL Insurance Company">TPL INSURANCE COMPANY</option>
+                                                            <option value="IGI GENERAL INSURNACE LIMITED">IGI INSURANCE COMPANY </option>
+                                                            <option value="SALAAM TAKAFUL INSURANCE PAKISTAN">SALAAM TAKAFUL INSURANCE COMPANY</option>
+                                                            <option value="ALFALAH GENERAL INSURNACE COMPANY">ALFALAH GENERAL INSURNACE COMPANY</option>
                                                             <option value="JUBILEE INSURNACE COMPANY">JUBILEE INSURNACE COMPANY</option>
-                                                            <option value="ATLAS INSURNACE COMPANY LTD">ATLAS INSURNACE COMPANY LTD</option>
-                                                            <option value="ADAMJEE INSURNACE CORP BR KHI">ADAMJEE INSURNACE CORP BR KHI</option>
-                                                            <option value="ASKARI GENERAL INSURNACE COMPANY LTD">ASKARI GENERAL INSURNACE COMPANY LTD</option>
-                                                            <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY LTD</option>
+                                                            <option value="ATLAS INSURNACE COMPANY">ATLAS INSURNACE COMPANY</option>
+                                                            <option value="ADAMJEE INSURNACE COMPANY">ADAMJEE INSURNACE COMPANY</option>
+                                                            <option value="ASKARI GENERAL INSURNACE COMPANY">ASKARI GENERAL INSURNACE COMPANY</option>
+                                                            <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY</option>
                                                             <option value="UBL INSURNACE COMPANY">UBL INSURNACE COMPANY</option>
-                                                            <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY LTD</option>
-                                                            <option value="PAK QATAR">PAK QATAR</option>
-                                                            <option value="UNITED INS">UNITED INS</option>
+                                                            <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY</option>
+                                                            <option value="PAK QATAR INSURANCE COMPANY">PAK QATAR INSURANCE COMPANY</option>
+                                                            <option value="UNITED INSURANCE COMPANY">UNITED INSURANCE COMPANY</option>
                                                             <option value="NONE">NONE</option>
-
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -287,7 +286,7 @@ export default function Page() {
                                                         <input placeholder="Registration" onChange={(value) => {
                                                             setValue('RegistrationNumber', value.target.value);
                                                             setRegistrationNumber(value.target.value);
-                                                        }} className="border-none focus:outline-none" type="number" required></input>
+                                                        }} className="border-none focus:outline-none" type="text" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">

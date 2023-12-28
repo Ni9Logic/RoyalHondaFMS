@@ -95,3 +95,13 @@ model Invoice {
   dateTime         String?
   descriptionPrice Json?
 }
+
+model InsuranceCompanies {
+  id   Int     @id @default(autoincrement())
+  name String?
+}
+
+model Surveyors {
+  id   Int     @id @default(autoincrement())
+  name String?
+}

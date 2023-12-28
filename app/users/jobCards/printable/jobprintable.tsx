@@ -185,12 +185,20 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                     </div>
                     <hr className="border-t-1 border-black" />
                     <div className="flex flex-row">
-                        <p className="ml-2 w-full border border-black h-32 border-l-0 border-b-0 border-t-0 font-bold">User Signature</p>
-                        <p className="w-full ml-2 text-blue-600 flex flex-row gap-1">
-                            <p className="text-red-500 text-[12px]">Note:</p>
-                            <p className="text-[12px]">
-                                I have personally verified the things mentioned above, and I have also checked all the belongings of my car. I am completely satisfied.
-                            </p>
+                        <p className="ml-2 w-52 border border-black h-32 border-l-0 border-b-0 border-t-0 font-bold">User Signature</p>
+                        <p className="w-full ml-2 text-blue-600 flex flex-col gap-1">
+                            <p className="text-red-500 text-[12px] justify-center flex">Terms and Conditions</p>
+                            <div className="flex flex-col">
+                                <p className="text-[11px]">
+                                    1) I have personally verified the things mentioned above, and I have also checked all the belongings of my car. I am completely satisfied.
+                                </p>
+                                <p className="text-[11px]">
+                                    2) Under insurance and depresations will be applied. (if applicable).
+                                </p>
+                                <p className="text-[11px]">
+                                    3) Before Leaving workshop check belongings of your car, later on company will not be responsible.
+                                </p>
+                            </div>
                         </p>
                     </div>
                     <hr className="border-t-1 border-black" />
