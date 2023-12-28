@@ -29,6 +29,7 @@ model JobCard {
   JobCheckedBy             String?
   WorkType                 String?
   Insurance                String?
+  Status                   String?
   carRegistration          String?
   RequiredWorkDetails      String?
   AdditionalWorkDetails    String?

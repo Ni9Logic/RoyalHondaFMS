@@ -8,6 +8,19 @@ import axios from "axios";
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import AnotherPrintJobs from "@/app/users/jobCards/printable/jobprintable";
+import PlusIcon from "@/app/components/ui/plusicon";
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export type JOBFormData = {
     CustomerName: string,
@@ -16,6 +29,7 @@ export type JOBFormData = {
     JobCheckedBy: string,
     WorkType: string,
     Insurance: string,
+    Status: string,
     RegistrationNumber: string,
     RequiredWorkDetails: string,
     OtherAdditionalWork: string,
@@ -41,6 +55,10 @@ export type JOBFormData = {
     OutReceivedFrom: string,
     OutTime: string
 };
+
+export type InsuranceCompaniesData = {
+    name: string;
+}
 
 export default function Page() {
     // Date Time Selection
@@ -80,13 +98,25 @@ export default function Page() {
     const [OutReceivedBy, setOutReceivedBy] = useState<string>('');
     const [OutReceivedFrom, setOutReceivedFrom] = useState<string>('');
     const [OutReceivedTime, setOutReceivedTime] = useState<string>('');
+    const [Status, setStatus] = useState('');
 
 
     const [isLoading, setLoading] = useState(false);
+    const [isAddInsurance, setIsAddInsurance] = useState(false);
+    const [isAddInsuranceLoading, setIsAddInsuranceLoading] = useState(false);
 
     const {
         handleSubmit,
         setValue,
+    } = useForm<InsuranceCompaniesData>({
+        defaultValues: {
+            name: ''
+        }
+    })
+
+    const {
+        handleSubmit: handleSubmitJobFormData,
+        setValue: setValueJobFormData,
     } = useForm<JOBFormData>({
         defaultValues: {
             CustomerName: '',
@@ -95,6 +125,7 @@ export default function Page() {
             JobCheckedBy: '',
             WorkType: '',
             Insurance: '',
+            Status: '',
             RegistrationNumber: '',
             RequiredWorkDetails: '',
             OtherAdditionalWork: '',
@@ -134,7 +165,17 @@ export default function Page() {
             .finally(() => setLoading(false));
     }
 
+    const onSubmitAddInsurance: SubmitHandler<InsuranceCompaniesData> = async (data: InsuranceCompaniesData) => {
+        setIsAddInsuranceLoading(true);
 
+        axios.post('../../api/addInsurance', data)
+            .then(() => {
+                toast.success('Insurance Company Added');
+            })
+            .catch((error) => {
+                toast.error(error?.data?.data?.Message);
+            })
+    }
 
     return (
         <>
@@ -150,7 +191,7 @@ export default function Page() {
                     </div>
                     <div className="items-center justify-center text-center gap-10 container">
                         <div className="overflow-x-auto flex items-center justfiy-center">
-                            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-2">
+                            <form onSubmit={handleSubmitJobFormData(onSubmit)} className="flex flex-col w-full gap-2">
                                 <div className="grid grid-cols-2 gap-2">
                                     <div className="flex-1 m-0 p-0">
                                         <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -171,7 +212,7 @@ export default function Page() {
                                                     </th>
                                                     <td className="px-6 py-4">
                                                         <input placeholder="Customer Name" onChange={(value) => {
-                                                            setValue('CustomerName', value.target.value);
+                                                            setValueJobFormData('CustomerName', value.target.value);
                                                             setCustomerName(value.target.value);
                                                         }} className="border-none focus:outline-none" required />
                                                     </td>
@@ -182,7 +223,7 @@ export default function Page() {
                                                     </th>
                                                     <td className="px-6 py-4">
                                                         <input placeholder="Driver | User" onChange={(value) => {
-                                                            setValue('DriverUser', value.target.value);
+                                                            setValueJobFormData('DriverUser', value.target.value);
                                                             setDriverUser(value.target.value);
                                                         }} className="border-none focus:outline-none" required></input>
                                                     </td>
@@ -193,7 +234,7 @@ export default function Page() {
                                                     </th>
                                                     <td className="px-6 py-4">
                                                         <input placeholder="Contact Number" onChange={(value) => {
-                                                            setValue('CellNo', value.target.value);
+                                                            setValueJobFormData('CellNo', value.target.value);
                                                             setCellNo(value.target.value);
                                                         }} className="border-none focus:outline-none" required></input>
                                                     </td>
@@ -204,7 +245,7 @@ export default function Page() {
                                                     </th>
                                                     <td className="px-6 py-4">
                                                         <input placeholder="Job Checked By" onChange={(value) => {
-                                                            setValue('JobCheckedBy', value.target.value);
+                                                            setValueJobFormData('JobCheckedBy', value.target.value);
                                                             setJobCheckedBy(value.target.value);
                                                         }} className="border-none focus:outline-none" required></input>
                                                     </td>
@@ -239,7 +280,7 @@ export default function Page() {
                                                     </th>
                                                     <td className="px-6 py-4">
                                                         <select onChange={(value) => {
-                                                            setValue('WorkType', value.target.value);
+                                                            setValueJobFormData('WorkType', value.target.value);
                                                             setWorkType(value.target.value);
                                                         }} className="border-none focus:outline-none" required>
                                                             <option value="" disabled selected>Select Work Type</option>
@@ -254,9 +295,9 @@ export default function Page() {
                                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         Insurance
                                                     </th>
-                                                    <td className="px-6 py-4">
+                                                    <td className="px-6 py-4 flex flex-row gap-3">
                                                         <select onChange={(value) => {
-                                                            setValue('Insurance', value.target.value);
+                                                            setValueJobFormData('Insurance', value.target.value);
                                                             setInsurance(value.target.value);
                                                         }} className="border-none focus:outline-none">
                                                             <option value="" disabled selected>Select an insurance company</option>
@@ -276,6 +317,44 @@ export default function Page() {
                                                             <option value="UNITED INSURANCE COMPANY">UNITED INSURANCE COMPANY</option>
                                                             <option value="NONE">NONE</option>
                                                         </select>
+                                                        <button type="button" onClick={() => setIsAddInsurance(true)}>
+                                                            <PlusIcon />
+                                                            <Drawer open={isAddInsurance}>
+                                                                <DrawerContent>
+                                                                    <form id="form2">
+                                                                        <DrawerHeader className="flex items-center flex-col gap-2">
+                                                                            <DrawerTitle className="justify-center flex">Add Insurance Company?</DrawerTitle>
+                                                                            <DrawerDescription className="justify-center flex">
+                                                                                <Input placeholder="Company Name"></Input>
+                                                                            </DrawerDescription>
+                                                                        </DrawerHeader>
+                                                                        <DrawerFooter className="flex justify-center items-center">
+                                                                            <Button className="w-20">Add</Button>
+                                                                            <DrawerClose>
+                                                                                <Button className="w-20" variant="outline" onClick={() => setIsAddInsurance(false)}>Cancel</Button>
+                                                                            </DrawerClose>
+                                                                        </DrawerFooter>
+                                                                    </form>
+                                                                </DrawerContent>
+                                                            </Drawer>
+
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Status
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <select onChange={(value) => {
+                                                            setValueJobFormData('Status', value.target.value);
+                                                            setStatus(value.target.value);
+                                                        }} className="border-none focus:outline-none">
+                                                            <option value="" disabled selected >Select Status</option>
+                                                            <option value="PARKED">PARKED</option>
+                                                            <option value="DELIVERED">DELIVERED</option>
+                                                            <option value="COME BACK LATER">COME BACK LATER</option>
+                                                        </select>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -284,7 +363,7 @@ export default function Page() {
                                                     </th>
                                                     <td className="px-6 py-4">
                                                         <input placeholder="Registration" onChange={(value) => {
-                                                            setValue('RegistrationNumber', value.target.value);
+                                                            setValueJobFormData('RegistrationNumber', value.target.value);
                                                             setRegistrationNumber(value.target.value);
                                                         }} className="border-none focus:outline-none" type="text" required></input>
                                                     </td>
@@ -295,7 +374,7 @@ export default function Page() {
                                                     </th>
                                                     <td className="px-6 py-4">
                                                         <input placeholder="Battery #" onChange={(value) => {
-                                                            setValue('BatteryNumber', value.target.value);
+                                                            setValueJobFormData('BatteryNumber', value.target.value);
                                                             setBatteryNumber(value.target.value);
                                                         }} className="border-none focus:outline-none" type="number" required></input>
                                                     </td>
@@ -306,7 +385,7 @@ export default function Page() {
                                                     </th>
                                                     <td className="px-6 py-4">
                                                         <input placeholder="Frame #" onChange={(value) => {
-                                                            setValue('FrameNo', value.target.value);
+                                                            setValueJobFormData('FrameNo', value.target.value);
                                                             setFrameNo(value.target.value);
                                                         }} className="border-none focus:outline-none" type="number" required></input>
                                                     </td>
@@ -334,7 +413,7 @@ export default function Page() {
                                                     </th>
                                                     <td className="px-6 py-4">
                                                         <input placeholder="Fuel" onChange={(value) => {
-                                                            setValue('Fuel', value.target.value);
+                                                            setValueJobFormData('Fuel', value.target.value);
                                                             setFuel(value.target.value);
                                                         }} className="border-none focus:outline-none" required></input>
                                                     </td>
@@ -345,7 +424,7 @@ export default function Page() {
                                                     </th>
                                                     <td className="px-6 py-4">
                                                         <input placeholder="Mileage" onChange={(value) => {
-                                                            setValue('Mileage', value.target.value);
+                                                            setValueJobFormData('Mileage', value.target.value);
                                                             setMileage(value.target.value);
                                                         }} className="border-none focus:outline-none" required></input>
                                                     </td>
@@ -357,7 +436,7 @@ export default function Page() {
                                                     <td className="px-6 py-4">
                                                         <input onChange={
                                                             (e) => {
-                                                                setValue('Lighter', e.target.checked);
+                                                                setValueJobFormData('Lighter', e.target.checked);
                                                                 setLighter(e.target.checked);
                                                             }
                                                         } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -371,7 +450,7 @@ export default function Page() {
                                                     <td className="px-6 py-4">
                                                         <input onChange={
                                                             (e) => {
-                                                                setValue('Ashtray', e.target.checked);
+                                                                setValueJobFormData('Ashtray', e.target.checked);
                                                                 setAshtray(e.target.checked);
                                                             }
                                                         } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -385,7 +464,7 @@ export default function Page() {
                                                     <td className="px-6 py-4">
                                                         <input onChange={
                                                             (e) => {
-                                                                setValue('FloorMats', e.target.checked);
+                                                                setValueJobFormData('FloorMats', e.target.checked);
                                                                 setFloorMats(e.target.checked);
                                                             }
                                                         } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -399,7 +478,7 @@ export default function Page() {
                                                     <td className="px-6 py-4">
                                                         <input onChange={
                                                             (e) => {
-                                                                setValue('OriginalBook', e.target.checked);
+                                                                setValueJobFormData('OriginalBook', e.target.checked);
                                                                 setOriginalBook(e.target.checked);
 
                                                             }
@@ -414,7 +493,7 @@ export default function Page() {
                                                     <td className="px-6 py-4">
                                                         <input onChange={
                                                             (e) => {
-                                                                setValue('SeatCovers', e.target.checked);
+                                                                setValueJobFormData('SeatCovers', e.target.checked);
                                                                 setSeatCovers(e.target.checked);
 
                                                             }
@@ -429,7 +508,7 @@ export default function Page() {
                                                     <td className="px-6 py-4">
                                                         <input onChange={
                                                             (e) => {
-                                                                setValue('RadioAntena', e.target.checked);
+                                                                setValueJobFormData('RadioAntena', e.target.checked);
                                                                 setRadioAntena(e.target.checked);
 
                                                             }
@@ -444,7 +523,7 @@ export default function Page() {
                                                     <td className="px-6 py-4">
                                                         <input onChange={
                                                             (e) => {
-                                                                setValue('SpareWheel', e.target.checked);
+                                                                setValueJobFormData('SpareWheel', e.target.checked);
                                                                 setSpareWheel(e.target.checked);
 
                                                             }
@@ -459,7 +538,7 @@ export default function Page() {
                                                     <td className="px-6 py-4">
                                                         <input onChange={
                                                             (e) => {
-                                                                setValue('WheelRod', e.target.checked);
+                                                                setValueJobFormData('WheelRod', e.target.checked);
                                                                 setWheelRod(e.target.checked);
                                                             }
                                                         } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -473,7 +552,7 @@ export default function Page() {
                                                     <td className="px-6 py-4">
                                                         <input onChange={
                                                             (e) => {
-                                                                setValue('JackHandle', e.target.checked);
+                                                                setValueJobFormData('JackHandle', e.target.checked);
                                                                 setJackHandle(e.target.checked);
                                                             }
                                                         } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -487,7 +566,7 @@ export default function Page() {
                                                     <td className="px-6 py-4">
                                                         <input onChange={
                                                             (e) => {
-                                                                setValue('Tools', e.target.checked);
+                                                                setValueJobFormData('Tools', e.target.checked);
                                                                 setTools(e.target.checked);
                                                             }
                                                         } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -501,7 +580,7 @@ export default function Page() {
                                                     <td className="px-6 py-4">
                                                         <input onChange={
                                                             (e) => {
-                                                                setValue('ExtraThings', e.target.checked);
+                                                                setValueJobFormData('ExtraThings', e.target.checked);
                                                                 setExtraThings(e.target.checked);
                                                             }
                                                         } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -516,12 +595,12 @@ export default function Page() {
                                     <div>
                                         <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Required Work Details</label>
                                         <textarea onChange={(e) => {
-                                            setValue('RequiredWorkDetails', e.target.value);
+                                            setValueJobFormData('RequiredWorkDetails', e.target.value);
                                             setRequiredWorkDetails(e.target.value);
                                         }} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                                         <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Addtional Work Details (If Required)</label>
                                         <textarea onChange={(e) => {
-                                            setValue('OtherAdditionalWork', e.target.value);
+                                            setValueJobFormData('OtherAdditionalWork', e.target.value);
                                             setOtherAdditionalWork(e.target.value);
                                         }} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                                         <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
@@ -548,13 +627,13 @@ export default function Page() {
                                                         <div className="flex flex-col">
                                                             <input placeholder="Vehicle Received By" onChange={
                                                                 (e) => {
-                                                                    setValue('InReceivedBy', e.target.value);
+                                                                    setValueJobFormData('InReceivedBy', e.target.value);
                                                                     setInReceivedBy(e.target.value);
                                                                 }
                                                             } className="border-none focus:outline-none border-b"></input>
                                                             <input placeholder="Vehicle Received From" onChange={
                                                                 (e) => {
-                                                                    setValue('InReceivedFrom', e.target.value);
+                                                                    setValueJobFormData('InReceivedFrom', e.target.value);
                                                                     setInReceivedFrom(e.target.value);
                                                                 }
                                                             } className="border-none focus:outline-none" required></input>
@@ -567,7 +646,7 @@ export default function Page() {
                                                                 value={inDate}
                                                                 onChange={(date) => {
                                                                     setInDate(date);
-                                                                    setValue('InTime', inDate);
+                                                                    setValueJobFormData('InTime', inDate);
                                                                     setInReceivedTime(date?.toString());
                                                                 }
                                                                 }
@@ -584,13 +663,13 @@ export default function Page() {
                                                         <div className="flex flex-col">
                                                             <input placeholder="Vehicle Received By" onChange={
                                                                 (e) => {
-                                                                    setValue('OutReceivedBy', e.target.value);
+                                                                    setValueJobFormData('OutReceivedBy', e.target.value);
                                                                     setOutReceivedBy(e.target.value);
                                                                 }
                                                             } className="border-none focus:outline-none border-b"></input>
                                                             <input placeholder="Vehicle Received From" onChange={
                                                                 (e) => {
-                                                                    setValue('OutReceivedFrom', e.target.value);
+                                                                    setValueJobFormData('OutReceivedFrom', e.target.value);
                                                                     setOutReceivedFrom(e.target.value);
                                                                 }
                                                             } className="border-none focus:outline-none" required></input>
@@ -603,7 +682,7 @@ export default function Page() {
                                                             value={outDate}
                                                             onChange={(date) => {
                                                                 setOutDate(date);
-                                                                setValue('OutTime', outDate);
+                                                                setValueJobFormData('OutTime', outDate);
                                                                 setOutReceivedTime(date?.toString());
                                                             }
                                                             }
@@ -661,6 +740,7 @@ export default function Page() {
                                 JobCheckedBy,
                                 WorkType,
                                 Insurance,
+                                Status,
                                 OtherAdditionalWork,
                                 RegistrationNumber,
                                 RequiredWorkDetails,
