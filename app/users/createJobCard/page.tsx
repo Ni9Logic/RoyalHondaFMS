@@ -1,10 +1,10 @@
 'use client'
 import Footer from "../Footer";
 import Navbar from "../Navbar";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from 'react-hot-toast';
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import AnotherPrintJobs from "@/app/users/jobCards/printable/jobprintable";
@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/drawer"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Loader from "@/app/components/ui/loader";
+import { uuid } from 'uuidv4';
 
 export type JOBFormData = {
     CustomerName: string,
@@ -62,6 +64,30 @@ export type InsuranceCompaniesData = {
 
 export default function Page() {
     // Date Time Selection
+    const [allInsurances, setAllInsurances] = useState<InsuranceCompaniesData[]>();
+    const getAllInsurances = async () => {
+        try {
+            const response = await axios.get('/api/getAllInsurance');
+            setAllInsurances(response?.data?.Message);
+        } catch (error: any) {
+            console.log('Error Fetching Data', error);
+        }
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await getAllInsurances();
+            } catch (error) {
+                console.error('Error fetching serial number:', error);
+            }
+        };
+
+        fetchData();
+
+        return () => {
+        };
+    }, [])
     const [inDate, setInDate] = useState<any>(undefined);
     const [outDate, setOutDate] = useState<any>(undefined);
     const [isPreview, setIsPreview] = useState(false);
@@ -160,22 +186,26 @@ export default function Page() {
                 toast.success('Job Card Created!');
             })
             .catch((error) => {
-                toast.error(error.error)
+                toast.error(error?.response?.data?.Message);
             })
             .finally(() => setLoading(false));
     }
 
     const onSubmitAddInsurance: SubmitHandler<InsuranceCompaniesData> = async (data: InsuranceCompaniesData) => {
         setIsAddInsuranceLoading(true);
-
         axios.post('../../api/addInsurance', data)
             .then(() => {
                 toast.success('Insurance Company Added');
             })
-            .catch((error) => {
-                toast.error(error?.data?.data?.Message);
+            .catch((error: AxiosError) => {
+                // @ts-ignore
+                toast.error(error.response?.data?.Message);
+            })
+            .finally(() => {
+                setIsAddInsuranceLoading(false);
             })
     }
+
 
     return (
         <>
@@ -184,6 +214,7 @@ export default function Page() {
                 !isPreview &&
                 <>
                     <Navbar />
+                    <form id="form2" onSubmit={handleSubmit(onSubmitAddInsurance)}></form>
                     <div className="flex items-center justify-center ">
                         <h1 className="font-bold text-3xl self-center items-center text-center justify-center mb-10 container">
                             Job Card Creation
@@ -283,11 +314,10 @@ export default function Page() {
                                                             setValueJobFormData('WorkType', value.target.value);
                                                             setWorkType(value.target.value);
                                                         }} className="border-none focus:outline-none" required>
-                                                            <option value="" disabled selected>Select Work Type</option>
+                                                            <option defaultValue={"None Selected"} disabled selected>Select Work Type</option>
                                                             <option value="INSURANCE">INSURANCE</option>
                                                             <option value="WORK ORDER">WORK ORDER</option>
                                                             <option value="CASH WORK">CASH WORK</option>
-                                                            <option value="NONE">NONE</option>
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -300,45 +330,37 @@ export default function Page() {
                                                             setValueJobFormData('Insurance', value.target.value);
                                                             setInsurance(value.target.value);
                                                         }} className="border-none focus:outline-none">
-                                                            <option value="" disabled selected>Select an insurance company</option>
-                                                            <option value="HABIB BANK LIMITED">HABIB INSURANCE COMPANY</option>
-                                                            <option value="TPL Insurance Company">TPL INSURANCE COMPANY</option>
-                                                            <option value="IGI GENERAL INSURNACE LIMITED">IGI INSURANCE COMPANY </option>
-                                                            <option value="SALAAM TAKAFUL INSURANCE PAKISTAN">SALAAM TAKAFUL INSURANCE COMPANY</option>
-                                                            <option value="ALFALAH GENERAL INSURNACE COMPANY">ALFALAH GENERAL INSURNACE COMPANY</option>
-                                                            <option value="JUBILEE INSURNACE COMPANY">JUBILEE INSURNACE COMPANY</option>
-                                                            <option value="ATLAS INSURNACE COMPANY">ATLAS INSURNACE COMPANY</option>
-                                                            <option value="ADAMJEE INSURNACE COMPANY">ADAMJEE INSURNACE COMPANY</option>
-                                                            <option value="ASKARI GENERAL INSURNACE COMPANY">ASKARI GENERAL INSURNACE COMPANY</option>
-                                                            <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY</option>
-                                                            <option value="UBL INSURNACE COMPANY">UBL INSURNACE COMPANY</option>
-                                                            <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY</option>
-                                                            <option value="PAK QATAR INSURANCE COMPANY">PAK QATAR INSURANCE COMPANY</option>
-                                                            <option value="UNITED INSURANCE COMPANY">UNITED INSURANCE COMPANY</option>
-                                                            <option value="NONE">NONE</option>
+                                                            <option disabled defaultValue={"None Selected"} selected>Select an Insurance Company</option>
+                                                            {
+                                                                allInsurances?.map((item, index) => (
+                                                                    <option key={uuid()} value={item.name}>{item.name}</option>
+                                                                ))
+                                                            }
                                                         </select>
-                                                        <button type="button" onClick={() => setIsAddInsurance(true)}>
-                                                            <PlusIcon />
-                                                            <Drawer open={isAddInsurance}>
-                                                                <DrawerContent>
-                                                                    <form id="form2">
-                                                                        <DrawerHeader className="flex items-center flex-col gap-2">
-                                                                            <DrawerTitle className="justify-center flex">Add Insurance Company?</DrawerTitle>
-                                                                            <DrawerDescription className="justify-center flex">
-                                                                                <Input placeholder="Company Name"></Input>
-                                                                            </DrawerDescription>
-                                                                        </DrawerHeader>
-                                                                        <DrawerFooter className="flex justify-center items-center">
-                                                                            <Button className="w-20">Add</Button>
-                                                                            <DrawerClose>
-                                                                                <Button className="w-20" variant="outline" onClick={() => setIsAddInsurance(false)}>Cancel</Button>
-                                                                            </DrawerClose>
-                                                                        </DrawerFooter>
-                                                                    </form>
-                                                                </DrawerContent>
-                                                            </Drawer>
+                                                        <Drawer>
+                                                            <DrawerTrigger>
+                                                                <PlusIcon />
+                                                            </DrawerTrigger>
+                                                            <DrawerContent>
+                                                                <DrawerHeader className="flex items-center flex-col gap-2">
+                                                                    <DrawerTitle className="justify-center flex">Add Insurance Company?</DrawerTitle>
+                                                                    <DrawerDescription className="justify-center flex">
+                                                                        <Input required form="form2" placeholder="Company Name" onChange={(e) => setValue('name', e.target.value)} />
+                                                                    </DrawerDescription>
+                                                                </DrawerHeader>
+                                                                <DrawerFooter className="flex justify-center items-center">
+                                                                    <Button className="w-20 flex flex-row gap-1" type="submit" form="form2">
+                                                                        Add
+                                                                        <Loader isLoading={isAddInsuranceLoading} />
+                                                                    </Button>
+                                                                    <DrawerClose>
+                                                                        <Button type="button" className="w-20" variant="outline">Close</Button>
+                                                                    </DrawerClose>
+                                                                </DrawerFooter>
 
-                                                        </button>
+                                                            </DrawerContent>
+                                                        </Drawer>
+
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -350,7 +372,7 @@ export default function Page() {
                                                             setValueJobFormData('Status', value.target.value);
                                                             setStatus(value.target.value);
                                                         }} className="border-none focus:outline-none">
-                                                            <option value="" disabled selected >Select Status</option>
+                                                            <option disabled selected defaultValue={"None Selected"}>Select Status</option>
                                                             <option value="PARKED">PARKED</option>
                                                             <option value="DELIVERED">DELIVERED</option>
                                                             <option value="COME BACK LATER">COME BACK LATER</option>

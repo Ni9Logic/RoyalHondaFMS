@@ -58,6 +58,7 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.1.6",
     "uuid": "^9.0.1",
+    "uuidv4": "^6.2.13",
     "vaul": "^0.8.0"
   },
   "devDependencies": {
