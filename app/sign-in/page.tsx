@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Loader from '../components/ui/loader';
 import { Label } from '@/components/ui/label';
-import logo from "@/app/components/images/logo.png";
 import Image from 'next/image';
 
 export default function Page() {
