@@ -12,6 +12,8 @@ import TableSummaries from "./Summary";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Loader from "@/app/components/ui/loader";
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import PlusIcon from "@/app/components/ui/plusicon";
 
 
 export interface EstimateRowType {
@@ -40,6 +42,7 @@ export interface EstimateForm {
     jobId: string;
     cMake: string;
     cModel: string;
+    cSurveyor: string;
     EstimateTableData: EstimateRowObject;
     ServicesDetailsTableData: ServiceRowObject;
     DiscountServices: number;
@@ -51,6 +54,11 @@ export interface EstimateForm {
     cRegistration: string;
     PaymentMode: string;
     OverAllAmount: number;
+}
+
+export interface Surveyor {
+    id: number;
+    cSurveyor: string;
 }
 export default function PAGE() {
     // Get the current date
@@ -72,6 +80,7 @@ export default function PAGE() {
     const [cModel, setcModel] = useState('');
     const [cRegistration, setcRegistration] = useState('');
     const [PaymentMode, setPaymentMode] = useState('');
+    const [cSurveyor, setcSurveyor] = useState('');
 
     const [servicesDetailsRows, setServicesDetailsRow] = useState<ServiceRowObject>({})
     const [estimateRows, setEstimateRows] = useState<EstimateRowObject>({});
@@ -182,6 +191,7 @@ export default function PAGE() {
         jobId: jobId,
         cMake: cMake,
         cModel: cModel,
+        cSurveyor: cSurveyor,
         EstimateTableData: estimateRows,
         ServicesDetailsTableData: servicesDetailsRows,
         DiscountServices: DiscountServices,
@@ -205,6 +215,7 @@ export default function PAGE() {
             jobId: jobId,
             cMake: cMake,
             cModel: cModel,
+            cSurveyor: cSurveyor,
             EstimateTableData: {},
             ServicesDetailsTableData: {},
             DiscountServices: 0,
@@ -235,8 +246,35 @@ export default function PAGE() {
                 setLoading(false);
             })
     }
+
+    const onAddSurveyorSubmit: SubmitHandler<Surveyor> = async (data: Surveyor) => {
+        setIsAddSurveyorLoading(true);
+        axios.post("../../../api/addSurveyor", data)
+            .then(() => {
+                toast.success("Surveyor Added!")
+            })
+            .catch((response: any) => {
+                let error = response?.response?.data?.Message;
+                toast.error(error);
+            })
+            .finally(() => {
+                setIsAddSurveyorLoading(false);
+            })
+    }
+
+    const {
+        handleSubmit: handleAddSurveyorSubmit,
+        setValue: setValueSurveyor,
+    } = useForm<Surveyor>({
+        defaultValues: {
+            cSurveyor: cSurveyor
+        }
+    })
+
+    const [isAddSurveyorLoading, setIsAddSurveyorLoading] = useState(false);
     return (
         <>
+            <form id="form2" onSubmit={handleAddSurveyorSubmit(onAddSurveyorSubmit)}></form>
             {
                 !isPrinting && (
                     <div>
@@ -326,6 +364,38 @@ export default function PAGE() {
                                             <option value="CASH">CASH</option>
                                         </select>
                                     </div>
+                                </div>
+                                <div className="flex flex-row mt-4 w-full items-center justify-center">
+                                    <select onChange={(value) => {
+                                        setValue('cSurveyor', value.target.value);
+                                        setcSurveyor(value.target.value);
+                                    }} className="border-none focus:outline-none">
+                                        <option disabled defaultValue={"None Selected"} selected>Select Surveyor</option>
+
+                                    </select>
+                                    <Drawer>
+                                        <DrawerTrigger>
+                                            <PlusIcon />
+                                        </DrawerTrigger>
+                                        <DrawerContent>
+                                            <DrawerHeader className="flex items-center flex-col gap-2">
+                                                <DrawerTitle className="justify-center flex">Add Surveyor?</DrawerTitle>
+                                                <DrawerDescription className="justify-center flex">
+                                                    <Input required form="form2" placeholder="Surveyor Name" onChange={(e) => setValueSurveyor('cSurveyor', e.target.value)} />
+                                                </DrawerDescription>
+                                            </DrawerHeader>
+                                            <DrawerFooter className="flex justify-center items-center">
+                                                <Button className="w-20 flex flex-row gap-1" type="submit" form="form2">
+                                                    Add
+                                                    <Loader isLoading={isAddSurveyorLoading} />
+                                                </Button>
+                                                <DrawerClose>
+                                                    <Button type="button" className="w-20" variant="outline">Close</Button>
+                                                </DrawerClose>
+                                            </DrawerFooter>
+
+                                        </DrawerContent>
+                                    </Drawer>
                                 </div>
 
                                 <div className={"mt-32 h-full w-full flex flex-col gap-4"}>

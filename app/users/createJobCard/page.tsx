@@ -101,6 +101,7 @@ export default function Page() {
     const [inDate, setInDate] = React.useState<Date>()
     const [outDate, setOutDate] = React.useState<Date>();
     const [isPreview, setIsPreview] = useState(false);
+    const [isCheckAll, setCheckAll] = useState(false);
 
     // To transfer all the fields inside jobprintable
     const [CustomerName, setCustomerName] = useState<string>('');
@@ -127,13 +128,10 @@ export default function Page() {
     const [FrameNo, setFrameNo] = useState<string>('');
     const [BatteryNumber, setBatteryNumber] = useState<string>('');
     const [RequiredWorkDetails, setRequiredWorkDetails] = useState<string>('');
-    const [AdditionalWorkDetails, setAdditionalWorkDetails] = useState<string>('');
     const [InReceivedBy, setInReceivedBy] = useState<string>('');
     const [InReceivedFrom, setInReceivedFrom] = useState<string>('');
-    const [InReceivedTime, setInReceivedTime] = useState<any>('');
     const [OutReceivedBy, setOutReceivedBy] = useState<string>('');
     const [OutReceivedFrom, setOutReceivedFrom] = useState<string>('');
-    const [OutReceivedTime, setOutReceivedTime] = useState<string>('');
     const [Status, setStatus] = useState('');
 
 
@@ -463,6 +461,19 @@ export default function Page() {
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Check All
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input onChange={
+                                                            (e) => {
+                                                                setCheckAll(e.target.checked);
+                                                            }
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         Lighter
                                                     </th>
                                                     <td className="px-6 py-4">
@@ -471,7 +482,7 @@ export default function Page() {
                                                                 setValueJobFormData('Lighter', e.target.checked);
                                                                 setLighter(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || Lighter ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -485,7 +496,7 @@ export default function Page() {
                                                                 setValueJobFormData('Ashtray', e.target.checked);
                                                                 setAshtray(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || Ashtray ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -499,7 +510,7 @@ export default function Page() {
                                                                 setValueJobFormData('FloorMats', e.target.checked);
                                                                 setFloorMats(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || FloorMats ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -514,7 +525,7 @@ export default function Page() {
                                                                 setOriginalBook(e.target.checked);
 
                                                             }
-                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || OriginalBook ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -529,7 +540,7 @@ export default function Page() {
                                                                 setSeatCovers(e.target.checked);
 
                                                             }
-                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || SeatCovers ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -544,7 +555,7 @@ export default function Page() {
                                                                 setRadioAntena(e.target.checked);
 
                                                             }
-                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || RadioAntena ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -559,7 +570,7 @@ export default function Page() {
                                                                 setSpareWheel(e.target.checked);
 
                                                             }
-                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || SpareWheel ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -573,7 +584,7 @@ export default function Page() {
                                                                 setValueJobFormData('WheelRod', e.target.checked);
                                                                 setWheelRod(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || WheelRod ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -587,7 +598,7 @@ export default function Page() {
                                                                 setValueJobFormData('JackHandle', e.target.checked);
                                                                 setJackHandle(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || JackHandle ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -601,7 +612,7 @@ export default function Page() {
                                                                 setValueJobFormData('Tools', e.target.checked);
                                                                 setTools(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || Tools ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -615,7 +626,7 @@ export default function Page() {
                                                                 setValueJobFormData('ExtraThings', e.target.checked);
                                                                 setExtraThings(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || ExtraThings ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -796,7 +807,6 @@ export default function Page() {
                                 OtherAdditionalWork,
                                 RegistrationNumber,
                                 RequiredWorkDetails,
-                                AdditionalWorkDetails,
                                 Fuel,
                                 Mileage,
                                 Lighter,

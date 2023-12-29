@@ -65,6 +65,7 @@ model EstimatedCostWork {
   cMake             String?
   cModel            String?
   cRegistration     String?
+  cSurveyor         String?
   cKiloMeters       Float?
   TotalServiceFee   Float?
   TotalEstimateFee  Float?
@@ -104,5 +105,5 @@ model InsuranceCompanies {
 
 model Surveyors {
   id   Int     @id @default(autoincrement())
-  name String?
+  cSurveyor String?
 }
