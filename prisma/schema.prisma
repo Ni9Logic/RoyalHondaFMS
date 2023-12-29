@@ -104,6 +104,6 @@ model InsuranceCompanies {
 }
 
 model Surveyors {
-  id   Int     @id @default(autoincrement())
-  cSurveyor String?
+  id        Int     @id @default(autoincrement())
+  cSurveyor String? @unique
 }

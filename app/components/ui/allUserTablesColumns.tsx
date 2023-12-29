@@ -29,6 +29,7 @@ export type JobTable = {
     CellNo: string;
     JobCheckedBy: string;
     WorkType: string;
+    Status: string;
     Insurance: string;
     carRegistration: string;
     FrameNo: string;
@@ -70,6 +71,10 @@ export const columns: ColumnDef<JobTable>[] = [
         header: 'Est #'
     },
     {
+        accessorKey: 'Status',
+        header: 'Status'
+    },
+    {
         accessorKey: 'CustomerName',
         header: 'Customer Name'
     },
@@ -105,7 +110,6 @@ export const columns: ColumnDef<JobTable>[] = [
         accessorKey: 'FrameNo',
         header: 'Frame Number'
     },
-
     {
         accessorKey: 'CreatedAt',
         header: 'Date'
@@ -145,6 +149,7 @@ export const columns: ColumnDef<JobTable>[] = [
                                         CustomerContact: `${job.CellNo}`,
                                         JobCheckedBy: `${job.JobCheckedBy}`,
                                         WorkType: `${job.WorkType}`,
+                                        Status: `${job.Status}`,
                                         Insurance: `${job.Insurance}`,
                                         RegistrationNumber: `${job.carRegistration}`,
                                         RequiredWorkDetails: `${job.RequiredWorkDetails}`,

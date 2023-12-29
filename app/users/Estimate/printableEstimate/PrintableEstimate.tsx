@@ -28,10 +28,16 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                     </div>
                                 </div>
 
-                                <div className="mt-10 w-full">
+                                <div className="mt-10 w-full flex flex-row gap-2">
                                     <p className="text-sm flex flex-row gap-1">Customer Name:
                                         <p className="border border-black w-auto h-auto text-sm">
                                             <p className="px-2 font-sans">{data?.cName}</p>
+                                        </p>
+                                    </p>
+
+                                    <p className="text-sm flex flex-row gap-1">Surveyor:
+                                        <p className="border border-black w-auto h-auto text-sm">
+                                            <p className="px-2 font-sans">{data?.cSurveyor}</p>
                                         </p>
                                     </p>
                                 </div>
@@ -76,7 +82,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                     <th scope="col" className="px-6 py-3 text-[10px] font-sans">
                                         Veh Reg No
                                     </th>
-                                <th scope="col" className="px-6 py-3 text-[10px] font-sans">
+                                    <th scope="col" className="px-6 py-3 text-[10px] font-sans">
                                         Job #
                                     </th>
                                     <th scope="col" className="px-6 py-3 text-[10px] font-sans">

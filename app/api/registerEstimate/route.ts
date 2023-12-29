@@ -5,7 +5,6 @@ import prisma from "@/app/lib/prismadb";
 export async function POST(request: Request) {
     try {
         const body: EstimateForm = await request.json();
-
         const EstimateTableData = JSON.stringify(body.EstimateTableData);
         const ServiceTableData = JSON.stringify(body.ServicesDetailsTableData);
 
@@ -19,6 +18,7 @@ export async function POST(request: Request) {
                     cModel: body.cModel,
                     cKiloMeters: body.cKiloMeters,
                     CreatedAt: body.CreatedAt,
+                    cSurveyor: body.cSurveyor,
                     cRegistration: body.cRegistration,
                     DiscountEstimate: body.DiscountEstimate,
                     DiscountServices: body.DiscountServices,
@@ -58,6 +58,7 @@ export async function POST(request: Request) {
                     cModel: body.cModel,
                     cKiloMeters: body.cKiloMeters,
                     CreatedAt: body.CreatedAt,
+                    cSurveyor: body.cSurveyor,
                     cRegistration: body.cRegistration,
                     DiscountEstimate: body.DiscountEstimate,
                     DiscountServices: body.DiscountServices,

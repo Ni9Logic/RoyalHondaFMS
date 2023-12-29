@@ -9,12 +9,18 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import PrintEstimate from "../printableEstimate/PrintableEstimate";
 import { v4 as uuidv4 } from 'uuid';
 import TableSummaries from "./Summary";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import Loader from "@/app/components/ui/loader";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import PlusIcon from "@/app/components/ui/plusicon";
-
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 export interface EstimateRowType {
     partNo: string;
@@ -256,6 +262,7 @@ export default function PAGE() {
             .catch((response: any) => {
                 let error = response?.response?.data?.Message;
                 toast.error(error);
+                console.log(response);
             })
             .finally(() => {
                 setIsAddSurveyorLoading(false);
@@ -272,6 +279,22 @@ export default function PAGE() {
     })
 
     const [isAddSurveyorLoading, setIsAddSurveyorLoading] = useState(false);
+    const [Surveyors, setSurveyors] = useState<Surveyor[]>();
+
+    const getAllSurveyors = async () => {
+        axios.get("../../../api/getAllSurveyor")
+            .then((response: AxiosResponse) => setSurveyors(response?.data?.Surveyors))
+            .catch((error: any) => toast.error(error?.response?.data?.Message));
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await getAllSurveyors();
+        }
+
+        fetchData();
+
+    }, [])
     return (
         <>
             <form id="form2" onSubmit={handleAddSurveyorSubmit(onAddSurveyorSubmit)}></form>
@@ -365,14 +388,24 @@ export default function PAGE() {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="flex flex-row mt-4 w-full items-center justify-center">
-                                    <select onChange={(value) => {
-                                        setValue('cSurveyor', value.target.value);
-                                        setcSurveyor(value.target.value);
-                                    }} className="border-none focus:outline-none">
-                                        <option disabled defaultValue={"None Selected"} selected>Select Surveyor</option>
-
-                                    </select>
+                                <div className="flex flex-row mt-4 items-center justify-center gap-2">
+                                    <Select onValueChange={(e) => {
+                                        setValue('cSurveyor', e);
+                                        setcSurveyor(e);
+                                    }}>
+                                        <SelectTrigger className="w-[180px]">
+                                            <SelectValue placeholder="Select Surveyor" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {
+                                                Surveyors?.map((surveyor) => (
+                                                    <SelectItem key={surveyor.id} value={surveyor.cSurveyor}>
+                                                        {surveyor.cSurveyor}
+                                                    </SelectItem>
+                                                ))
+                                            }
+                                        </SelectContent>
+                                    </Select>
                                     <Drawer>
                                         <DrawerTrigger>
                                             <PlusIcon />
@@ -569,8 +602,6 @@ export default function PAGE() {
                                                 let completeAmount = overAllBillEstimate(handleEstimateTotalPrice(estimateRows)) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows));
                                                 setValue(('TotalEstimateFee'), overAllBillEstimate(handleEstimateTotalPrice(estimateRows)));
                                                 setValue(('TotalServiceFee'), overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)));
-
-                                                console.log(DiscountEstimate, DiscountServices)
                                                 setValue('OverAllAmount', completeAmount);
                                             }} className={"mt-2 w-1/6"}
                                                 onChange={(e) => e.preventDefault()}>

@@ -83,6 +83,15 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                             </p>
                             <hr className="border-t-1 border-black" />
 
+                            <p className="ml-2 print:ml-2 text-sm flex flex-row gap-1">
+                                Status:
+                                <p className="text-red-500 text-xl">
+                                    {data?.Status}
+                                </p>
+                            </p>
+
+                            <hr className="border-t-1 border-black" />
+
                             <p className="ml-2 print:ml-2 text-sm">
                                 Registration:
                                 <p className="text-red-500 text-xl">
@@ -214,7 +223,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
 
                         <div className="w-full border border-b-0 border-t-0 border-r-0 border-black flex flex-row gap-2">
                             <p className="ml-2">Date Time: </p>
-                            {data?.inDate.toDateString()}
+                            {data?.inDate.toLocaleDateString()}
                         </div>
                     </div>
 
@@ -230,7 +239,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
 
                         <div className="w-full border border-b-0 border-t-0 border-r-0 border-black flex flex-row gap-2">
                             <p className="ml-2">Date Time: </p>
-                            {data?.outDate.toDateString()}
+                            {data?.outDate.toLocaleDateString()}
                         </div>
                     </div>
                 </div>

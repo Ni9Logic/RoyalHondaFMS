@@ -6,6 +6,15 @@ export async function POST(req: Request) {
     try {
         const body: Surveyor = await req.json();
 
+        const isFind = await prisma?.surveyors.findUnique({
+            where: {
+                cSurveyor: body.cSurveyor
+            }
+        })
+
+        if (isFind)
+            return NextResponse.json({ Message: "Surveyor Already Exists" }, { status: 400 });
+        
         const isCreated = await prisma?.surveyors.create({
             data: {
                 cSurveyor: body.cSurveyor
