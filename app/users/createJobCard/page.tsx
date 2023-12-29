@@ -23,6 +23,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Loader from "@/app/components/ui/loader";
 import { uuid } from 'uuidv4';
+import { format } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+import { Calendar } from "@/components/ui/calendar"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
 
 export type JOBFormData = {
     CustomerName: string,
@@ -88,8 +98,8 @@ export default function Page() {
         return () => {
         };
     }, [])
-    const [inDate, setInDate] = useState<any>(undefined);
-    const [outDate, setOutDate] = useState<any>(undefined);
+    const [inDate, setInDate] = React.useState<Date>()
+    const [outDate, setOutDate] = React.useState<Date>();
     const [isPreview, setIsPreview] = useState(false);
 
     // To transfer all the fields inside jobprintable
@@ -663,17 +673,28 @@ export default function Page() {
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <div className="flex flex-row text-center justify-center gap-2">
-                                                            <Datetime
-                                                                initialValue={'Click to set Time'}
-                                                                value={inDate}
-                                                                onChange={(date) => {
-                                                                    setInDate(date);
-                                                                    setValueJobFormData('InTime', inDate);
-                                                                    setInReceivedTime(date?.toString());
-                                                                }
-                                                                }
-                                                                dateFormat="MM/D/YY"
-                                                            />
+                                                            <Popover>
+                                                                <PopoverTrigger asChild>
+                                                                    <Button
+                                                                        variant={"outline"}
+                                                                        className={cn(
+                                                                            "justify-start text-left font-normal",
+                                                                            !inDate && "text-muted-foreground"
+                                                                        )}
+                                                                    >
+                                                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                                                        {inDate ? format(inDate, "yyyy-MM-dd") : <span>Pick a date</span>}
+                                                                    </Button>
+                                                                </PopoverTrigger>
+                                                                <PopoverContent>
+                                                                    <Calendar
+                                                                        mode="single"
+                                                                        selected={inDate}
+                                                                        onSelect={setInDate}
+                                                                        initialFocus
+                                                                    />
+                                                                </PopoverContent>
+                                                            </Popover>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -698,19 +719,28 @@ export default function Page() {
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <Datetime
-                                                            initialValue={'Click to set Time'}
-                                                            className="border-none outline-none focus:border-none focus:outline-none"
-                                                            value={outDate}
-                                                            onChange={(date) => {
-                                                                setOutDate(date);
-                                                                setValueJobFormData('OutTime', outDate);
-                                                                setOutReceivedTime(date?.toString());
-                                                            }
-                                                            }
-                                                            dateFormat="MM/D/YY"
-                                                            timeFormat="hh:mm A"
-                                                        />
+                                                        <Popover>
+                                                            <PopoverTrigger asChild>
+                                                                <Button
+                                                                    variant={"outline"}
+                                                                    className={cn(
+                                                                        "justify-start text-left font-normal",
+                                                                        !outDate && "text-muted-foreground"
+                                                                    )}
+                                                                >
+                                                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                                                    {outDate ? format(outDate, "yyyy-MM-dd") : <span>Pick a date</span>}
+                                                                </Button>
+                                                            </PopoverTrigger>
+                                                            <PopoverContent>
+                                                                <Calendar
+                                                                    mode="single"
+                                                                    selected={outDate}
+                                                                    onSelect={setOutDate}
+                                                                    initialFocus
+                                                                />
+                                                            </PopoverContent>
+                                                        </Popover>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -784,10 +814,10 @@ export default function Page() {
                                 BatteryNumber,
                                 InReceivedBy,
                                 InReceivedFrom,
-                                InReceivedTime,
+                                inDate,
                                 OutReceivedBy,
                                 OutReceivedFrom,
-                                OutReceivedTime,
+                                outDate,
                                 isPreview,
                             }
                         }

@@ -3,6 +3,7 @@ import logo from "@/app/components/images/logo.png";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { JOBFormData } from "../../createJobCard/page";
 interface PrintJobProps {
     data: any;
     onClose: () => void; // Function to close the drawer
@@ -85,7 +86,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                             <p className="ml-2 print:ml-2 text-sm">
                                 Registration:
                                 <p className="text-red-500 text-xl">
-                                    {data?.carRegistration}
+                                    {data?.RegistrationNumber}
                                 </p>
                             </p>
 
@@ -213,7 +214,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
 
                         <div className="w-full border border-b-0 border-t-0 border-r-0 border-black flex flex-row gap-2">
                             <p className="ml-2">Date Time: </p>
-                            {data?.InTime}
+                            {data?.inDate.toDateString()}
                         </div>
                     </div>
 
@@ -229,7 +230,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
 
                         <div className="w-full border border-b-0 border-t-0 border-r-0 border-black flex flex-row gap-2">
                             <p className="ml-2">Date Time: </p>
-                            {data?.OutTime}
+                            {data?.outDate.toDateString()}
                         </div>
                     </div>
                 </div>
