@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 import Loader from "@/app/components/ui/loader";
 import { uuid } from 'uuidv4';
 import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
+import { Calendar as CalendarIcon, Frame } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
@@ -136,7 +136,6 @@ export default function Page() {
 
 
     const [isLoading, setLoading] = useState(false);
-    const [isAddInsurance, setIsAddInsurance] = useState(false);
     const [isAddInsuranceLoading, setIsAddInsuranceLoading] = useState(false);
 
     const {
@@ -253,7 +252,7 @@ export default function Page() {
                                                         <input placeholder="Customer Name" onChange={(value) => {
                                                             setValueJobFormData('CustomerName', value.target.value);
                                                             setCustomerName(value.target.value);
-                                                        }} className="border-none focus:outline-none" required />
+                                                        }} defaultValue={CustomerName} className="border-none focus:outline-none" required />
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -264,7 +263,7 @@ export default function Page() {
                                                         <input placeholder="Driver | User" onChange={(value) => {
                                                             setValueJobFormData('DriverUser', value.target.value);
                                                             setDriverUser(value.target.value);
-                                                        }} className="border-none focus:outline-none" required></input>
+                                                        }} defaultValue={DriverUser} className="border-none focus:outline-none" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -275,7 +274,7 @@ export default function Page() {
                                                         <input placeholder="Contact Number" onChange={(value) => {
                                                             setValueJobFormData('CellNo', value.target.value);
                                                             setCellNo(value.target.value);
-                                                        }} className="border-none focus:outline-none" required></input>
+                                                        }} defaultValue={CellNo} className="border-none focus:outline-none" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -286,7 +285,7 @@ export default function Page() {
                                                         <input placeholder="Job Checked By" onChange={(value) => {
                                                             setValueJobFormData('JobCheckedBy', value.target.value);
                                                             setJobCheckedBy(value.target.value);
-                                                        }} className="border-none focus:outline-none" required></input>
+                                                        }} defaultValue={JobCheckedBy} className="border-none focus:outline-none" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -321,7 +320,7 @@ export default function Page() {
                                                         <select onChange={(value) => {
                                                             setValueJobFormData('WorkType', value.target.value);
                                                             setWorkType(value.target.value);
-                                                        }} className="border-none focus:outline-none" required>
+                                                        }} defaultValue={WorkType} className="border-none focus:outline-none" required>
                                                             <option defaultValue={"None Selected"} disabled selected>Select Work Type</option>
                                                             <option value="INSURANCE">INSURANCE</option>
                                                             <option value="WORK ORDER">WORK ORDER</option>
@@ -337,7 +336,7 @@ export default function Page() {
                                                         <select onChange={(value) => {
                                                             setValueJobFormData('Insurance', value.target.value);
                                                             setInsurance(value.target.value);
-                                                        }} className="border-none focus:outline-none">
+                                                        }} defaultValue={Insurance} className="border-none focus:outline-none">
                                                             <option disabled defaultValue={"None Selected"} selected>Select an Insurance Company</option>
                                                             {
                                                                 allInsurances?.map((item, index) => (
@@ -379,7 +378,7 @@ export default function Page() {
                                                         <select onChange={(value) => {
                                                             setValueJobFormData('Status', value.target.value);
                                                             setStatus(value.target.value);
-                                                        }} className="border-none focus:outline-none">
+                                                        }} defaultValue={Status} className="border-none focus:outline-none">
                                                             <option disabled selected defaultValue={"None Selected"}>Select Status</option>
                                                             <option value="PARKED">PARKED</option>
                                                             <option value="DELIVERED">DELIVERED</option>
@@ -395,7 +394,7 @@ export default function Page() {
                                                         <input placeholder="Registration" onChange={(value) => {
                                                             setValueJobFormData('RegistrationNumber', value.target.value);
                                                             setRegistrationNumber(value.target.value);
-                                                        }} className="border-none focus:outline-none" type="text" required></input>
+                                                        }} defaultValue={RegistrationNumber} className="border-none focus:outline-none" type="text" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -406,7 +405,7 @@ export default function Page() {
                                                         <input placeholder="Battery #" onChange={(value) => {
                                                             setValueJobFormData('BatteryNumber', value.target.value);
                                                             setBatteryNumber(value.target.value);
-                                                        }} className="border-none focus:outline-none" type="number" required></input>
+                                                        }} defaultValue={BatteryNumber} className="border-none focus:outline-none" type="text" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -417,7 +416,7 @@ export default function Page() {
                                                         <input placeholder="Frame #" onChange={(value) => {
                                                             setValueJobFormData('FrameNo', value.target.value);
                                                             setFrameNo(value.target.value);
-                                                        }} className="border-none focus:outline-none" type="number" required></input>
+                                                        }} defaultValue={FrameNo} className="border-none focus:outline-none" type="text" required></input>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -445,7 +444,7 @@ export default function Page() {
                                                         <input placeholder="Fuel" onChange={(value) => {
                                                             setValueJobFormData('Fuel', value.target.value);
                                                             setFuel(value.target.value);
-                                                        }} className="border-none focus:outline-none" required></input>
+                                                        }} defaultValue={Fuel} className="border-none focus:outline-none" type="number" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -456,7 +455,7 @@ export default function Page() {
                                                         <input placeholder="Mileage" onChange={(value) => {
                                                             setValueJobFormData('Mileage', value.target.value);
                                                             setMileage(value.target.value);
-                                                        }} className="border-none focus:outline-none" required></input>
+                                                        }} defaultValue={Mileage} className="border-none focus:outline-none" type="number" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -467,8 +466,30 @@ export default function Page() {
                                                         <input onChange={
                                                             (e) => {
                                                                 setCheckAll(e.target.checked);
+                                                                setLighter(e.target.checked);
+                                                                setAshtray(e.target.checked);
+                                                                setFloorMats(e.target.checked);
+                                                                setOriginalBook(e.target.checked);
+                                                                setSeatCovers(e.target.checked);
+                                                                setRadioAntena(e.target.checked);
+                                                                setSpareWheel(e.target.checked);
+                                                                setWheelRod(e.target.checked);
+                                                                setJackHandle(e.target.checked);
+                                                                setTools(e.target.checked);
+                                                                setExtraThings(e.target.checked);
+                                                                setValueJobFormData('Lighter', e.target.checked);
+                                                                setValueJobFormData('Ashtray', e.target.checked);
+                                                                setValueJobFormData('FloorMats', e.target.checked);
+                                                                setValueJobFormData('OriginalBook', e.target.checked);
+                                                                setValueJobFormData('SeatCovers', e.target.checked);
+                                                                setValueJobFormData('RadioAntena', e.target.checked);
+                                                                setValueJobFormData('SpareWheel', e.target.checked);
+                                                                setValueJobFormData('WheelRod', e.target.checked);
+                                                                setValueJobFormData('JackHandle', e.target.checked);
+                                                                setValueJobFormData('Tools', e.target.checked);
+                                                                setValueJobFormData('ExtraThings', e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={isCheckAll} id="default-checkbox" type="checkbox" checked={isCheckAll ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -482,7 +503,7 @@ export default function Page() {
                                                                 setValueJobFormData('Lighter', e.target.checked);
                                                                 setLighter(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || Lighter ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={Lighter} id="default-checkbox" type="checkbox" checked={isCheckAll || Lighter ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -496,7 +517,7 @@ export default function Page() {
                                                                 setValueJobFormData('Ashtray', e.target.checked);
                                                                 setAshtray(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || Ashtray ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={Ashtray} id="default-checkbox" type="checkbox" checked={isCheckAll || Ashtray ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -510,7 +531,7 @@ export default function Page() {
                                                                 setValueJobFormData('FloorMats', e.target.checked);
                                                                 setFloorMats(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || FloorMats ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={FloorMats} id="default-checkbox" type="checkbox" checked={isCheckAll || FloorMats ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -525,7 +546,7 @@ export default function Page() {
                                                                 setOriginalBook(e.target.checked);
 
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || OriginalBook ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={OriginalBook} id="default-checkbox" type="checkbox" checked={isCheckAll || OriginalBook ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -540,7 +561,7 @@ export default function Page() {
                                                                 setSeatCovers(e.target.checked);
 
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || SeatCovers ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={SeatCovers} id="default-checkbox" type="checkbox" checked={isCheckAll || SeatCovers ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -555,7 +576,7 @@ export default function Page() {
                                                                 setRadioAntena(e.target.checked);
 
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || RadioAntena ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={RadioAntena} id="default-checkbox" type="checkbox" checked={isCheckAll || RadioAntena ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -570,7 +591,7 @@ export default function Page() {
                                                                 setSpareWheel(e.target.checked);
 
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || SpareWheel ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={SpareWheel} id="default-checkbox" type="checkbox" checked={isCheckAll || SpareWheel ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -584,7 +605,7 @@ export default function Page() {
                                                                 setValueJobFormData('WheelRod', e.target.checked);
                                                                 setWheelRod(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || WheelRod ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={WheelRod} id="default-checkbox" type="checkbox" checked={isCheckAll || WheelRod ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -598,7 +619,7 @@ export default function Page() {
                                                                 setValueJobFormData('JackHandle', e.target.checked);
                                                                 setJackHandle(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || JackHandle ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={JackHandle} id="default-checkbox" type="checkbox" checked={isCheckAll || JackHandle ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -612,7 +633,7 @@ export default function Page() {
                                                                 setValueJobFormData('Tools', e.target.checked);
                                                                 setTools(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || Tools ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={Tools} id="default-checkbox" type="checkbox" checked={isCheckAll || Tools ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -626,7 +647,7 @@ export default function Page() {
                                                                 setValueJobFormData('ExtraThings', e.target.checked);
                                                                 setExtraThings(e.target.checked);
                                                             }
-                                                        } id="default-checkbox" type="checkbox" checked={isCheckAll || ExtraThings ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        } defaultChecked={ExtraThings} id="default-checkbox" type="checkbox" checked={isCheckAll || ExtraThings ? true : false} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                                                     </td>
                                                 </tr>
@@ -640,12 +661,12 @@ export default function Page() {
                                         <textarea onChange={(e) => {
                                             setValueJobFormData('RequiredWorkDetails', e.target.value);
                                             setRequiredWorkDetails(e.target.value);
-                                        }} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                                        }} defaultValue={RequiredWorkDetails} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                                         <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Addtional Work Details (If Required)</label>
                                         <textarea onChange={(e) => {
                                             setValueJobFormData('OtherAdditionalWork', e.target.value);
                                             setOtherAdditionalWork(e.target.value);
-                                        }} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                                        }} defaultValue={OtherAdditionalWork} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                                         <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
                                             <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
                                                 <tr>
@@ -673,13 +694,13 @@ export default function Page() {
                                                                     setValueJobFormData('InReceivedBy', e.target.value);
                                                                     setInReceivedBy(e.target.value);
                                                                 }
-                                                            } className="border-none focus:outline-none border-b"></input>
+                                                            } defaultValue={InReceivedBy} className="border-none focus:outline-none border-b"></input>
                                                             <input placeholder="Vehicle Received From" onChange={
                                                                 (e) => {
                                                                     setValueJobFormData('InReceivedFrom', e.target.value);
                                                                     setInReceivedFrom(e.target.value);
                                                                 }
-                                                            } className="border-none focus:outline-none" required></input>
+                                                            } defaultValue={InReceivedFrom} className="border-none focus:outline-none" required></input>
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
@@ -720,13 +741,13 @@ export default function Page() {
                                                                     setValueJobFormData('OutReceivedBy', e.target.value);
                                                                     setOutReceivedBy(e.target.value);
                                                                 }
-                                                            } className="border-none focus:outline-none border-b"></input>
+                                                            } defaultValue={OutReceivedBy} className="border-none focus:outline-none border-b"></input>
                                                             <input placeholder="Vehicle Received From" onChange={
                                                                 (e) => {
                                                                     setValueJobFormData('OutReceivedFrom', e.target.value);
                                                                     setOutReceivedFrom(e.target.value);
                                                                 }
-                                                            } className="border-none focus:outline-none" required></input>
+                                                            } defaultValue={OutReceivedFrom} className="border-none focus:outline-none" required></input>
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">

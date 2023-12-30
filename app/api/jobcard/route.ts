@@ -32,10 +32,10 @@ export async function POST(request: Request) {
             BatteryNumber,
             InReceivedBy,
             InReceivedFrom,
-            InTime,
+            InDate,
             OutReceivedBy,
             OutReceivedFrom,
-            OutTime
+            OutDate
         } = body;
 
         // Get the current date
@@ -79,10 +79,10 @@ export async function POST(request: Request) {
                 BatteryNumber,
                 InReceivedBy,
                 InReceivedFrom,
-                InTime,
+                InTime: InDate ? InDate.toLocalDate() : '',
                 OutReceivedBy,
                 OutReceivedFrom,
-                OutTime,
+                OutTime: OutDate ? OutDate.toLocalDate() : '',
                 CreatedAt: formattedDate,
             },
         });

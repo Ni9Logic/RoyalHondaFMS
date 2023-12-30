@@ -40,10 +40,10 @@ export type JOBFormData = {
     BatteryNumber: string,
     InReceivedBy: string,
     InReceivedFrom: string,
-    InReceivedTime: string,
+    InTime: string,
     OutReceivedBy: string,
     OutReceivedFrom: string,
-    OutReceivedTime: string,
+    OutTime: string,
 };
 
 export default function Page() {
@@ -100,10 +100,10 @@ export default function Page() {
             BatteryNumber: searchParams.get('BatteryNumber')?.toString(),
             InReceivedBy: searchParams.get('InReceivedBy')?.toString(),
             InReceivedFrom: searchParams.get('InReceivedFrom')?.toString(),
-            InReceivedTime: inDate,
+            InTime: inDate,
             OutReceivedBy: searchParams.get('OutReceivedBy')?.toString(),
             OutReceivedFrom: searchParams.get('OutReceivedFrom')?.toString(),
-            OutReceivedTime: outDate,
+            OutTime: outDate,
         },
     });
 

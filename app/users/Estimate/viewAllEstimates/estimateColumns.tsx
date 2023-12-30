@@ -143,12 +143,12 @@ export const columns: ColumnDef<EstimateForm>[] = [
                                         OutTime: `${estimate.OutTime}`,
                                     },
                                 }}> */}
-                                    <DropdownMenuItem>Edit Job Card</DropdownMenuItem>
+                                    <DropdownMenuItem>Edit Estimate</DropdownMenuItem>
                                 {/* </Link> */}
                                 <DropdownMenuItem onClick={() => {
                                     setIsPrinting(true);
                                 }
-                                }>Print Job Card</DropdownMenuItem>
+                                }>Print Estimate</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     }
