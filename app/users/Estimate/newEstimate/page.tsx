@@ -21,6 +21,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { InsuranceCompanies } from "@prisma/client";
 
 export interface EstimateRowType {
     partNo: string;
@@ -49,6 +50,8 @@ export interface EstimateForm {
     cMake: string;
     cModel: string;
     cSurveyor: string;
+    cDriverUser: string;
+    Insurance: string;
     EstimateTableData: EstimateRowObject;
     ServicesDetailsTableData: ServiceRowObject;
     DiscountServices: number;
@@ -60,6 +63,7 @@ export interface EstimateForm {
     cRegistration: string;
     PaymentMode: string;
     OverAllAmount: number;
+    isRoyal: boolean;
 }
 
 export interface Surveyor {
@@ -76,7 +80,7 @@ export default function PAGE() {
     const day = currentDate.getDate();
 
     // Format the date as a string (e.g., "2023-12-23")
-    const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const formattedDate = `${year}/${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
     const [cName, setcName] = useState('');
 
     // Convert this to integer later in the api
@@ -87,6 +91,9 @@ export default function PAGE() {
     const [cRegistration, setcRegistration] = useState('');
     const [PaymentMode, setPaymentMode] = useState('');
     const [cSurveyor, setcSurveyor] = useState('');
+    const [cDriverUser, setcDriverUser] = useState('');
+    const [insurance, setInsurance] = useState('');
+    const [isRoyal, setIsRoyal] = useState(true);
 
     const [servicesDetailsRows, setServicesDetailsRow] = useState<ServiceRowObject>({})
     const [estimateRows, setEstimateRows] = useState<EstimateRowObject>({});
@@ -198,6 +205,8 @@ export default function PAGE() {
         cMake: cMake,
         cModel: cModel,
         cSurveyor: cSurveyor,
+        cDriverUser: cDriverUser,
+        Insurance: insurance,
         EstimateTableData: estimateRows,
         ServicesDetailsTableData: servicesDetailsRows,
         DiscountServices: DiscountServices,
@@ -208,6 +217,7 @@ export default function PAGE() {
         CreatedAt: formattedDate,
         cRegistration: cRegistration,
         PaymentMode: PaymentMode,
+        isRoyal: isRoyal,
         OverAllAmount: handleOverAllBill(),
     }
 
@@ -222,6 +232,8 @@ export default function PAGE() {
             cMake: cMake,
             cModel: cModel,
             cSurveyor: cSurveyor,
+            cDriverUser: cDriverUser,
+            Insurance: insurance,
             EstimateTableData: {},
             ServicesDetailsTableData: {},
             DiscountServices: 0,
@@ -232,6 +244,7 @@ export default function PAGE() {
             CreatedAt: formattedDate,
             cRegistration: cRegistration,
             PaymentMode: PaymentMode,
+            isRoyal: isRoyal,
             OverAllAmount: 0,
         }
     })
@@ -287,14 +300,35 @@ export default function PAGE() {
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }
 
+    const [estId, setEstId] = useState('');
+    const getLastEstimateId = async () => {
+        axios.get("../../../api/getLastEstimateId")
+            .then((response: AxiosResponse) => {
+                setEstId(response?.data?.id);
+            })
+            .catch((error: AxiosError) => {
+                console.log(error);
+            })
+
+    }
+
+    const [allInsurances, setAllInsurances] = useState<InsuranceCompanies[]>();
+    const getAllInsurancess = async () => {
+        axios.get("../../../api/getAllInsurance")
+            .then((response: AxiosResponse) => setAllInsurances(response?.data?.Message))
+            .catch((error: any) => toast.error(error?.response?.data?.Message));
+    }
     useEffect(() => {
         const fetchData = async () => {
             await getAllSurveyors();
+            await getAllInsurancess();
+            await getLastEstimateId();
         }
 
         fetchData();
 
     }, [])
+
     return (
         <>
             <form id="form2" onSubmit={handleAddSurveyorSubmit(onAddSurveyorSubmit)}></form>
@@ -315,14 +349,14 @@ export default function PAGE() {
                                                 <Input onChange={(e) => {
                                                     setValue('cName', e.target.value);
                                                     setcName(e.target.value);
-                                                }} type="text" id="text" placeholder="Customer Name"
+                                                }} defaultValue={cName} type="text" id="text" placeholder="Customer Name"
                                                     required />
                                             </div>
                                         </div>
                                     </div>
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
                                         <Label htmlFor="Customer Name">Estimate Number</Label>
-                                        <Input type="text" id="text" placeholder="Estimate Number" disabled />
+                                        <Input value={estId ? estId + 1 : '1'} type="text" id="text" placeholder="Estimate Number" disabled />
                                     </div>
                                 </div>
                                 <div className="flex flex-row gap-2">
@@ -333,7 +367,7 @@ export default function PAGE() {
                                     </div>
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
                                         <Label htmlFor="Customer Name">NTN</Label>
-                                        <Input type="text" id="text" placeholder="NTN" value={"3268859-8"} disabled />
+                                        <Input type="text" id="text" placeholder="NTN" value={isRoyal ? "7522464-3" : "3268859-8"} disabled />
                                     </div>
                                 </div>
                                 <div className="flex flex-row gap-2">
@@ -342,14 +376,14 @@ export default function PAGE() {
                                         <Input onChange={(e) => {
                                             setValue('cMake', e.target.value);
                                             setcMake(e.target.value);
-                                        }} type="text" id="text" placeholder="cMake" required />
+                                        }} defaultValue={cMake} type="text" id="text" placeholder="cMake" required />
                                     </div>
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
                                         <Label htmlFor="Customer Name">Model</Label>
                                         <Input onChange={(e) => {
                                             setValue('cModel', e.target.value);
                                             setcModel(e.target.value);
-                                        }} type="text" id="text" placeholder="cModel" required />
+                                        }} defaultValue={cModel} type="text" id="text" placeholder="cModel" required />
                                     </div>
                                 </div>
                                 <div className="flex flex-row gap-2">
@@ -358,7 +392,7 @@ export default function PAGE() {
                                         <Input onChange={(e) => {
                                             setValue('cRegistration', e.target.value);
                                             setcRegistration(e.target.value);
-                                        }} type="text" id="text" placeholder="Vehicle Reg No"
+                                        }} defaultValue={cRegistration} type="text" id="text" placeholder="Vehicle Reg No"
                                             required />
                                     </div>
                                     <div className="flex-grow max-w-sm items-center gap-1.5">
@@ -366,71 +400,109 @@ export default function PAGE() {
                                         <Input onChange={(e) => {
                                             setValue('jobId', e.target.value);
                                             setjobId(e.target.value);
-                                        }} type="number" id="text" placeholder="Job Card ID (If Exist)" />
+                                        }} defaultValue={jobId} type="number" id="text" placeholder="Job Card ID (If Exist)" />
                                     </div>
                                 </div>
                                 <div className="flex flex-row gap-2 mt-2">
+                                    <div className="w-full max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="Customer Name">Driver|User</Label>
+                                        <Input onChange={(e) => {
+                                            setValue('cDriverUser', e.target.value);
+                                            setcDriverUser(e.target.value);
+                                        }} defaultValue={cDriverUser} type="text" placeholder="Driver/User" required />
+                                    </div>
                                     <div className="w-full max-w-sm items-center gap-1.5">
                                         <Label htmlFor="Customer Name">KiloMeters</Label>
                                         <Input onChange={(e) => {
                                             setValue('cKiloMeters', parseInt(e.target.value));
                                             setcKiloMeters(parseInt(e.target.value));
-                                        }} type="number" id="number" placeholder="Km" required />
+                                        }} defaultValue={ckiloMeters} type="number" id="number" placeholder="Km" required />
                                     </div>
-                                    <div className="max-w-sm items-center gap-1.5 w-full flex-col flex">
-                                        <Label className="mt-2">Payment Mode</Label>
-                                        <select defaultValue={"CHEQUE"} onChange={(value) => {
-                                            setValue('PaymentMode', value.target.value);
-                                            setPaymentMode(value.target.value);
-                                        }} className="border-none focus:outline-none mt-1" required>
-                                            <option value="CHEQUE">CHEQUE</option>
-                                            <option value="CASH">CASH</option>
-                                        </select>
-                                    </div>
+
+
                                 </div>
-                                <div className="flex flex-row mt-4 items-center justify-center gap-2">
+                                <div className="flex flex-row mt-4 items-center justify-center gap-12">
+                                    <div className="flex flex-row gap-1">
+                                        <Select onValueChange={(e) => {
+                                            setValue('cSurveyor', e);
+                                            setcSurveyor(e);
+                                        }} defaultValue={cSurveyor}>
+                                            <SelectTrigger className="w-[180px]">
+                                                <SelectValue placeholder="Select Surveyor" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {
+                                                    Surveyors?.map((surveyor) => (
+                                                        <SelectItem key={uuidv4()} value={surveyor.cSurveyor}>
+                                                            {surveyor.cSurveyor}
+                                                        </SelectItem>
+                                                    ))
+                                                }
+                                            </SelectContent>
+                                        </Select>
+                                        <Drawer>
+                                            <DrawerTrigger>
+                                                <PlusIcon />
+                                            </DrawerTrigger>
+                                            <DrawerContent>
+                                                <DrawerHeader className="flex items-center flex-col gap-2">
+                                                    <DrawerTitle className="justify-center flex">Add Surveyor?</DrawerTitle>
+                                                    <DrawerDescription className="justify-center flex">
+                                                        <Input required form="form2" placeholder="Surveyor Name" onChange={(e) => setValueSurveyor('cSurveyor', e.target.value)} />
+                                                    </DrawerDescription>
+                                                </DrawerHeader>
+                                                <DrawerFooter className="flex justify-center items-center">
+                                                    <Button className="w-20 flex flex-row gap-1" type="submit" form="form2">
+                                                        Add
+                                                        <Loader isLoading={isAddSurveyorLoading} />
+                                                    </Button>
+                                                    <DrawerClose>
+                                                        <Button type="button" className="w-20" variant="outline">Close</Button>
+                                                    </DrawerClose>
+                                                </DrawerFooter>
+
+                                            </DrawerContent>
+                                        </Drawer>
+                                    </div>
                                     <Select onValueChange={(e) => {
-                                        setValue('cSurveyor', e);
-                                        setcSurveyor(e);
-                                    }}>
+                                        setValue('PaymentMode', e);
+                                        setPaymentMode(e);
+                                    }} defaultValue={PaymentMode}>
                                         <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="Select Surveyor" />
+                                            <SelectValue placeholder="Payment Mode" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="CASH">CASH</SelectItem>
+                                            <SelectItem value="CHEQUE">CHEQUE</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <Select onValueChange={(e) => {
+                                        setValue('Insurance', e);
+                                        setInsurance(e);
+                                    }} defaultValue={insurance}>
+                                        <SelectTrigger className="w-[180px]">
+                                            <SelectValue placeholder="Select Insurance" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {
-                                                Surveyors?.map((surveyor) => (
-                                                    <SelectItem key={surveyor.id} value={surveyor.cSurveyor}>
-                                                        {surveyor.cSurveyor}
+                                                allInsurances?.map((insurance) => (
+                                                    
+                                                    <SelectItem key={uuidv4()} value={insurance.name ? insurance.name : 'NULL'}>
+                                                        {insurance.name}
                                                     </SelectItem>
                                                 ))
                                             }
                                         </SelectContent>
                                     </Select>
-                                    <Drawer>
-                                        <DrawerTrigger>
-                                            <PlusIcon />
-                                        </DrawerTrigger>
-                                        <DrawerContent>
-                                            <DrawerHeader className="flex items-center flex-col gap-2">
-                                                <DrawerTitle className="justify-center flex">Add Surveyor?</DrawerTitle>
-                                                <DrawerDescription className="justify-center flex">
-                                                    <Input required form="form2" placeholder="Surveyor Name" onChange={(e) => setValueSurveyor('cSurveyor', e.target.value)} />
-                                                </DrawerDescription>
-                                            </DrawerHeader>
-                                            <DrawerFooter className="flex justify-center items-center">
-                                                <Button className="w-20 flex flex-row gap-1" type="submit" form="form2">
-                                                    Add
-                                                    <Loader isLoading={isAddSurveyorLoading} />
-                                                </Button>
-                                                <DrawerClose>
-                                                    <Button type="button" className="w-20" variant="outline">Close</Button>
-                                                </DrawerClose>
-                                            </DrawerFooter>
-
-                                        </DrawerContent>
-                                    </Drawer>
                                 </div>
-
+                                <div className={`flex w-full flex-row gap-2 mt-4`}>
+                                    <Button type="button" onClick={() => setIsRoyal(true)} className="w-full" variant={isRoyal ? 'default' : 'secondary'}>
+                                        Royal Estimate
+                                    </Button>
+                                    <Button type="button" onClick={() => setIsRoyal(false)} className="w-full" variant={isRoyal ? 'secondary' : 'default'}>
+                                        Mehr Estimate
+                                    </Button>
+                                </div>
                                 <div className={"mt-32 h-full w-full flex flex-col gap-4"}>
                                     <div>
                                         {/* @ts-ignore */}

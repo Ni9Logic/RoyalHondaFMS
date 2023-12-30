@@ -61,13 +61,16 @@ model JobCard {
 }
 
 model EstimatedCostWork {
-  id                Int     @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   jobId             Int? // If this job id exists it means this estimate can be shown if a user opens job card with this id 
   cName             String?
   cMake             String?
   cModel            String?
   cRegistration     String?
   cSurveyor         String?
+  cDriverUser       String?
+  cNtn              String?
+  Insurance         String?
   cKiloMeters       Float?
   TotalServiceFee   Float?
   TotalEstimateFee  Float?
@@ -77,6 +80,7 @@ model EstimatedCostWork {
   DiscountServices  Float?
   DiscountEstimate  Float?
   OverAllAmount     Float?
+  isRoyal           Boolean?
   CreatedAt         String?
 }
 
@@ -108,4 +112,5 @@ model InsuranceCompanies {
 model Surveyors {
   id        Int     @id @default(autoincrement())
   cSurveyor String? @unique
+  cNtn      String? @unique
 }

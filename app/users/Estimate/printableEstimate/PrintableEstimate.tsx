@@ -1,5 +1,7 @@
 import { EstimateForm } from "../newEstimate/page";
 import { Label } from "@/components/ui/label";
+import TitleMehrMotors from "./Titles/MehrMotors";
+import TitleRoyalHonda from "./Titles/RoyalHonda";
 
 const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
     const isPrinting = window.matchMedia('print').matches;
@@ -13,21 +15,9 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                         <div className="flex flex-row">
                             <div className="flex flex-col">
                                 {/* Company Details */}
-                                <div className="flex flex-col gap-1">
-                                    <p className="text-red-500 font-bold">
-                                        Meher Motors
-                                    </p>
-                                    <p className="text-[11px] w-auto">
-                                        445 Meherabad Peshawar Road Rawalpindi
-                                    </p>
-                                    <p className="text-blue-400 text-[11px]">051-5496022 - 21, 051-5469654</p>
-                                    <div className="text-[11px] gap-0">
-                                        <p>hondameher@yahoo.com</p>
-                                        <p>services.hondameher@gmail.com</p>
-                                        <p>hondameher.bodyshop@gmail.com</p>
-                                    </div>
-                                </div>
-
+                                {
+                                    data.isRoyal ? <TitleRoyalHonda /> : <TitleMehrMotors />
+                                }
                                 <div className="mt-10 w-full flex flex-row gap-2">
                                     <p className="text-sm flex flex-row gap-1">Customer Name:
                                         <p className="border border-black w-auto h-auto text-sm">
@@ -38,6 +28,19 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                     <p className="text-sm flex flex-row gap-1">Surveyor:
                                         <p className="border border-black w-auto h-auto text-sm">
                                             <p className="px-2 font-sans">{data?.cSurveyor}</p>
+                                        </p>
+                                    </p>
+                                </div>
+                                <div className="mt-10 w-full flex flex-row gap-2">
+                                    <p className="text-sm flex flex-row gap-1">Driver|User:
+                                        <p className="border border-black w-auto h-auto text-sm">
+                                            <p className="px-2 font-sans">{data?.cDriverUser}</p>
+                                        </p>
+                                    </p>
+
+                                    <p className="text-sm flex flex-row gap-1">Insurance:
+                                        <p className="border border-black w-auto h-auto text-sm">
+                                            <p className="px-2 font-sans">{data?.Insurance}</p>
                                         </p>
                                     </p>
                                 </div>
@@ -55,7 +58,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                 </div>
                                 <div className="h-full flex justify-end">
                                     <p className="font-sans flex flex-row gap-1">
-                                        <p className="font-bold">NTN #:</p> <p className="text-red-500 font-bold">3268859-8</p>
+                                        <p className="font-bold">NTN #:</p> <p className="text-red-500 font-bold">{data.isRoyal ? "7522464-3" : "3268859-8"}</p>
                                     </p>
                                 </div>
                                 <div className="h-full flex justify-end">
