@@ -103,6 +103,8 @@ export default function Page() {
     const [isPreview, setIsPreview] = useState(false);
     const [isCheckAll, setCheckAll] = useState(false);
 
+
+
     // To transfer all the fields inside jobprintable
     const [CustomerName, setCustomerName] = useState<string>('');
     const [DriverUser, setDriverUser] = useState<string>('');
@@ -180,6 +182,9 @@ export default function Page() {
             InReceivedBy: '',
             InReceivedFrom: '',
             InTime: '',
+            OutReceivedBy: '',
+            OutReceivedFrom: '',
+            OutTime: '',
         },
     });
 
@@ -723,6 +728,9 @@ export default function Page() {
                                                                         mode="single"
                                                                         selected={inDate}
                                                                         onSelect={setInDate}
+                                                                        onDayClick={(date) => {
+                                                                            setValueJobFormData('InTime', date ? date?.toLocaleDateString() : '')
+                                                                        }}
                                                                         initialFocus
                                                                     />
                                                                 </PopoverContent>
@@ -769,6 +777,9 @@ export default function Page() {
                                                                     mode="single"
                                                                     selected={outDate}
                                                                     onSelect={setOutDate}
+                                                                    onDayClick={(date) => {
+                                                                        setValueJobFormData('OutTime', date ? date?.toLocaleDateString() : '')
+                                                                    }}
                                                                     initialFocus
                                                                 />
                                                             </PopoverContent>

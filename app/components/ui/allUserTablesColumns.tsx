@@ -111,6 +111,14 @@ export const columns: ColumnDef<JobTable>[] = [
         header: 'Frame Number'
     },
     {
+        accessorKey: 'InTime',
+        header: 'In Date'
+    },
+    {
+        accessorKey: 'OutTime',
+        header: 'Out Date'
+    },
+    {
         accessorKey: 'CreatedAt',
         header: 'Date'
     },

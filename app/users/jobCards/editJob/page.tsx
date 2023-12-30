@@ -1,10 +1,10 @@
 'use client'
 import Footer from "@/app/users/Footer";
 import Navbar from "@/app/users/Navbar";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from 'react-hot-toast';
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import { useSearchParams } from 'next/navigation'
@@ -12,14 +12,23 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Loader from "@/app/components/ui/loader";
 import moment from "moment";
+import getAllInsurance from "@/app/actions/getAllInsurance";
+import { InsuranceCompaniesData } from "../../createJobCard/page";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns/format";
+import { Calendar } from "@/components/ui/calendar";
 
 export type JOBFormData = {
+    SerialNo: string,
     CustomerName: string,
     DriverUser: string,
     CellNo: string,
     JobCheckedBy: string,
     WorkType: string,
     Insurance: string,
+    Status: string,
     RegistrationNumber: string,
     RequiredWorkDetails: string,
     OtherAdditionalWorkDetails: string,
@@ -48,23 +57,8 @@ export type JOBFormData = {
 
 export default function Page() {
     // Date Time Selection
-    const [inDate, setInDate] = useState('');
-    const [outDate, setOutDate] = useState('');
     const [isLoading, setLoading] = useState(false);
     const searchParams = useSearchParams();
-
-    const handleInDateChange = (date: any) => {
-        const formattedDate = moment(date).format('YYYY-MM-DD');
-        setInDate(formattedDate.toString());
-        console.log(inDate);
-    }
-
-    const handleOutDateChange = (date: any) => {
-        const formattedDate = moment(date).format('YYYY-MM-DD');
-        setOutDate(formattedDate.toString());
-
-        console.log(outDate);
-    }
 
     const {
         register,
@@ -74,12 +68,14 @@ export default function Page() {
         setValue,
     } = useForm<JOBFormData>({
         defaultValues: {
+            SerialNo: searchParams.get('SerialNo')?.toString(),
             CustomerName: searchParams.get('CustomerName')?.toString(),
             DriverUser: searchParams.get('DriverUser')?.toString(),
             CellNo: searchParams.get('CustomerContact')?.toString(),
             JobCheckedBy: searchParams.get('JobCheckedBy')?.toString(),
             WorkType: searchParams.get('WorkType')?.toString(),
             Insurance: searchParams.get('Insurance')?.toString(),
+            Status: searchParams.get('Status')?.toString(),
             RegistrationNumber: searchParams.get('RegistrationNumber')?.toString(),
             RequiredWorkDetails: searchParams.get('RequiredWorkDetails')?.toString(),
             OtherAdditionalWorkDetails: searchParams.get('OtherAdditionalWork')?.toString(),
@@ -100,19 +96,20 @@ export default function Page() {
             BatteryNumber: searchParams.get('BatteryNumber')?.toString(),
             InReceivedBy: searchParams.get('InReceivedBy')?.toString(),
             InReceivedFrom: searchParams.get('InReceivedFrom')?.toString(),
-            InTime: inDate,
+            InTime: searchParams.get('inTime')?.toString(),
             OutReceivedBy: searchParams.get('OutReceivedBy')?.toString(),
             OutReceivedFrom: searchParams.get('OutReceivedFrom')?.toString(),
-            OutTime: outDate,
+            OutTime: searchParams.get('OutTime')?.toString(),
         },
     });
 
 
     const onSubmit: SubmitHandler<JOBFormData> = async (data: JOBFormData) => {
         setLoading(true);
+        console.log(data);
         axios.post("/api/updateJobCard", data)
             .then(() => {
-                toast.success("Estimate Created!")
+                toast.success("Job Card Updated!")
             })
             .catch((response: any) => {
                 let error = response?.response?.data?.Message;
@@ -123,7 +120,22 @@ export default function Page() {
             })
     }
 
+    const [inDate, setInDate] = React.useState<Date>()
+    const [outDate, setOutDate] = React.useState<Date>();
+    const [allInsurances, setAllInsurances] = useState<InsuranceCompaniesData[]>();
+    const getAllInsurances = async () => {
+        axios.get("/api/getAllInsurance")
+            .then((response: AxiosResponse) => setAllInsurances(response.data.Message))
+            .catch((error: AxiosError) => console.log(error));
+    }
 
+    useEffect(() => {
+        const fetchData = async () => {
+            await getAllInsurances();
+        }
+
+        fetchData();
+    })
     return (
         <>
             <Navbar />
@@ -244,22 +256,28 @@ export default function Page() {
                                                     setValue('Insurance', value.target.value);
                                                 }} className="border-none focus:outline-none">
                                                     <option value="" disabled selected>{searchParams.get('Insurance')?.toString()}</option>
-                                                    <option value="HABIB BANK LIMITED">HABIB BANK LIMITED</option>
-                                                    <option value="TPL Insurance Coampnay">TPL INSURANCE COMPANY</option>
-                                                    <option value="IGI GENERAL INSURNACE LIMITED">IGI GENERAL INSURNACE LIMITED </option>
-                                                    <option value="SALAAM TAKAFUL INS PAKISTAN LTD">SALAAM TAKAFUL INS PAKISTAN LTD</option>
-                                                    <option value="ALFALAH GENERAL INSURNACE COMPANY LTD">ALFALAH GENERAL INSURNACE COMPANY LTD</option>
-                                                    <option value="JUBILEE INSURNACE COMPANY">JUBILEE INSURNACE COMPANY</option>
-                                                    <option value="ATLAS INSURNACE COMPANY LTD">ATLAS INSURNACE COMPANY LTD</option>
-                                                    <option value="ADAMJEE INSURNACE CORP BR KHI">ADAMJEE INSURNACE CORP BR KHI</option>
-                                                    <option value="ASKARI GENERAL INSURNACE COMPANY LTD">ASKARI GENERAL INSURNACE COMPANY LTD</option>
-                                                    <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY LTD</option>
-                                                    <option value="UBL INSURNACE COMPANY">UBL INSURNACE COMPANY</option>
-                                                    <option value="EFU GENERAL INSURNACE COMPANY LTD">EFU GENERAL INSURNACE COMPANY LTD</option>
-                                                    <option value="PAK QATAR">PAK QATAR</option>
-                                                    <option value="UNITED INS">UNITED INS</option>
-                                                    <option value="NONE">NONE</option>
-
+                                                    {
+                                                        allInsurances?.map((insurance: any) => {
+                                                            return (
+                                                                <option value={insurance.name}>{insurance.name}</option>
+                                                            )
+                                                        })
+                                                    }
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Status
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <select onChange={(value) => {
+                                                    setValue('Status', value.target.value);
+                                                }} defaultValue={searchParams.get('Status')?.toString()} className="border-none focus:outline-none">
+                                                    <option disabled selected defaultValue={"None Selected"}>Select Status</option>
+                                                    <option value="PARKED">PARKED</option>
+                                                    <option value="DELIVERED">DELIVERED</option>
+                                                    <option value="COME BACK LATER">COME BACK LATER</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -526,11 +544,33 @@ export default function Page() {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex flex-row text-center justify-center gap-2">
-                                                    <Datetime
-                                                        timeFormat={false}
-                                                        dateFormat="YYYY-MM-DD"
-                                                        onChange={handleInDateChange}
-                                                    />
+                                                    <Popover>
+                                                        <PopoverTrigger asChild>
+                                                            <Button
+                                                                variant={"outline"}
+                                                                className={cn(
+                                                                    "justify-start text-left font-normal",
+                                                                    !inDate && "text-muted-foreground"
+                                                                )}
+                                                            >
+                                                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                                                {inDate ? format(inDate, "yyyy-MM-dd") : <span>{searchParams.get('InTime')?.toString()}</span>}
+                                                            </Button>
+                                                        </PopoverTrigger>
+                                                        <PopoverContent>
+                                                            <Calendar
+                                                                mode="single"
+                                                                selected={inDate}
+                                                                onSelect={(date) => {
+                                                                    setInDate(date);
+                                                                }}
+                                                                onDayClick={(date) => {
+                                                                    setValue('InTime', date ? date?.toLocaleDateString() : '')
+                                                                }}
+                                                                initialFocus
+                                                            />
+                                                        </PopoverContent>
+                                                    </Popover>
                                                 </div>
                                             </td>
                                         </tr>
@@ -553,11 +593,33 @@ export default function Page() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <Datetime
-                                                    className="border-none outline-none focus:border-none focus:outline-none"
-                                                    timeFormat={false}
-                                                    onChange={(date) => handleOutDateChange(date)}
-                                                />
+                                                <Popover>
+                                                    <PopoverTrigger asChild>
+                                                        <Button
+                                                            variant={"outline"}
+                                                            className={cn(
+                                                                "justify-start text-left font-normal",
+                                                                !outDate && "text-muted-foreground"
+                                                            )}
+                                                        >
+                                                            <CalendarIcon className="mr-2 h-4 w-4" />
+                                                            {outDate ? format(outDate, "yyyy-MM-dd") : <span>{searchParams.get('OutTime')?.toString()}</span>}
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent>
+                                                        <Calendar
+                                                            mode="single"
+                                                            selected={outDate}
+                                                            onSelect={(date) => {
+                                                                setOutDate(date);
+                                                            }}
+                                                            onDayClick={(date) => {
+                                                                setValue('OutTime', date ? date?.toLocaleDateString() : '')
+                                                            }}
+                                                            initialFocus
+                                                        />
+                                                    </PopoverContent>
+                                                </Popover>
                                             </td>
                                         </tr>
                                     </tbody>

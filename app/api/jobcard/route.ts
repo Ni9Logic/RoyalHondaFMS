@@ -1,9 +1,10 @@
+import { JOBFormData } from "@/app/users/createJobCard/page";
 import prisma from "../../lib/prismadb";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     try {
-        const body = await request.json();
+        const body: JOBFormData = await request.json();
         const {
             CustomerName,
             DriverUser,
@@ -32,11 +33,14 @@ export async function POST(request: Request) {
             BatteryNumber,
             InReceivedBy,
             InReceivedFrom,
-            InDate,
+            InTime,
             OutReceivedBy,
             OutReceivedFrom,
-            OutDate
+            OutTime,
         } = body;
+
+        
+
 
         // Get the current date
         const currentDate = new Date();
@@ -79,14 +83,13 @@ export async function POST(request: Request) {
                 BatteryNumber,
                 InReceivedBy,
                 InReceivedFrom,
-                InTime: InDate ? InDate.toLocalDate() : '',
+                InTime: InTime,
                 OutReceivedBy,
                 OutReceivedFrom,
-                OutTime: OutDate ? OutDate.toLocalDate() : '',
+                OutTime: OutTime,
                 CreatedAt: formattedDate,
             },
         });
-
         return NextResponse.json({ jobcard });
     } catch (error: any) {
         console.log(error, "Error in registration");
