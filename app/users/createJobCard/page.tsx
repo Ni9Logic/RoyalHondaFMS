@@ -22,7 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Loader from "@/app/components/ui/loader";
-import { uuid } from 'uuidv4';
+import { v4 as uuidv4 } from 'uuid';
 import { format } from "date-fns"
 import { Calendar as CalendarIcon, Frame } from "lucide-react"
 
@@ -38,6 +38,8 @@ export type JOBFormData = {
     CustomerName: string,
     DriverUser: string,
     CellNo: string,
+    Make: string,
+    Model: string,
     JobCheckedBy: string,
     WorkType: string,
     Insurance: string,
@@ -112,6 +114,8 @@ export default function Page() {
     const [JobCheckedBy, setJobCheckedBy] = useState<string>('');
     const [WorkType, setWorkType] = useState<string>('');
     const [Insurance, setInsurance] = useState<string>('');
+    const [Make, setMake] = useState('');
+    const [Model, setModel] = useState('');
     const [RegistrationNumber, setRegistrationNumber] = useState<string>('');
     const [OtherAdditionalWork, setOtherAdditionalWork] = useState<string>('');
     const [Fuel, setFuel] = useState<string>('');
@@ -159,6 +163,8 @@ export default function Page() {
             CellNo: '',
             JobCheckedBy: '',
             WorkType: '',
+            Make: '',
+            Model: '',
             Insurance: '',
             Status: '',
             RegistrationNumber: '',
@@ -325,8 +331,8 @@ export default function Page() {
                                                         <select onChange={(value) => {
                                                             setValueJobFormData('WorkType', value.target.value);
                                                             setWorkType(value.target.value);
-                                                        }} defaultValue={WorkType} className="border-none focus:outline-none" required>
-                                                            <option defaultValue={"None Selected"} disabled selected>Select Work Type</option>
+                                                        }} className="border-none focus:outline-none" required>
+                                                            <option defaultValue={"None Selected"} disabled>Select Work Type</option>
                                                             <option value="INSURANCE">INSURANCE</option>
                                                             <option value="WORK ORDER">WORK ORDER</option>
                                                             <option value="CASH WORK">CASH WORK</option>
@@ -341,11 +347,11 @@ export default function Page() {
                                                         <select onChange={(value) => {
                                                             setValueJobFormData('Insurance', value.target.value);
                                                             setInsurance(value.target.value);
-                                                        }} defaultValue={Insurance} className="border-none focus:outline-none">
-                                                            <option disabled defaultValue={"None Selected"} selected>Select an Insurance Company</option>
+                                                        }} className="border-none focus:outline-none">
+                                                            <option key={uuidv4()} disabled>Select an Insurance Company</option>
                                                             {
                                                                 allInsurances?.map((item, index) => (
-                                                                    <option key={uuid()} value={item.name}>{item.name}</option>
+                                                                    <option value={item.name}>{item.name}</option>
                                                                 ))
                                                             }
                                                         </select>
@@ -383,12 +389,34 @@ export default function Page() {
                                                         <select onChange={(value) => {
                                                             setValueJobFormData('Status', value.target.value);
                                                             setStatus(value.target.value);
-                                                        }} defaultValue={Status} className="border-none focus:outline-none">
-                                                            <option disabled selected defaultValue={"None Selected"}>Select Status</option>
+                                                        }} className="border-none focus:outline-none">
+                                                            <option disabled defaultValue={"None Selected"}>Select Status</option>
                                                             <option value="PARKED">PARKED</option>
                                                             <option value="DELIVERED">DELIVERED</option>
                                                             <option value="COME BACK LATER">COME BACK LATER</option>
                                                         </select>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Make
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input placeholder="Make" onChange={(value) => {
+                                                            setValueJobFormData('Make', value.target.value);
+                                                            setMake(value.target.value);
+                                                        }} defaultValue={Make} className="border-none focus:outline-none" type="text" required></input>
+                                                    </td>
+                                                </tr>
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Model
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        <input placeholder="Model" onChange={(value) => {
+                                                            setValueJobFormData('Model', value.target.value);
+                                                            setModel(value.target.value);
+                                                        }} defaultValue={Model} className="border-none focus:outline-none" type="text" required></input>
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -857,6 +885,8 @@ export default function Page() {
                                 InReceivedBy,
                                 InReceivedFrom,
                                 inDate,
+                                Make,
+                                Model,
                                 OutReceivedBy,
                                 OutReceivedFrom,
                                 outDate,

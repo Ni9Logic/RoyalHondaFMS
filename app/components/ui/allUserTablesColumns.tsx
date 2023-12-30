@@ -29,6 +29,8 @@ export type JobTable = {
     CellNo: string;
     JobCheckedBy: string;
     WorkType: string;
+    Make: string,
+    Model: string,
     Status: string;
     Insurance: string;
     carRegistration: string;
@@ -87,8 +89,16 @@ export const columns: ColumnDef<JobTable>[] = [
         header: 'Contact Number'
     },
     {
-        accessorKey: 'DriverUser',
-        header: 'Driver | User'
+        accessorKey: 'WorkType',
+        header: 'Work Type'
+    },
+    {
+        accessorKey: 'Make',
+        header: 'Make'
+    },
+    {
+        accessorKey: 'Model',
+        header: 'Model'
     },
     {
         accessorKey: 'JobCheckedBy',
@@ -157,6 +167,8 @@ export const columns: ColumnDef<JobTable>[] = [
                                         CustomerContact: `${job.CellNo}`,
                                         JobCheckedBy: `${job.JobCheckedBy}`,
                                         WorkType: `${job.WorkType}`,
+                                        Make: `${job.Make}`,
+                                        Model: `${job.Model}`,
                                         Status: `${job.Status}`,
                                         Insurance: `${job.Insurance}`,
                                         RegistrationNumber: `${job.carRegistration}`,

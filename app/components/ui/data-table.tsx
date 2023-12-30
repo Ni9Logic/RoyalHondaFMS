@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({
             table.setPageSize(7);
     }, [])
     return (
-        <div className="flex flex-col overflow-x-auto w-full flex-grow">
+        <div className="flex flex-col">
             <div className="flex flex-row items-center gap-2">
                 <div className="flex items-center py-4">
                     <Input

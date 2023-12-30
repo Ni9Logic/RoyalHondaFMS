@@ -26,6 +26,8 @@ model JobCard {
   CustomerName             String?
   DriverUser               String?
   CellNo                   String?
+  Make                     String?
+  Model                    String?
   JobCheckedBy             String?
   WorkType                 String?
   Insurance                String?

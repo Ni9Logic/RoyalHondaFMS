@@ -27,6 +27,8 @@ export type JOBFormData = {
     CellNo: string,
     JobCheckedBy: string,
     WorkType: string,
+    Make: string,
+    Model: string,
     Insurance: string,
     Status: string,
     RegistrationNumber: string,
@@ -74,6 +76,8 @@ export default function Page() {
             CellNo: searchParams.get('CustomerContact')?.toString(),
             JobCheckedBy: searchParams.get('JobCheckedBy')?.toString(),
             WorkType: searchParams.get('WorkType')?.toString(),
+            Make: searchParams.get('Make')?.toString(),
+            Model: searchParams.get('Model')?.toString(),
             Insurance: searchParams.get('Insurance')?.toString(),
             Status: searchParams.get('Status')?.toString(),
             RegistrationNumber: searchParams.get('RegistrationNumber')?.toString(),
@@ -279,6 +283,26 @@ export default function Page() {
                                                     <option value="DELIVERED">DELIVERED</option>
                                                     <option value="COME BACK LATER">COME BACK LATER</option>
                                                 </select>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Make
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input defaultValue={searchParams.get('Make')?.toString()} onChange={(value) => {
+                                                    setValue('Make', value.target.value);
+                                                }} className="border-none focus:outline-none"></input>
+                                            </td>
+                                        </tr>
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Model
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                <input defaultValue={searchParams.get('Model')?.toString()} onChange={(value) => {
+                                                    setValue('Model', value.target.value);
+                                                }} className="border-none focus:outline-none"></input>
                                             </td>
                                         </tr>
                                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">

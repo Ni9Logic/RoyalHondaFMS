@@ -238,7 +238,7 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                 </Label>
 
                                 <Label className={"flex flex-row gap-1"}>
-                                    Total Bill: <p
+                                    Total Amount: <p
                                         className={"font-bold"}>{handleOverAllBill().toLocaleString()} Rs</p>
                                 </Label>
                             </div>

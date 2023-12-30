@@ -26,36 +26,27 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
         const fetchData = async () => {
             try {
                 await fetchSerialNumber();
-                // Additional code after the fetch operation if needed
             } catch (error) {
                 console.error('Error fetching serial number:', error);
-                // Handle the error as needed
             }
         };
 
-        fetchData(); // Call the async function immediately
-
-        // If you have a cleanup function (optional)
-        return () => {
-            // Code to run on unmount (cleanup)
-        };
-    }, []); // Empty dependency array
+        fetchData();
+    }, []);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape") {
-                onClose(); // Call the onClose function when "Escape" is pressed
+                onClose();
             }
         };
 
-        // Add event listener when the component mounts
         document.addEventListener("keydown", handleKeyDown);
 
-        // Remove event listener when the component unmounts
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [onClose]); // Re-run effect when onClose changes
+    }, [onClose]);
     return (
         <>
             <div className="ml-4 mr-4">
@@ -76,11 +67,23 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                                 <p className="text-sm print:text-[10px] mb-0 print:mb-[-2px] ml-2 print:ml-2">
                                     Tel: 051-54 69 654, 54 69 653, 54 96 021, 54 69 626
                                 </p>
+                                <p className="text-sm print:text-[10px] mb-0 print:mb-[-2px] ml-2 print:ml-2">
+                                    Mobile: +92 330 5256665
+                                </p>
+
                                 <hr className="border-t-1 border-black" />
 
                             </div>
                             <p className="ml-2 print:ml-2 text-sm">
                                 Work Type: {data?.WorkType}
+                            </p>
+                            <hr className="border-t-1 border-black" />
+                            <p className="ml-2 print:ml-2 text-sm">
+                                Make: {data?.Make}
+                            </p>
+                            <hr className="border-t-1 border-black" />
+                            <p className="ml-2 print:ml-2 text-sm">
+                                Model: {data?.Model}
                             </p>
                             <hr className="border-t-1 border-black" />
 
@@ -96,7 +99,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                             <p className="ml-2 print:ml-2 text-sm flex flex-row gap-1">
                                 Registration:
                                 <p className="text-red-500 text-xl flex items-center justify-center">
-                                    {data?.RegistrationNumber}
+                                    {data?.RegistrationNumber ? data?.RegistrationNumber : data?.carRegistration}
                                 </p>
                             </p>
 
@@ -128,7 +131,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                             <p className="ml-2"> Contact No: {data?.CellNo} </p>
                             <hr className="border-t-1 border-black" />
 
-                            <p className="ml-2"> Job Checked By: {data?.JobCheckedBy} </p>
+                            <p className="ml-2 flex flex-row gap-1 items-center"> Job Checked By: <p className="text-xs">{data?.JobCheckedBy}</p> </p>
                             <hr className="border-t-1 border-black" />
 
                             <p className="ml-2 text-sm"> Email: services.royalhonda@gmail.com </p>
@@ -219,7 +222,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
                         </p>
                     </div>
                     <hr className="border-t-1 border-black" />
-                    <div className="flex flex-row h-24">
+                    <div className="flex flex-row h-20">
                         <div className="w-full border border-black border-l-0 border-t-0 border-b-0 text-sm">
                             {data?.InReceivedBy}
                         </div>
@@ -230,12 +233,12 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
 
                         <div className="w-full border border-b-0 border-t-0 border-r-0 border-black flex flex-row gap-2">
                             <p className="ml-2">Date Time: </p>
-                            {data?.inDate ? data?.inDate.toLocaleDateString() : 'NULL'}
+                            {data?.inDate ? data?.inDate.toLocaleDateString() : data?.InTime}
                         </div>
                     </div>
 
                     <hr className="border-t-1 border-black" />
-                    <div className="flex flex-row h-24">
+                    <div className="flex flex-row h-20">
                         <div className="w-full border border-black border-l-0 border-t-0 border-b-0">
                             {data?.OutReceivedBy}
                         </div>
@@ -246,7 +249,7 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
 
                         <div className="w-full border border-b-0 border-t-0 border-r-0 border-black flex flex-row gap-2">
                             <p className="ml-2">Date Time: </p>
-                            {data?.outDate ? data?.outDate.toLocaleDateString() : 'NULL'}
+                            {data?.outDate ? data?.outDate.toLocaleDateString() : data?.OutTime}
                         </div>
                     </div>
                 </div>

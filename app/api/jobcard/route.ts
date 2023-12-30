@@ -11,6 +11,8 @@ export async function POST(request: Request) {
             CellNo,
             JobCheckedBy,
             WorkType,
+            Make,
+            Model,
             Status,
             Insurance,
             RegistrationNumber,
@@ -39,20 +41,7 @@ export async function POST(request: Request) {
             OutTime,
         } = body;
 
-        
-
-
-        // Get the current date
-        const currentDate = new Date();
-
-        // Extract the year, month, and day
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth() + 1; // Months are zero-based
-        const day = currentDate.getDate();
-
-        // Format the date as a string (e.g., "2023-12-23")
-        const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-        // Create JobCard
+            
         const jobcard = await prisma.jobCard.create({
             data: {
                 CustomerName,
@@ -60,6 +49,8 @@ export async function POST(request: Request) {
                 CellNo,
                 JobCheckedBy,
                 WorkType,
+                Make,
+                Model,
                 Status,
                 Insurance,
                 RequiredWorkDetails,
@@ -87,7 +78,7 @@ export async function POST(request: Request) {
                 OutReceivedBy,
                 OutReceivedFrom,
                 OutTime: OutTime,
-                CreatedAt: formattedDate,
+                CreatedAt: new Date().toLocaleDateString(),
             },
         });
         return NextResponse.json({ jobcard });
