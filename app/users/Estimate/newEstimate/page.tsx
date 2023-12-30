@@ -143,6 +143,7 @@ export default function PAGE() {
         setGenerateSummary(!isGenerateSummary);
     }
 
+    // Returns Total Parts Cost Without Discount
     function handleEstimateTotalPrice(EstimateArray: EstimateRowObject) {
         let totalPrice = 0;
         Object.keys(EstimateArray).map((key, index) => (
@@ -152,6 +153,7 @@ export default function PAGE() {
         return totalPrice;
     }
 
+    // Returns Total Labor/Service Cost Without Discount
     function handleServicesTotalPrice(EstimateArray: ServiceRowObject) {
         let totalPrice = 0;
         Object.keys(EstimateArray).map((key, index) => (
@@ -170,6 +172,7 @@ export default function PAGE() {
 
     const [overAllPrice, setOverAllPrice] = useState(0);
 
+    // Returns amount after discount of Parts Cost
     function handleDiscountEstimate(totalEstimatePrice: number) {
         if (isNaN(DiscountEstimate))
             setDiscountEstimate(0);
@@ -177,6 +180,7 @@ export default function PAGE() {
         return (DiscountEstimate / 100) * totalEstimatePrice;
     }
 
+    // Returns amount after discount of Service/Labor Cost
     function handleDiscountServices(totalServicesPrice: number) {
         if (isNaN(DiscountServices))
             setDiscountServices(0);
@@ -184,16 +188,23 @@ export default function PAGE() {
         return (DiscountServices / 100) * totalServicesPrice;
     }
 
+    // Returns total price of parts - discounted price of parts
     function overAllBillEstimate(totalEstimatePrice: number) {
-        return totalEstimatePrice - handleDiscountEstimate(totalEstimatePrice);
+        let discounted_price_estimate = handleDiscountEstimate(totalEstimatePrice);
+        return totalEstimatePrice - discounted_price_estimate;
     }
 
+    // Returns total price of Service/Labor - discounted price of Service/Labor
     function overAllBillServices(totalServicesPrice: number) {
-        return totalServicesPrice - handleDiscountServices(totalServicesPrice);
+        let discounted_price_Service = handleDiscountServices(totalServicesPrice);
+        return totalServicesPrice - discounted_price_Service;
     }
 
+    // Returns total price of parts after discount + total price of Service/Labor after discount
     function handleOverAllBill() {
-        return overAllBillEstimate(overAllBillEstimate(handleEstimateTotalPrice(estimateRows))) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows));
+        let total_price_of_parts_after_discount = overAllBillEstimate(overAllBillEstimate(handleEstimateTotalPrice(estimateRows)));
+        let total_price_of_services_after_discount = overAllBillServices(handleServicesTotalPrice(servicesDetailsRows));
+        return total_price_of_parts_after_discount + total_price_of_services_after_discount;
     }
 
 
