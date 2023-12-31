@@ -22,6 +22,8 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { InsuranceCompanies } from "@prisma/client";
+import AddSurveyor from "../Components/AddSurveyor";
+import EstimateSheetForm from "../Components/EstimateSheetForm";
 
 export interface EstimateRowType {
     partNo: string;
@@ -352,86 +354,29 @@ export default function PAGE() {
                                 <h1 className="text-3xl font-bold">Estimate Sheet</h1>
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center justify-center gap-2 mt-10">
-                                <div className="flex flex-row gap-2">
-                                    <div className="max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">Customer Name</Label>
-                                        <div className="flex flex-row w-full">
-                                            <div className="">
-                                                <Input onChange={(e) => {
-                                                    setValue('cName', e.target.value);
-                                                    setcName(e.target.value);
-                                                }} defaultValue={cName} type="text" id="text" placeholder="Customer Name"
-                                                    required />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex-grow max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">Estimate Number</Label>
-                                        <Input value={estId ? estId + 1 : '1'} type="text" id="text" placeholder="Estimate Number" disabled />
-                                    </div>
-                                </div>
-                                <div className="flex flex-row gap-2">
-                                    <div className="flex-grow max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">Date</Label>
-                                        <Input {...register('CreatedAt')} type="text" id="text" placeholder="Date"
-                                            value={formattedDate} disabled />
-                                    </div>
-                                    <div className="flex-grow max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">NTN</Label>
-                                        <Input type="text" id="text" placeholder="NTN" value={isRoyal ? "7522464-3" : "3268859-8"} disabled />
-                                    </div>
-                                </div>
-                                <div className="flex flex-row gap-2">
-                                    <div className="flex-grow max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">Make</Label>
-                                        <Input onChange={(e) => {
-                                            setValue('cMake', e.target.value);
-                                            setcMake(e.target.value);
-                                        }} defaultValue={cMake} type="text" id="text" placeholder="cMake" required />
-                                    </div>
-                                    <div className="flex-grow max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">Model</Label>
-                                        <Input onChange={(e) => {
-                                            setValue('cModel', e.target.value);
-                                            setcModel(e.target.value);
-                                        }} defaultValue={cModel} type="text" id="text" placeholder="cModel" required />
-                                    </div>
-                                </div>
-                                <div className="flex flex-row gap-2">
-                                    <div className="flex-grow max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">Vehicle Reg No</Label>
-                                        <Input onChange={(e) => {
-                                            setValue('cRegistration', e.target.value);
-                                            setcRegistration(e.target.value);
-                                        }} defaultValue={cRegistration} type="text" id="text" placeholder="Vehicle Reg No"
-                                            required />
-                                    </div>
-                                    <div className="flex-grow max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">Job Card Id</Label>
-                                        <Input onChange={(e) => {
-                                            setValue('jobId', e.target.value);
-                                            setjobId(e.target.value);
-                                        }} defaultValue={jobId} type="number" id="text" placeholder="Job Card ID (If Exist)" />
-                                    </div>
-                                </div>
-                                <div className="flex flex-row gap-2 mt-2">
-                                    <div className="w-full max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">Driver|User</Label>
-                                        <Input onChange={(e) => {
-                                            setValue('cDriverUser', e.target.value);
-                                            setcDriverUser(e.target.value);
-                                        }} defaultValue={cDriverUser} type="text" placeholder="Driver/User" required />
-                                    </div>
-                                    <div className="w-full max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="Customer Name">KiloMeters</Label>
-                                        <Input onChange={(e) => {
-                                            setValue('cKiloMeters', parseInt(e.target.value));
-                                            setcKiloMeters(parseInt(e.target.value));
-                                        }} defaultValue={ckiloMeters} type="number" id="number" placeholder="Km" required />
-                                    </div>
+                                <EstimateSheetForm
+                                    cDriverUser={cDriverUser}
+                                    cMake={cMake}
+                                    cModel={cModel}
+                                    cName={cName}
+                                    cRegistration={cRegistration}
+                                    ckiloMeters={ckiloMeters}
+                                    estId={estId}
+                                    formattedDate={formattedDate}
+                                    isRoyal={isRoyal}
+                                    jobId={parseInt(jobId)}
+                                    register={register}
+                                    setcDriverUser={setcDriverUser}
+                                    setcMake={setcMake}
+                                    setcModel={setcModel}
+                                    setcName={setcName}
+                                    setcRegistration={setcRegistration}
+                                    setcKiloMeters={setcKiloMeters}
+                                    setjobId={setjobId}
+                                    setValue={setValue}
+                                />
 
-
-                                </div>
+                                {/* Surveyors, Payment Mode & Insurances */}
                                 <div className="flex flex-row mt-4 items-center justify-center gap-12">
                                     <div className="flex flex-row gap-1">
                                         <Select onValueChange={(e) => {
@@ -451,29 +396,7 @@ export default function PAGE() {
                                                 }
                                             </SelectContent>
                                         </Select>
-                                        <Drawer>
-                                            <DrawerTrigger>
-                                                <PlusIcon />
-                                            </DrawerTrigger>
-                                            <DrawerContent>
-                                                <DrawerHeader className="flex items-center flex-col gap-2">
-                                                    <DrawerTitle className="justify-center flex">Add Surveyor?</DrawerTitle>
-                                                    <DrawerDescription className="justify-center flex">
-                                                        <Input required form="form2" placeholder="Surveyor Name" onChange={(e) => setValueSurveyor('cSurveyor', e.target.value)} />
-                                                    </DrawerDescription>
-                                                </DrawerHeader>
-                                                <DrawerFooter className="flex justify-center items-center">
-                                                    <Button className="w-20 flex flex-row gap-1" type="submit" form="form2">
-                                                        Add
-                                                        <Loader isLoading={isAddSurveyorLoading} />
-                                                    </Button>
-                                                    <DrawerClose>
-                                                        <Button type="button" className="w-20" variant="outline">Close</Button>
-                                                    </DrawerClose>
-                                                </DrawerFooter>
-
-                                            </DrawerContent>
-                                        </Drawer>
+                                        <AddSurveyor setValueSurveyor={setValueSurveyor} isAddSurveyorLoading={isAddSurveyorLoading} />
                                     </div>
                                     <Select onValueChange={(e) => {
                                         setValue('PaymentMode', e);
@@ -497,7 +420,7 @@ export default function PAGE() {
                                         <SelectContent>
                                             {
                                                 allInsurances?.map((insurance) => (
-                                                    
+
                                                     <SelectItem key={uuidv4()} value={insurance.name ? insurance.name : 'NULL'}>
                                                         {insurance.name}
                                                     </SelectItem>
@@ -506,6 +429,8 @@ export default function PAGE() {
                                         </SelectContent>
                                     </Select>
                                 </div>
+
+                                {/* Print with Royal Honda Title or Mehr Motors Title */}
                                 <div className={`flex w-full flex-row gap-2 mt-4`}>
                                     <Button type="button" onClick={() => setIsRoyal(true)} className="w-full" variant={isRoyal ? 'default' : 'secondary'}>
                                         Royal Estimate
@@ -514,6 +439,8 @@ export default function PAGE() {
                                         Mehr Estimate
                                     </Button>
                                 </div>
+
+                                {/* Parts Estimate Cost work */}
                                 <div className={"mt-32 h-full w-full flex flex-col gap-4"}>
                                     <div>
                                         {/* @ts-ignore */}
@@ -603,7 +530,7 @@ export default function PAGE() {
                                                     ))}
                                             </tbody>
                                         </table>
-
+                                        {/* Discount On Parts Estimate Cost Work */}
                                         <div className={"flex flex-row gap-2"}>
                                             <Button type={"button"} className={"mt-2 w-2/6"} onChange={(e) => e.preventDefault()}
                                                 onClick={() => handleAddEstimateRow()}>Add Row</Button>
@@ -615,6 +542,8 @@ export default function PAGE() {
                                                 className={"mt-2 flex justify-end ml-auto w-[2/6]"} />
                                         </div>
                                     </div>
+
+                                    {/* Labor Charges */}
                                     <div>
                                         <Label className={"mb-2 font-bold flex justify-center"}>Services Details and Charges</Label>
                                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -690,6 +619,8 @@ export default function PAGE() {
                                                 onChange={(e) => e.preventDefault()}>
                                                 Generate Summary
                                             </Button>
+
+                                            {/* Discount on Labor Charges */}
                                             <Input onChange={(e) => {
                                                 setDiscountServices(parseInt(e.target.value));
                                                 setValue('DiscountServices', parseInt(e.target.value));
@@ -697,12 +628,16 @@ export default function PAGE() {
                                                 className={"mt-2 flex w-1/6 ml-auto"} type="number" placeholder={"Discount Services %"} />
                                         </div>
                                     </div>
+
+                                    {/* Summary Table */}
                                     {
                                         isGenerateSummary &&
                                         (
                                             <TableSummaries data={data} />
                                         )
                                     }
+
+                                    {/* Submit and Preview */}
                                     <div className={"flex flex-row mt-2 gap-2"}>
                                         <Button disabled={isLoading || !isGenerateSummary} className="flex gap-1">
                                             Submit
