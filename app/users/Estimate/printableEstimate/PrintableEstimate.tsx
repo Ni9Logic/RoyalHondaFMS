@@ -202,14 +202,14 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                     <tbody>
                                         {
                                             Object.keys(data?.ServicesDetailsTableData)?.map((key, index) => (
-                                                <tr className="w-full">
-                                                    <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                                <tr className="">
+                                                    <td className="px-6 text-sm text-gray-900 dark:text-white">
                                                         {index + 1}
                                                     </td>
-                                                    <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white items-center self-center flex">
+                                                    <td className="px-6 text-sm text-gray-900 dark:text-white">
                                                         {data?.ServicesDetailsTableData[key].details}
                                                     </td>
-                                                    <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                                    <td className="px-6 text-sm text-gray-900 dark:text-white">
                                                         {data?.ServicesDetailsTableData[key].charges.toLocaleString()} Rs
                                                     </td>
                                                 </tr>
@@ -228,12 +228,38 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                             </Label>
                             <hr className={"border-t-1 border-black flex"} />
                             <div>
-                                <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Parts Price:</p> {data?.TotalEstimateFee.toLocaleString()} Rs</p>
-                                <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Parts:</p> {data?.DiscountEstimate} %</p>
-                                <p className="font-sans text-sm flex flex-row gap-1">Parts Price <p className="font-bold">(Discounted):</p> {(data?.TotalEstimateFee - (data?.TotalEstimateFee * data?.DiscountEstimate) / 100).toLocaleString()} Rs</p>
+                                <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Parts Cost:</p> {data?.TotalEstimateFee.toLocaleString()} Rs</p>
+                                {
+                                    data?.DiscountEstimate !== 0 && !isNaN(data?.DiscountEstimate) &&
+                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Parts:</p> {data?.DiscountEstimate} %</p>
+                                }
+                                {
+                                    data?.DiscountEstimateFigure !== 0 && !isNaN(data?.DiscountEstimateFigure) &&
+                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Parts (Figure):</p> -{data?.DiscountEstimateFigure} Rs</p>
+                                }
+                                {
+                                    data?.DiscountEstimateFigure !== 0 && !isNaN(data?.DiscountEstimateFigure) ?
+                                        <p className="font-sans text-sm flex flex-row gap-1">Parts Price <p className="font-bold">(After Discount):</p> {(data?.TotalEstimateFee - data?.DiscountEstimateFigure - (data?.TotalEstimateFee * data?.DiscountEstimate) / 100).toLocaleString()} Rs</p>
+                                        :
+                                        <p className="font-sans text-sm flex flex-row gap-1">Parts Price <p className="font-bold">(After Discount):</p> {(data?.TotalEstimateFee - ((data?.TotalEstimateFee * data?.DiscountEstimate) / 100)).toLocaleString()} Rs</p>
+
+                                }
                                 <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Labor Cost:</p> {data?.TotalServiceFee.toLocaleString()} Rs</p>
-                                <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Labor:</p> {data?.DiscountServices} %</p>
-                                <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(Discounted):</p> {(data?.TotalServiceFee - (data?.DiscountServices * data?.TotalServiceFee) / 100).toLocaleString()} Rs</p>
+                                {
+                                    data?.DiscountServices !== 0 && !isNaN(data?.DiscountServices) &&
+                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Labor:</p> {data?.DiscountServices} %</p>
+                                }
+                                {
+                                    data?.DiscountServicesFigure !== 0 && !isNaN(data?.DiscountServicesFigure) &&
+                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Services (Figure):</p> -{data?.DiscountServicesFigure} Rs</p>
+                                }
+                                {
+                                    data?.DiscountServicesFigure !== 0 && !isNaN(data?.DiscountServicesFigure) ?
+                                        <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(After Discount):</p> {(data?.TotalServiceFee - data.DiscountServicesFigure - (data?.DiscountServices * data?.TotalServiceFee) / 100).toLocaleString()} Rs</p>
+                                        :
+                                        <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(After Discount):</p> {(data?.TotalServiceFee - (data?.DiscountServices * data?.TotalServiceFee) / 100).toLocaleString()} Rs</p>
+
+                                }
                                 <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Total Amount:</p> {((data?.TotalEstimateFee - (data?.TotalEstimateFee * data?.DiscountEstimate) / 100) + (data?.TotalServiceFee - (data?.DiscountServices * data?.TotalServiceFee) / 100)).toLocaleString()} Rs</p>
                             </div>
                         </div>

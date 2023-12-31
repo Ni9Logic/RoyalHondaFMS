@@ -59,6 +59,8 @@ export interface EstimateForm {
     ServicesDetailsTableData: ServiceRowObject;
     DiscountServices: number;
     DiscountEstimate: number;
+    DiscountServicesFigure: number;
+    DiscountEstimateFigure: number;
     TotalServiceFee: number;
     TotalEstimateFee: number;
     cKiloMeters: number;
@@ -170,6 +172,8 @@ export default function PAGE() {
 
     const [DiscountServices, setDiscountServices] = useState(0);
     const [DiscountEstimate, setDiscountEstimate] = useState(0);
+    const [DiscountServicesFigure, setDiscountServicesFigure] = useState(0);
+    const [DiscountEstimateFigure, setDiscountEstimateFigure] = useState(0);
 
 
     // Returns amount after discount of Parts Cost
@@ -207,8 +211,6 @@ export default function PAGE() {
         return total_price_of_parts_after_discount + total_price_of_services_after_discount;
     }
 
-
-
     // @ts-ignore
     const data: EstimateForm = {
         cName: cName,
@@ -222,6 +224,8 @@ export default function PAGE() {
         ServicesDetailsTableData: servicesDetailsRows,
         DiscountServices: DiscountServices,
         DiscountEstimate: DiscountEstimate,
+        DiscountServicesFigure: DiscountServicesFigure,
+        DiscountEstimateFigure: DiscountEstimateFigure,
         TotalServiceFee: handleServicesTotalPrice(servicesDetailsRows),
         TotalEstimateFee: handleEstimateTotalPrice(estimateRows),
         cKiloMeters: ckiloMeters,
@@ -249,6 +253,8 @@ export default function PAGE() {
             ServicesDetailsTableData: {},
             DiscountServices: 0,
             DiscountEstimate: DiscountEstimate,
+            DiscountEstimateFigure: DiscountEstimateFigure,
+            DiscountServicesFigure: DiscountServicesFigure,
             TotalServiceFee: 0,
             TotalEstimateFee: 0,
             cKiloMeters: ckiloMeters,
@@ -581,6 +587,11 @@ export default function PAGE() {
                                                 }}
                                                 className={"mt-2 flex justify-end ml-auto w-[2/6]"} />
                                         </div>
+                                        <Input onChange={(e) => {
+                                            setDiscountEstimateFigure(parseInt(e.target.value));
+                                            setValue('DiscountEstimateFigure', parseInt(e.target.value));
+                                        }}
+                                            className={"mt-2 flex w-3/12 ml-auto"} type="number" placeholder={"Discount Parts (Figure)"} />
                                     </div>
 
                                     {/* Labor Charges */}
@@ -655,6 +666,7 @@ export default function PAGE() {
                                                 setValue(('TotalEstimateFee'), overAllBillEstimate(handleEstimateTotalPrice(estimateRows)));
                                                 setValue(('TotalServiceFee'), overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)));
                                                 setValue('OverAllAmount', completeAmount);
+                                                console.log(DiscountServicesFigure);
                                             }} className={"mt-2 w-1/6"}
                                                 onChange={(e) => e.preventDefault()}>
                                                 Generate Summary
@@ -666,7 +678,13 @@ export default function PAGE() {
                                                 setValue('DiscountServices', parseInt(e.target.value));
                                             }}
                                                 className={"mt-2 flex w-1/6 ml-auto"} type="number" placeholder={"Discount Services %"} />
+
                                         </div>
+                                        <Input onChange={(e) => {
+                                            setDiscountServicesFigure(parseInt(e.target.value));
+                                            setValue('DiscountServicesFigure', parseInt(e.target.value));
+                                        }}
+                                            className={"mt-2 flex w-3/12 ml-auto"} type="number" placeholder={"Discount Services (Figure)"} />
                                     </div>
 
                                     {/* Summary Table */}

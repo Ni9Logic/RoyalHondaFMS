@@ -24,6 +24,8 @@ export async function POST(request: Request) {
                     cRegistration: body.cRegistration,
                     DiscountEstimate: body.DiscountEstimate,
                     DiscountServices: body.DiscountServices,
+                    DiscountEstimateFigure: body.DiscountEstimateFigure,
+                    DiscountServicesFigure: body.DiscountServicesFigure,
                     EstimateTableData: EstimateTableData,
                     ServicesTableData: ServiceTableData,
                     PaymentMode: body.PaymentMode,
@@ -33,7 +35,7 @@ export async function POST(request: Request) {
                 }
             })
             if (!isCreated)
-                return NextResponse.json({ Message: "Some error occurred!" }, { status: 404 });
+                return NextResponse.json({ Message: "Error Occurred While Creating Job Card!" }, { status: 404 });
 
             return NextResponse.json({ Message: "Estimate Created" }, { status: 200 });
         }

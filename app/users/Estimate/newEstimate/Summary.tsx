@@ -45,6 +45,19 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
     function handleOverAllBill() {
         return overAllBillEstimate(handleEstimateTotalPrice(data.EstimateTableData)) + overAllBillServices(handleServicesTotalPrice(data.ServicesDetailsTableData));
     }
+
+    function handleBillWithFigureDiscounts() {
+        if (isNaN(data?.DiscountEstimateFigure))
+            data.DiscountEstimateFigure = 0;
+
+        if (isNaN(data?.DiscountServicesFigure))
+            data.DiscountServicesFigure = 0;
+
+        
+        return handleOverAllBill() - data?.DiscountEstimateFigure - data?.DiscountServicesFigure;
+    }
+
+
     return (
         <>
             <div className={"flex flex-col"}>
@@ -236,10 +249,26 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                         )
                                     }
                                 </Label>
-
+                                <Label className="flex flex-row gap-1">
+                                    {
+                                        data?.DiscountEstimateFigure !== 0 && !isNaN(data?.DiscountEstimateFigure) &&
+                                        <p className="flex flex-row gap-1">Parts <p className="font-bold">(Discount)</p>: -{data?.DiscountEstimateFigure.toLocaleString()} Rs</p>
+                                    }
+                                </Label>
+                                <Label className="flex flex-row gap-1">
+                                    {
+                                        data?.DiscountServicesFigure !== 0 && !isNaN(data?.DiscountServicesFigure) &&
+                                        <p className="flex flex-row gap-1">Service / Labor <p className="font-bold">(Discount)</p>: -{data?.DiscountServicesFigure.toLocaleString()} Rs</p>
+                                    }
+                                </Label>
+                                <Label className="flex flex-row gap-1">
+                                    {(data?.DiscountServicesFigure !== 0 || data?.DiscountEstimateFigure !== 0) || (!isNaN(data?.DiscountServicesFigure) || !isNaN(data?.DiscountEstimateFigure)) &&
+                                        <p>Total Discount: -{(data?.DiscountEstimateFigure + data?.DiscountServicesFigure).toLocaleString()} Rs</p>
+                                    }
+                                </Label>
                                 <Label className={"flex flex-row gap-1"}>
                                     Total Amount: <p
-                                        className={"font-bold"}>{handleOverAllBill().toLocaleString()} Rs</p>
+                                        className={"font-bold"}>{handleBillWithFigureDiscounts().toLocaleString()} Rs</p>
                                 </Label>
                             </div>
                         </div>
