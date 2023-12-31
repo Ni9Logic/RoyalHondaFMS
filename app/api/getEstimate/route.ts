@@ -1,4 +1,5 @@
 import getEstimate from "@/app/actions/getEstimate";
+import { EstimateForm, EstimateRowObject } from "@/app/users/Estimate/newEstimate/page";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -7,14 +8,14 @@ export async function POST(request: Request) {
         const { id } = body;
 
         if (!id)
-            return NextResponse.json({ Error: 'Id Not Provided' }, { status: 404 })
+            return NextResponse.json({ Message: 'Id Not Provided' }, { status: 404 })
 
-        const getFirstEstimate = await getEstimate(id);
+        const getFirstEstimate = await getEstimate(parseInt(id));
         if (!getFirstEstimate)
-            return NextResponse.json({ Error: 'Estimate Not Found' }, { status: 404 })
+            return NextResponse.json({ Message: 'Estimate Not Found' }, { status: 404 })
 
-        return NextResponse.json({ getFirstEstimate });
+        return NextResponse.json({ Message: getFirstEstimate });
     } catch (error: any) {
-        return NextResponse.json({ error: error.cause }, { status: 400 })
+        return NextResponse.json({ Message: "Internal Server Error" }, { status: 500 })
     }
 }

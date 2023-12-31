@@ -9,7 +9,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import PrintEstimate from "../printableEstimate/PrintableEstimate";
 import { v4 as uuidv4 } from 'uuid';
 import TableSummaries from "./Summary";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { Axios, AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import Loader from "@/app/components/ui/loader";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
@@ -24,6 +24,7 @@ import {
 import { InsuranceCompanies } from "@prisma/client";
 import AddSurveyor from "../Components/AddSurveyor";
 import EstimateSheetForm from "../Components/EstimateSheetForm";
+import { parseJSON } from "date-fns";
 
 export interface EstimateRowType {
     partNo: string;
@@ -32,7 +33,7 @@ export interface EstimateRowType {
     partPrice: number;
     partTotalPrice: number;
 }
-interface EstimateRowObject {
+export interface EstimateRowObject {
     [key: string]: EstimateRowType;
 };
 
@@ -41,7 +42,7 @@ export interface ServicesDetailsType {
     charges: number;
 }
 
-interface ServiceRowObject {
+export interface ServiceRowObject {
     [key: string]: ServicesDetailsType;
 }
 
@@ -71,6 +72,10 @@ export interface EstimateForm {
 export interface Surveyor {
     id: number;
     cSurveyor: string;
+}
+
+interface SearchEstimate {
+    id: number;
 }
 export default function PAGE() {
     // Get the current date
@@ -139,9 +144,6 @@ export default function PAGE() {
     const dynamicWidth = "50%";
     const [isGenerateSummary, setGenerateSummary] = useState(false);
     const handleGenerateSummary = () => {
-        setServiceFee(handleServicesTotalPrice(servicesDetailsRows));
-        setEstimateFee(handleEstimateTotalPrice(estimateRows));
-        setOverAllPrice(handleOverAllBill());
         setGenerateSummary(!isGenerateSummary);
     }
 
@@ -169,10 +171,6 @@ export default function PAGE() {
     const [DiscountServices, setDiscountServices] = useState(0);
     const [DiscountEstimate, setDiscountEstimate] = useState(0);
 
-    const [estimateFee, setEstimateFee] = useState(0);
-    const [serviceFee, setServiceFee] = useState(0);
-
-    const [overAllPrice, setOverAllPrice] = useState(0);
 
     // Returns amount after discount of Parts Cost
     function handleDiscountEstimate(totalEstimatePrice: number) {
@@ -295,6 +293,7 @@ export default function PAGE() {
             })
     }
 
+    // Add Surveyor
     const {
         handleSubmit: handleAddSurveyorSubmit,
         setValue: setValueSurveyor,
@@ -303,6 +302,33 @@ export default function PAGE() {
             cSurveyor: cSurveyor
         }
     })
+
+    // Search Estimate
+    const {
+        register: registerSearchEstimate,
+        handleSubmit: handleSubmitSearchEstimate,
+    } = useForm<SearchEstimate>({
+        defaultValues: {
+            id: 0
+        }
+    })
+
+    const [isFindLoading, setIsFindLoading] = useState(false);
+
+
+    // OnSubmitSearch Function
+    const onSubmitSearchEstimate: SubmitHandler<SearchEstimate> = async (data: SearchEstimate) => {
+        setIsFindLoading(true);
+        axios.post('/api/getEstimate', data)
+            .then((response: any) => {
+                // When we upload these tables to database its stringified so we have to parse it to json before we can iternate through them
+                setEstimateRows(JSON.parse(response?.data?.Message?.EstimateTableData));
+                setServicesDetailsRow(JSON.parse(response?.data?.Message?.ServicesTableData));
+            })
+            // @ts-ignore
+            .catch((error: AxiosError) => toast.error(error?.response?.data?.Message))
+            .finally(() => setIsFindLoading(false));
+    }
 
     const [isAddSurveyorLoading, setIsAddSurveyorLoading] = useState(false);
     const [Surveyors, setSurveyors] = useState<Surveyor[]>();
@@ -331,6 +357,8 @@ export default function PAGE() {
             .then((response: AxiosResponse) => setAllInsurances(response?.data?.Message))
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }
+
+
     useEffect(() => {
         const fetchData = async () => {
             await getAllSurveyors();
@@ -345,6 +373,7 @@ export default function PAGE() {
     return (
         <>
             <form id="form2" onSubmit={handleAddSurveyorSubmit(onAddSurveyorSubmit)}></form>
+            <form id="searchEstimateForm" onSubmit={handleSubmitSearchEstimate(onSubmitSearchEstimate)}></form>
             {
                 !isPrinting && (
                     <div>
@@ -440,6 +469,18 @@ export default function PAGE() {
                                     </Button>
                                 </div>
 
+                                {/* Find Estimate */}
+                                <div className="mt-5 ml-auto">
+                                    <div className="flex gap-1 w-full flex-col">
+                                        <Label>Copy Estimate Cells</Label>
+                                        <Input type="number" form="searchEstimateForm" placeholder="Find Estimate" {...registerSearchEstimate('id')} />
+                                        <Button form="searchEstimateForm" className="flex flex-row gap-1" disabled={isFindLoading} type="submit">
+                                            Search
+                                            <Loader isLoading={isFindLoading} />
+                                        </Button>
+                                    </div>
+                                </div>
+
                                 {/* Parts Estimate Cost work */}
                                 <div className={"mt-32 h-full w-full flex flex-col gap-4"}>
                                     <div>
@@ -479,7 +520,7 @@ export default function PAGE() {
                                                                 {index + 1}
                                                             </th>
                                                             <td className="px-6 py-4">
-                                                                <input onChange={(e) => {
+                                                                <input defaultValue={estimateRows[key].partNo} onChange={(e) => {
                                                                     const updatedRows = { ...estimateRows };
                                                                     updatedRows[key].partNo = e.target.value;
                                                                     setEstimateRows(updatedRows);
@@ -488,7 +529,7 @@ export default function PAGE() {
                                                                     className={"border-none outline-none"} />
                                                             </td>
                                                             <td className="px-6 py-4">
-                                                                <input onChange={(e) => {
+                                                                <input defaultValue={estimateRows[key].partDesc} onChange={(e) => {
                                                                     const updatedRows = { ...estimateRows };
                                                                     updatedRows[key].partDesc = e.target.value;
                                                                     setEstimateRows(updatedRows);
@@ -497,7 +538,7 @@ export default function PAGE() {
                                                                     className={"border-none outline-none"} required />
                                                             </td>
                                                             <td className={"px-6 py-4"}>
-                                                                <input type={"number"} onChange={(e) => {
+                                                                <input defaultValue={estimateRows[key].partPrice} type={"number"} onChange={(e) => {
                                                                     const updatedRows = { ...estimateRows };
                                                                     updatedRows[key].partPrice = parseInt(e.target.value);
                                                                     updatedRows[key].partTotalPrice = (updatedRows[key].partPrice) * (updatedRows[key].partQty);
@@ -574,7 +615,7 @@ export default function PAGE() {
                                                                 {index + 1}
                                                             </th>
                                                             <td className="px-6 py-4">
-                                                                <input
+                                                                <input defaultValue={servicesDetailsRows[key].details}
                                                                     onChange={(e) => {
                                                                         servicesDetailsRows[key].details = e.target.value;
                                                                         const updatedRows = { ...servicesDetailsRows }
@@ -584,7 +625,7 @@ export default function PAGE() {
                                                                     className={"border-none outline-none w-full"} />
                                                             </td>
                                                             <td className="px-6 py-4">
-                                                                <input type="number"
+                                                                <input defaultValue={servicesDetailsRows[key].charges} type="number"
                                                                     onChange={(e) => {
                                                                         const updatedRows = { ...servicesDetailsRows }
                                                                         servicesDetailsRows[key].charges = parseInt(e.target.value)
