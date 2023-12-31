@@ -82,7 +82,7 @@ model EstimatedCostWork {
   DiscountServicesFigure Float?
   DiscountEstimateFigure Float?
   OverAllAmount          Float?
-  isRoyal                Boolean?
+  isRoyal                String?
   CreatedAt              String?
 }
 

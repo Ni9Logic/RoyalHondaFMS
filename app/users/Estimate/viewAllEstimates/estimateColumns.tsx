@@ -36,6 +36,22 @@ export const columns: ColumnDef<EstimateForm>[] = [
         header: 'Customer Name'
     },
     {
+        accessorKey: 'cDriverUser',
+        header: 'Insured User'
+    },
+    {
+        accessorKey: 'cSurveyor',
+        header: 'Surveyor'
+    },
+    {
+        accessorKey: 'Insurance',
+        header: 'Insurance'
+    },
+    {
+        accessorKey: 'isRoyal',
+        header: 'Estimate Type'
+    },
+    {
         accessorKey: 'PaymentMode',
         header: 'Payment'
     },
@@ -57,11 +73,15 @@ export const columns: ColumnDef<EstimateForm>[] = [
     },
     {
         accessorKey: 'TotalEstimateFee',
-        header: 'Cost'
+        header: 'Parts Cost'
     },
     {
         accessorKey: 'DiscountEstimate',
-        header: 'Cost Discount'
+        header: 'Parts Discount %'
+    },
+    {
+        accessorKey: 'DiscountEstimateFigure',
+        header: 'Parts Discount (In Figure)'
     },
     {
         accessorKey: 'TotalServiceFee',
@@ -69,7 +89,11 @@ export const columns: ColumnDef<EstimateForm>[] = [
     },
     {
         accessorKey: 'DiscountServices',
-        header: 'Service Discount'
+        header: 'Labor Discount'
+    },
+    {
+        accessorKey: 'DiscountServicesFigure',
+        header: 'Labor Discount (In Figure)'
     },
     {
         accessorKey: 'OverAllAmount',
@@ -87,7 +111,7 @@ export const columns: ColumnDef<EstimateForm>[] = [
 
 
             return (
-                <>
+                <div className="flex items-center justify-center">
                     {
                         !printing &&
                         <DropdownMenu>
@@ -143,7 +167,7 @@ export const columns: ColumnDef<EstimateForm>[] = [
                                         OutTime: `${estimate.OutTime}`,
                                     },
                                 }}> */}
-                                    <DropdownMenuItem>Edit Estimate</DropdownMenuItem>
+                                <DropdownMenuItem>Edit Estimate</DropdownMenuItem>
                                 {/* </Link> */}
                                 <DropdownMenuItem onClick={() => {
                                     setIsPrinting(true);
@@ -162,7 +186,7 @@ export const columns: ColumnDef<EstimateForm>[] = [
                             </DrawerContent>
                         </Drawer>
                     }
-                </>
+                </div>
             )
         },
     },
