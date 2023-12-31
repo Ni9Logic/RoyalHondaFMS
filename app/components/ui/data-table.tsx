@@ -61,7 +61,7 @@ export function DataTable<TData, TValue>({
     useEffect(() => {
         return () => void
 
-            table.setPageSize(7);
+            table.setPageSize(5);
     }, [])
     return (
         <div className="flex flex-col">

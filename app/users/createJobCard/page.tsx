@@ -216,7 +216,11 @@ export default function Page() {
                                     toast.dismiss(t.id);
                                     setSurelyCreate(true);
                                     setValueJobFormData('surelyCreate', true);
-                                    toast.success('Click on Submit Button To Surely Create');
+                                    toast.loading((t) => (
+                                        <p className="text-sm">
+                                            Click on Submit Button To Create For Sure!
+                                        </p>
+                                    ), { duration: 500 });
                                 }}>
                                     Create
                                 </Button>

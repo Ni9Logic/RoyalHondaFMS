@@ -35,7 +35,7 @@ export default function PAGE() {
     return (
         <>
             <Navbar />
-            <div className="h-[80vh] items-center justify-center w-full">
+            <div className="h-[80vh] items-center justify-center container flex">
                 <DataTable data={Data} columns={columns}/>
             </div>
             <Footer />
