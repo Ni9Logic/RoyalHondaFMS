@@ -286,7 +286,6 @@ export default function PAGE() {
             .catch((response: any) => {
                 let error = response?.response?.data?.Message;
                 toast.error(error);
-                console.log(response);
             })
             .finally(() => {
                 setIsAddSurveyorLoading(false);
