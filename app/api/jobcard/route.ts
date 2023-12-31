@@ -39,9 +39,29 @@ export async function POST(request: Request) {
             OutReceivedBy,
             OutReceivedFrom,
             OutTime,
+            surelyCreate,
         } = body;
 
-            
+        // Check if user is sending request of submission again
+
+        if (!surelyCreate) {
+            // Inform user if job card already exists with same registration number
+            const findJob = await prisma.jobCard.findFirst({
+                where: {
+                    carRegistration: RegistrationNumber
+                },
+                orderBy: {
+                    SerialNo: 'desc'
+                }
+            })
+
+            if (findJob) {
+                const date = findJob.CreatedAt;
+                return NextResponse.json({ Message: `Job Card With Given Reg No Already Created On ${date} With ID ${findJob.SerialNo}` }, { status: 203 });
+            }
+        }
+
+
         const jobcard = await prisma.jobCard.create({
             data: {
                 CustomerName,
@@ -81,7 +101,7 @@ export async function POST(request: Request) {
                 CreatedAt: new Date().toLocaleDateString(),
             },
         });
-        return NextResponse.json({ jobcard });
+        return NextResponse.json({ Message: 'Job Card Created!' }, { status: 200 });
     } catch (error: any) {
         console.log(error, "Error in registration");
         return new NextResponse('Internal Error', { status: 500 });

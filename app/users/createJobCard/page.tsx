@@ -4,7 +4,7 @@ import Navbar from "../Navbar";
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from 'react-hot-toast';
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import AnotherPrintJobs from "@/app/users/jobCards/printable/jobprintable";
@@ -33,8 +33,10 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import { duration } from "moment";
 
 export type JOBFormData = {
+    SerialNo?: number,
     CustomerName: string,
     DriverUser: string,
     CellNo: string,
@@ -67,7 +69,8 @@ export type JOBFormData = {
     InTime: string,
     OutReceivedBy: string,
     OutReceivedFrom: string,
-    OutTime: string
+    OutTime: string,
+    surelyCreate?: boolean;
 };
 
 export type InsuranceCompaniesData = {
@@ -139,6 +142,7 @@ export default function Page() {
     const [OutReceivedBy, setOutReceivedBy] = useState<string>('');
     const [OutReceivedFrom, setOutReceivedFrom] = useState<string>('');
     const [Status, setStatus] = useState('');
+    const [surelyCreate, setSurelyCreate] = useState(false);
 
 
     const [isLoading, setLoading] = useState(false);
@@ -191,22 +195,48 @@ export default function Page() {
             OutReceivedBy: '',
             OutReceivedFrom: '',
             OutTime: '',
+            surelyCreate: surelyCreate,
         },
     });
 
 
     const onSubmit: SubmitHandler<JOBFormData> = async (data: JOBFormData) => {
-        // Setting Loading state of button
         setLoading(true);
-
         axios.post('../../api/jobcard', data)
-            .then(() => {
-                toast.success('Job Card Created!');
+            .then((response: AxiosResponse) => {
+                if (response?.status === 203) {
+                    toast((t) => (
+                        <span className="text-sm font-bold flex flex-col gap-2">
+                            {response?.data?.Message}
+                            <div className="w-full flex items-center gap-1 justify-center">
+                                <Button variant={"destructive"} onClick={() => toast.dismiss(t.id)}>
+                                    Dismiss
+                                </Button>
+                                <Button className="bg-green-500" variant={"default"} onClick={() => {
+                                    toast.dismiss(t.id);
+                                    setSurelyCreate(true);
+                                    setValueJobFormData('surelyCreate', true);
+                                    toast.success('Click on Submit Button To Surely Create');
+                                }}>
+                                    Create
+                                </Button>
+                            </div>
+                        </span>
+                    ))
+                }
+
+                if (response?.status === 200) {
+                    toast.success(response?.data?.Message)
+                }
             })
             .catch((error) => {
                 toast.error(error?.response?.data?.Message);
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+                setLoading(false);
+                setSurelyCreate(false);
+                setValueJobFormData('surelyCreate', false);
+            });
     }
 
     const onSubmitAddInsurance: SubmitHandler<InsuranceCompaniesData> = async (data: InsuranceCompaniesData) => {
@@ -819,30 +849,10 @@ export default function Page() {
                                     </div>
                                 </div>
                                 <div className="flex flex-row gap-2 items-center justify-center">
-                                    <button type="submit" disabled={isLoading} className="relative inline-block px-4 py-2 font-medium group overflow-hidden">
-                                        <span className="absolute inset-0  h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                                        <span className="absolute inset-0 h-full bg-white border-2 border-black group-hover:bg-black"></span>
-                                        <span className={`relative z-10 text-black group-hover:text-white ${isLoading && 'flex items-center gap-2'}`}>
-                                            Submit
-                                            {
-                                                isLoading &&
-                                                <div role="status" className='flex items-center'>
-                                                    <svg aria-hidden="true" className="w-8 h-8 text-white animate-spin dark:text-gray-600 fill-black" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                                                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                                                    </svg>
-                                                </div>
-                                            }
-                                        </span>
-                                    </button>
-                                    <button onClick={() => {
-                                        setIsPreview(!isPreview);
-
-                                    }} type="button" className="print:hidden relative inline-block px-4 py-2 font-medium group overflow-y-hidden overflow-hidden">
-                                        <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                                        <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
-                                        <span className="relative z-10 text-black group-hover:text-white">Preview</span>
-                                    </button>
+                                    <Button className="w-1/6 flex flex-row gap-1" disabled={isLoading} type="submit">
+                                        Submit <Loader isLoading={isLoading} />
+                                    </Button>
+                                    <Button variant={"secondary"} onClick={() => setIsPreview(!isPreview)}>Preview</Button>
                                 </div>
                             </form>
                         </div >
