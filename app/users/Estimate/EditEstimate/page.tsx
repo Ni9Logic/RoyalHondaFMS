@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { SubmitHandler, useForm } from "react-hook-form";
-import PrintEstimate from "../printableEstimate/PrintableEstimate";
 import { v4 as uuidv4 } from 'uuid';
 import TableSummaries from "../newEstimate/Summary";
 import axios, { AxiosError, AxiosResponse } from "axios";
