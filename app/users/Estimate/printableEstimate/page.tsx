@@ -189,30 +189,35 @@ export default function PAGE() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {/* {
-                                                Object.keys(data?.EstimateTableData)?.map((key, index) => (
+                                            {
+                                                Object.keys(estimateRows)?.map((key, index) => (
                                                     <tr className="">
                                                         <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                                             {index + 1}
                                                         </td>
                                                         <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white items-center self-center flex">
-                                                            {data?.EstimateTableData[key].partNo}
+                                                            {/* @ts-ignore */}
+                                                            {estimateRows[key].partNo}
                                                         </td>
                                                         <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                            {data?.EstimateTableData[key].partDesc}
+                                                            {/* @ts-ignore */}
+                                                            {estimateRows[key].partDesc}
                                                         </td>
                                                         <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                            {data?.EstimateTableData[key].partPrice.toLocaleString()} Rs
+                                                            {/* @ts-ignore */}
+                                                            {estimateRows[key].partPrice.toLocaleString()} Rs
                                                         </td>
                                                         <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                            {data?.EstimateTableData[key].partQty}
+                                                            {/* @ts-ignore */}
+                                                            {estimateRows[key].partQty}
                                                         </td>
                                                         <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                            {data?.EstimateTableData[key].partTotalPrice.toLocaleString()} Rs
+                                                            {/* @ts-ignore */}
+                                                            {estimateRows[key].partTotalPrice.toLocaleString()} Rs
                                                         </td>
                                                     </tr>
                                                 ))
-                                            } */}
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -236,15 +241,18 @@ export default function PAGE() {
                                         </thead>
                                         <tbody>
                                             {
+                                                
                                                 Object.keys(servicesDetailsRows)?.map((key, index) => (
                                                     <tr className="">
                                                         <td className="px-6 text-sm text-gray-900 dark:text-white">
                                                             {index + 1}
                                                         </td>
                                                         <td className="px-6 text-sm text-gray-900 dark:text-white">
+                                                            {/* @ts-ignore */}
                                                             {servicesDetailsRows[key].details}
                                                         </td>
                                                         <td className="px-6 text-sm text-gray-900 dark:text-white">
+                                                            {/* @ts-ignore */}
                                                             {servicesDetailsRows[key].charges.toLocaleString()} Rs
                                                         </td>
                                                     </tr>
@@ -295,7 +303,7 @@ export default function PAGE() {
                                             <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(After Discount):</p> {(data?.TotalServiceFee - (data?.DiscountServices * data?.TotalServiceFee) / 100).toLocaleString()} Rs</p>
 
                                     }
-                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Total Amount:</p> {((data?.TotalEstimateFee - (data?.TotalEstimateFee * data?.DiscountEstimate) / 100) + (data?.TotalServiceFee - (data?.DiscountServices * data?.TotalServiceFee) / 100)).toLocaleString()} Rs</p>
+                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Total Amount:</p> {data?.TotalEstimateFee .toLocaleString()} Rs</p>
                                 </div>
                             </div>
                         </div>
