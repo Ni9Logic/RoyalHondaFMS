@@ -7,20 +7,29 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
+import Loader from "@/app/components/ui/loader";
 
 export default function PAGE() {
     const [data, setData] = useState<any>();
     const searchParams = useSearchParams();
     const id = searchParams.get('id')?.toString();
+    const [isLoading, setLoading] = useState(false);
+    const [estimateRows, setEstimateRows] = useState([]);
+    const [servicesDetailsRows, setServicesDetailsRows] = useState([]);
+
 
     const searchEstimate = async () => {
-        axios.post('/api/estimate/getEstimate', id )
+        setLoading(true);
+        axios.post('/api/getEstimate', { id })
             .then((response: AxiosResponse) => {
                 setData(response?.data?.Message)
+                setEstimateRows(JSON.parse(response?.data?.Message?.EstimateTableData))
+                setServicesDetailsRows(JSON.parse(response?.data?.Message?.ServicesTableData))
             })
             .catch((error: AxiosResponse) => {
                 toast.error(error?.data?.Message)
             })
+            .finally(() => setLoading(false));
     }
 
     useEffect(() => {
@@ -32,7 +41,7 @@ export default function PAGE() {
     }, [id])
     return (
         <>
-            {!data ? <p>Loading...</p> :
+            {!data ? <div className="flex h-screen container items-center justify-center"><Loader isLoading={isLoading} /></div> :
                 <div className={`flex items-center justify-center mb-auto`}>
                     <div className="border border-black h-full">
                         <div className={`w-screen container`}>
@@ -180,7 +189,7 @@ export default function PAGE() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {
+                                            {/* {
                                                 Object.keys(data?.EstimateTableData)?.map((key, index) => (
                                                     <tr className="">
                                                         <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white">
@@ -203,7 +212,7 @@ export default function PAGE() {
                                                         </td>
                                                     </tr>
                                                 ))
-                                            }
+                                            } */}
                                         </tbody>
                                     </table>
                                 </div>
@@ -227,16 +236,16 @@ export default function PAGE() {
                                         </thead>
                                         <tbody>
                                             {
-                                                Object.keys(data?.ServicesDetailsTableData)?.map((key, index) => (
+                                                Object.keys(servicesDetailsRows)?.map((key, index) => (
                                                     <tr className="">
                                                         <td className="px-6 text-sm text-gray-900 dark:text-white">
                                                             {index + 1}
                                                         </td>
                                                         <td className="px-6 text-sm text-gray-900 dark:text-white">
-                                                            {data?.ServicesDetailsTableData[key].details}
+                                                            {servicesDetailsRows[key].details}
                                                         </td>
                                                         <td className="px-6 text-sm text-gray-900 dark:text-white">
-                                                            {data?.ServicesDetailsTableData[key].charges.toLocaleString()} Rs
+                                                            {servicesDetailsRows[key].charges.toLocaleString()} Rs
                                                         </td>
                                                     </tr>
                                                 ))
