@@ -1,5 +1,4 @@
 'use client'
-import { EstimateForm } from "../newEstimate/page";
 import { Label } from "@/components/ui/label";
 import TitleMehrMotors from "./Titles/MehrMotors";
 import TitleRoyalHonda from "./Titles/RoyalHonda";
@@ -8,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import Loader from "@/app/components/ui/loader";
+import { EstimateRowObject } from "../newEstimate/page";
 
 export default function PAGE() {
     const [data, setData] = useState<any>();
@@ -16,15 +16,18 @@ export default function PAGE() {
     const [isLoading, setLoading] = useState(false);
     const [estimateRows, setEstimateRows] = useState([]);
     const [servicesDetailsRows, setServicesDetailsRows] = useState([]);
+    const [actualTotalPartsPrice, setActualTotalPartsPrice] = useState(0);
 
 
     const searchEstimate = async () => {
         setLoading(true);
         axios.post('/api/getEstimate', { id })
             .then((response: AxiosResponse) => {
+                let mydata = response?.data?.Message;
                 setData(response?.data?.Message)
-                setEstimateRows(JSON.parse(response?.data?.Message?.EstimateTableData))
-                setServicesDetailsRows(JSON.parse(response?.data?.Message?.ServicesTableData))
+                setEstimateRows(JSON.parse(mydata.EstimateTableData))
+                setServicesDetailsRows(JSON.parse(mydata.ServicesTableData))
+                setActualTotalPartsPrice(CalculateTotalEstimateCost());
             })
             .catch((error: AxiosResponse) => {
                 toast.error(error?.data?.Message)
@@ -35,10 +38,31 @@ export default function PAGE() {
     useEffect(() => {
         const fetchEstimate = async () => {
             await searchEstimate();
+            CalculateTotalEstimateCost();
         }
 
         fetchEstimate();
     }, [id])
+
+    function CalculateTotalEstimateCost() {
+        let totalPrice = 0;
+        Object.keys(estimateRows).map((key, index) => {
+            // @ts-ignore
+            totalPrice += estimateRows[key].partPrice * estimateRows[key].partQty;
+        })
+
+        return totalPrice;
+    }
+
+    function CalculateTotalServiceCost() {
+        let totalPrice = 0;
+        Object.keys(servicesDetailsRows).map((key, index) => {
+            // @ts-ignore
+            totalPrice += servicesDetailsRows[key].charges;
+        })
+
+        return totalPrice;
+    }
     return (
         <>
             {!data ? <div className="flex h-screen container items-center justify-center"><Loader isLoading={isLoading} /></div> :
@@ -241,7 +265,7 @@ export default function PAGE() {
                                         </thead>
                                         <tbody>
                                             {
-                                                
+
                                                 Object.keys(servicesDetailsRows)?.map((key, index) => (
                                                     <tr className="">
                                                         <td className="px-6 text-sm text-gray-900 dark:text-white">
@@ -271,7 +295,7 @@ export default function PAGE() {
                                 </Label>
                                 <hr className={"border-t-1 border-black flex"} />
                                 <div>
-                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Parts Cost:</p> {data?.TotalEstimateFee.toLocaleString()} Rs</p>
+                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Parts Cost:</p> {CalculateTotalEstimateCost().toLocaleString()} Rs</p>
                                     {
                                         data?.DiscountEstimate !== 0 && !isNaN(data?.DiscountEstimate) &&
                                         <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Parts:</p> {data?.DiscountEstimate} %</p>
@@ -282,12 +306,12 @@ export default function PAGE() {
                                     }
                                     {
                                         data?.DiscountEstimateFigure !== 0 && !isNaN(data?.DiscountEstimateFigure) ?
-                                            <p className="font-sans text-sm flex flex-row gap-1">Parts Price <p className="font-bold">(After Discount):</p> {(data?.TotalEstimateFee - data?.DiscountEstimateFigure - (data?.TotalEstimateFee * data?.DiscountEstimate) / 100).toLocaleString()} Rs</p>
+                                            <p className="font-sans text-sm flex flex-row gap-1">Parts Price <p className="font-bold">(After Discount):</p> {(CalculateTotalEstimateCost() - data?.DiscountEstimateFigure - (CalculateTotalEstimateCost() * data?.DiscountEstimate) / 100).toLocaleString()} Rs</p>
                                             :
-                                            <p className="font-sans text-sm flex flex-row gap-1">Parts Price <p className="font-bold">(After Discount):</p> {(data?.TotalEstimateFee - ((data?.TotalEstimateFee * data?.DiscountEstimate) / 100)).toLocaleString()} Rs</p>
+                                            <p className="font-sans text-sm flex flex-row gap-1">Parts Price <p className="font-bold">(After Discount):</p> {(CalculateTotalEstimateCost() - ((CalculateTotalEstimateCost() * data?.DiscountEstimate) / 100)).toLocaleString()} Rs</p>
 
                                     }
-                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Labor Cost:</p> {data?.TotalServiceFee.toLocaleString()} Rs</p>
+                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Labor Cost:</p> {CalculateTotalServiceCost().toLocaleString()} Rs</p>
                                     {
                                         data?.DiscountServices !== 0 && !isNaN(data?.DiscountServices) &&
                                         <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Labor:</p> {data?.DiscountServices} %</p>
@@ -298,12 +322,12 @@ export default function PAGE() {
                                     }
                                     {
                                         data?.DiscountServicesFigure !== 0 && !isNaN(data?.DiscountServicesFigure) ?
-                                            <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(After Discount):</p> {(data?.TotalServiceFee - data.DiscountServicesFigure - (data?.DiscountServices * data?.TotalServiceFee) / 100).toLocaleString()} Rs</p>
+                                            <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(After Discount):</p> {(CalculateTotalServiceCost() - data.DiscountServicesFigure - (data?.DiscountServices * CalculateTotalServiceCost()) / 100).toLocaleString()} Rs</p>
                                             :
-                                            <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(After Discount):</p> {(data?.TotalServiceFee - (data?.DiscountServices * data?.TotalServiceFee) / 100).toLocaleString()} Rs</p>
+                                            <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(After Discount):</p> {(CalculateTotalServiceCost() - (data?.DiscountServices * CalculateTotalServiceCost()) / 100).toLocaleString()} Rs</p>
 
                                     }
-                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Total Amount:</p> {data?.TotalEstimateFee .toLocaleString()} Rs</p>
+                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Total Amount:</p> {data?.OverAllAmount.toLocaleString()} Rs</p>
                                 </div>
                             </div>
                         </div>

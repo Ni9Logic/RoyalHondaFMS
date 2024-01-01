@@ -675,6 +675,8 @@ export default function PAGE() {
                                                 let completeAmount = overAllBillEstimate(handleEstimateTotalPrice(estimateRows)) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)) - DiscountEstimateFigure - DiscountServicesFigure;
                                                 setValue(('TotalEstimateFee'), overAllBillEstimate(handleEstimateTotalPrice(estimateRows)));
                                                 setValue(('TotalServiceFee'), overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)));
+                                                setValue('EstimateTableData', estimateRows);
+                                                setValue('ServicesDetailsTableData', servicesDetailsRows);
                                                 setValue('OverAllAmount', completeAmount);
                                                 console.log(DiscountServicesFigure);
                                             }} className={"mt-2 w-1/6"}
