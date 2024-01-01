@@ -59,9 +59,7 @@ export function DataTable<TData, TValue>({
 
     const [filterColumn, setFilterColumn] = useState('');
     useEffect(() => {
-        return () => void
-
-            table.setPageSize(5);
+        table.setPageSize(5);
     }, [table.setPageSize])
     return (
         <div className="flex flex-col container">
