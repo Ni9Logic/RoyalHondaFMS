@@ -262,8 +262,8 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                     }
                                 </Label>
                                 <Label className="flex flex-row gap-1">
-                                    {(data?.DiscountServicesFigure !== 0 || data?.DiscountEstimateFigure !== 0) || (!isNaN(data?.DiscountServicesFigure) || !isNaN(data?.DiscountEstimateFigure)) &&
-                                        <p>Total Discount: -{(data?.DiscountEstimateFigure + data?.DiscountServicesFigure).toLocaleString()} Rs</p>
+                                    {(!isNaN(data?.DiscountServicesFigure) || !isNaN(data?.DiscountEstimateFigure)) &&
+                                        <p>Total Discount: -{(data?.DiscountEstimateFigure + data?.DiscountServicesFigure + overAllBillServices(handleServicesTotalPrice(data?.ServicesDetailsTableData)) + overAllBillEstimate(handleEstimateTotalPrice(data?.EstimateTableData))).toLocaleString()} Rs</p>
                                     }
                                 </Label>
                                 <Label className={"flex flex-row gap-1"}>

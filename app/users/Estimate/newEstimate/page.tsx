@@ -672,7 +672,7 @@ export default function PAGE() {
                                                 onClick={() => handleAddServicesDetailsRow()}>Add Row</Button>
                                             <Button type={"button"} onClick={() => {
                                                 handleGenerateSummary();
-                                                let completeAmount = overAllBillEstimate(handleEstimateTotalPrice(estimateRows)) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows));
+                                                let completeAmount = overAllBillEstimate(handleEstimateTotalPrice(estimateRows)) + overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)) - DiscountEstimateFigure - DiscountServicesFigure;
                                                 setValue(('TotalEstimateFee'), overAllBillEstimate(handleEstimateTotalPrice(estimateRows)));
                                                 setValue(('TotalServiceFee'), overAllBillServices(handleServicesTotalPrice(servicesDetailsRows)));
                                                 setValue('OverAllAmount', completeAmount);
