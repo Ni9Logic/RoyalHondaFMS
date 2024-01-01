@@ -5,14 +5,11 @@ import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from 'react-hot-toast';
 import axios, { AxiosError, AxiosResponse } from "axios";
-import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import { useSearchParams } from 'next/navigation'
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Loader from "@/app/components/ui/loader";
-import moment from "moment";
-import getAllInsurance from "@/app/actions/getAllInsurance";
 import { InsuranceCompaniesData } from "../../createJobCard/page";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";

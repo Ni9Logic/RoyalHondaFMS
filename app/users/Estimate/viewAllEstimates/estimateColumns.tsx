@@ -113,37 +113,34 @@ export const columns: ColumnDef<EstimateForm>[] = [
 
             return (
                 <div className="flex items-center justify-center">
-                    {
-                        !printing &&
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                    <span className="sr-only">Open menu</span>
-                                    <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <DropdownMenuItem
-                                    onClick={() => navigator.clipboard.writeText(estimate.id.toString())}
-                                >
-                                    Copy Serial Number
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem
+                                onClick={() => navigator.clipboard.writeText(estimate.id.toString())}
+                            >
+                                Copy Serial Number
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
 
-                                <DropdownMenuItem>Edit Estimate</DropdownMenuItem>
-                                {/* </Link> */}
-                                <DropdownMenuItem onClick={() => {
-                                    setIsPrinting(true);
+                            <DropdownMenuItem>Edit Estimate</DropdownMenuItem>
+                            <Link href={{
+                                pathname: '/users/Estimate/printableEstimate',
+                                query: {
+                                    id: estimate.id
                                 }
-                                }>Print Estimate</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    }
-                    {
-                        printing && 
-                        <PrintEstimate data={estimate} />
-                    }
+                            }}>
+                                <DropdownMenuItem>Print Estimate</DropdownMenuItem>
+                            </Link>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
                 </div >
             )
         },
