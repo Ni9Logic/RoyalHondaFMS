@@ -122,8 +122,14 @@ export const columns: ColumnDef<EstimateForm>[] = [
                                 Copy Serial Number
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-
-                            <DropdownMenuItem>Edit Estimate</DropdownMenuItem>
+                            <Link href={{
+                                pathname: '/users/Estimate/EditEstimate',
+                                query: {
+                                    id: estimate.id
+                                }
+                            }}>
+                                <DropdownMenuItem>Edit Estimate</DropdownMenuItem>
+                            </Link>
                             <Link href={{
                                 pathname: '/users/Estimate/printableEstimate',
                                 query: {

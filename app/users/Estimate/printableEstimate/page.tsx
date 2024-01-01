@@ -122,7 +122,7 @@ export default function PAGE() {
                                     </div>
                                     <div className="h-full flex justify-end">
                                         <p className="font-sans flex flex-row gap-1">
-                                            <p className="font-bold">EST #:</p> 20
+                                            <p className="font-bold">EST #:</p> {data?.id}
                                         </p>
                                     </div>
                                 </div>
