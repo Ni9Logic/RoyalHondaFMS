@@ -1,4 +1,4 @@
-import { EstimateForm } from "../newEstimate/page";
+import { EstimateForm } from "../../Interfaces/Interface";
 import { Label } from "@/components/ui/label";
 import TitleMehrMotors from "./Titles/MehrMotors";
 import TitleRoyalHonda from "./Titles/RoyalHonda";

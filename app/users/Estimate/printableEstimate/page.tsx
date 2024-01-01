@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import Loader from "@/app/components/ui/loader";
-import { EstimateRowObject } from "../newEstimate/page";
+import { EstimateRowObject } from "../../Interfaces/Interface";
 
 export default function PAGE() {
     const [data, setData] = useState<any>();

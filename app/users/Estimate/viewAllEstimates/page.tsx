@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Footer from "../../Footer";
 import Navbar from "../../Navbar";
-import { EstimateForm } from "../newEstimate/page";
+import { EstimateForm } from "../../Interfaces/Interface";
 import axios from "axios";
 import { DataTable } from "@/app/components/ui/data-table";
 import { columns } from "./estimateColumns";

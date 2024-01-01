@@ -1,4 +1,4 @@
-import { Surveyor } from "@/app/users/Estimate/newEstimate/page";
+import { Surveyor } from "@/app/users/Interfaces/Interface";
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prismadb";
 

@@ -1,5 +1,5 @@
 import { Label } from "@/components/ui/label";
-import { EstimateForm } from "./page";
+import { EstimateForm } from "../../Interfaces/Interface";
 
 const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
     function handleEstimateTotalPrice(EstimateArray: any) {
