@@ -20,6 +20,7 @@ import {
     DrawerContent,
 } from "@/components/ui/drawer"
 import { EstimateForm } from "../newEstimate/page";
+import PrintEstimate from "../printableEstimate/PrintableEstimate";
 
 
 export const columns: ColumnDef<EstimateForm>[] = [
@@ -129,44 +130,7 @@ export const columns: ColumnDef<EstimateForm>[] = [
                                     Copy Serial Number
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                {/* <Link href={{
-                                    pathname: '/users/jobCards/editJob',
-                                    query: {
-                                        SerialNo: `${estimate.SerialNo}`,
-                                        EstimateNumber: `${estimate.EstimateNumber}`,
-                                        CustomerName: `${estimate.CustomerName}`,
-                                        CustomerContact: `${estimate.CellNo}`,
-                                        JobCheckedBy: `${estimate.JobCheckedBy}`,
-                                        WorkType: `${estimate.WorkType}`,
-                                        Insurance: `${estimate.Insurance}`,
-                                        RegistrationNumber: `${estimate.carRegistration}`,
-                                        RequiredWorkDetails: `${estimate.RequiredWorkDetails}`,
-                                        AdditionalWorkDetails: `${estimate.AdditionalWorkDetails}`,
-                                        OtherAdditionalWorkDetails: `${estimate.OtherAdditionalWorkDetails}`,
-                                        BatteryNumber: `${estimate.BatteryNumber}`,
-                                        FrameNumber: `${estimate.FrameNo}`,
-                                        DriverUser: `${estimate.DriverUser}`,
-                                        Fuel: `${estimate.Fuel}`,
-                                        Mileage: `${estimate.Mileage}`,
-                                        Lighter: `${estimate.Lighter}`,
-                                        Ashtray: `${estimate.Ashtray}`,
-                                        FloorMats: `${estimate.FloorMats}`,
-                                        OriginalBook: `${estimate.OriginalBook}`,
-                                        SeatCovers: `${estimate.SeatCovers}`,
-                                        RadioAnteena: `${estimate.RadioAnteena}`,
-                                        SpareWheel: `${estimate.SpareWheel}`,
-                                        WheelRod: `${estimate.WheelRod}`,
-                                        JackHandle: `${estimate.JackHandle}`,
-                                        Tools: `${estimate.Tools}`,
-                                        ExtraThings: `${estimate.ExtraThings}`,
-                                        InReceivedBy: `${estimate.InReceivedBy}`,
-                                        InReceivedFrom: `${estimate.InReceivedFrom}`,
-                                        InTime: `${estimate.InTime}`,
-                                        OutReceivedBy: `${estimate.OutReceivedBy}`,
-                                        OutReceivedFrom: `${estimate.OutReceivedFrom}`,
-                                        OutTime: `${estimate.OutTime}`,
-                                    },
-                                }}> */}
+
                                 <DropdownMenuItem>Edit Estimate</DropdownMenuItem>
                                 {/* </Link> */}
                                 <DropdownMenuItem onClick={() => {
@@ -177,16 +141,10 @@ export const columns: ColumnDef<EstimateForm>[] = [
                         </DropdownMenu>
                     }
                     {
-                        printing &&
-                        <Drawer open={printing}>
-                            <DrawerContent className="h-full w-full">
-                                {/* Here put link to the page for editing an estimate */}
-                                <DrawerClose>
-                                </DrawerClose>
-                            </DrawerContent>
-                        </Drawer>
+                        printing && 
+                        <PrintEstimate data={estimate} />
                     }
-                </div>
+                </div >
             )
         },
     },

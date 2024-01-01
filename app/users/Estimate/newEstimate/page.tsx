@@ -9,11 +9,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import PrintEstimate from "../printableEstimate/PrintableEstimate";
 import { v4 as uuidv4 } from 'uuid';
 import TableSummaries from "./Summary";
-import axios, { Axios, AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import Loader from "@/app/components/ui/loader";
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
-import PlusIcon from "@/app/components/ui/plusicon";
 import {
     Select,
     SelectContent,
@@ -24,7 +22,6 @@ import {
 import { InsuranceCompanies } from "@prisma/client";
 import AddSurveyor from "../Components/AddSurveyor";
 import EstimateSheetForm from "../Components/EstimateSheetForm";
-import { parseJSON } from "date-fns";
 
 export interface EstimateRowType {
     partNo: string;
@@ -53,6 +50,7 @@ export interface EstimateForm {
     cMake: string;
     cModel: string;
     cSurveyor: string;
+    cSurveyorNTN: string;
     cDriverUser: string;
     Insurance: string;
     EstimateTableData: EstimateRowObject;
@@ -74,6 +72,7 @@ export interface EstimateForm {
 export interface Surveyor {
     id: number;
     cSurveyor: string;
+    cSurveyorNTN: string;
 }
 
 interface SearchEstimate {
@@ -100,6 +99,7 @@ export default function PAGE() {
     const [cRegistration, setcRegistration] = useState('');
     const [PaymentMode, setPaymentMode] = useState('');
     const [cSurveyor, setcSurveyor] = useState('');
+    const [cSurveyorNTN, setcSurveyorNTN] = useState('');
     const [cDriverUser, setcDriverUser] = useState('');
     const [insurance, setInsurance] = useState('');
     const [isRoyal, setIsRoyal] = useState(true);
@@ -218,6 +218,7 @@ export default function PAGE() {
         cMake: cMake,
         cModel: cModel,
         cSurveyor: cSurveyor,
+        cSurveyorNTN: cSurveyorNTN,
         cDriverUser: cDriverUser,
         Insurance: insurance,
         EstimateTableData: estimateRows,
@@ -247,6 +248,7 @@ export default function PAGE() {
             cMake: cMake,
             cModel: cModel,
             cSurveyor: cSurveyor,
+            cSurveyorNTN: cSurveyorNTN,
             cDriverUser: cDriverUser,
             Insurance: insurance,
             EstimateTableData: {},
@@ -304,7 +306,8 @@ export default function PAGE() {
         setValue: setValueSurveyor,
     } = useForm<Surveyor>({
         defaultValues: {
-            cSurveyor: cSurveyor
+            cSurveyor: cSurveyor,
+            cSurveyorNTN: cSurveyorNTN,
         }
     })
 
@@ -412,10 +415,15 @@ export default function PAGE() {
 
                                 {/* Surveyors, Payment Mode & Insurances */}
                                 <div className="flex flex-row mt-4 items-center justify-center gap-12">
+                                    <Input placeholder="Surveyor NTN" className="w-1/6" disabled value={cSurveyorNTN} />
                                     <div className="flex flex-row gap-1">
+
                                         <Select onValueChange={(e) => {
-                                            setValue('cSurveyor', e);
-                                            setcSurveyor(e);
+                                            let values = JSON.parse(e);
+                                            setValue('cSurveyor', values.surveyorName);
+                                            setcSurveyor(values.surveyorName);
+                                            setValue('cSurveyorNTN', values.surveyorNTN);
+                                            setcSurveyorNTN(values.surveyorNTN);
                                         }} defaultValue={cSurveyor}>
                                             <SelectTrigger className="w-[180px]">
                                                 <SelectValue placeholder="Select Surveyor" />
@@ -423,7 +431,9 @@ export default function PAGE() {
                                             <SelectContent>
                                                 {
                                                     Surveyors?.map((surveyor) => (
-                                                        <SelectItem key={uuidv4()} value={surveyor.cSurveyor}>
+                                                        <SelectItem key={uuidv4()} value={
+                                                            JSON.stringify({ surveyorName: surveyor.cSurveyor, surveyorNTN: surveyor.cSurveyorNTN })
+                                                        }>
                                                             {surveyor.cSurveyor}
                                                         </SelectItem>
                                                     ))

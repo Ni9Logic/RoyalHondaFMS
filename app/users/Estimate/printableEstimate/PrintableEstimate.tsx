@@ -27,7 +27,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
 
                                     <p className="text-sm flex flex-row gap-1">Surveyor:
                                         <p className="border border-black w-auto h-auto text-sm">
-                                            <p className="px-2 font-sans">{data?.cSurveyor}</p>
+                                            <p className="px-2 font-sans flex flex-row gap-1">{data?.cSurveyor} <p className="text-sm font-bold text-red-500">{data?.cSurveyorNTN}</p></p>
                                         </p>
                                     </p>
                                 </div>
@@ -154,7 +154,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {
+                                        {/* {
                                             Object.keys(data?.EstimateTableData)?.map((key, index) => (
                                                 <tr className="">
                                                     <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white">
@@ -177,7 +177,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                                     </td>
                                                 </tr>
                                             ))
-                                        }
+                                        } */}
                                     </tbody>
                                 </table>
                             </div>
@@ -200,7 +200,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {
+                                        {/* {
                                             Object.keys(data?.ServicesDetailsTableData)?.map((key, index) => (
                                                 <tr className="">
                                                     <td className="px-6 text-sm text-gray-900 dark:text-white">
@@ -214,7 +214,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                                     </td>
                                                 </tr>
                                             ))
-                                        }
+                                        } */}
                                     </tbody>
                                 </table>
                             </div>

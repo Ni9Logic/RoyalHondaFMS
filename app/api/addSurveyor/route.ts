@@ -1,12 +1,12 @@
 import { Surveyor } from "@/app/users/Estimate/newEstimate/page";
 import { NextResponse } from "next/server";
-import primsa from "@/app/lib/prismadb";
+import prisma from "@/app/lib/prismadb";
 
 export async function POST(req: Request) {
     try {
         const body: Surveyor = await req.json();
 
-        const isFind = await prisma?.surveyors.findUnique({
+        const isFind = await prisma.surveyors.findUnique({
             where: {
                 cSurveyor: body.cSurveyor
             }
@@ -15,9 +15,10 @@ export async function POST(req: Request) {
         if (isFind)
             return NextResponse.json({ Message: "Surveyor Already Exists" }, { status: 400 });
         
-        const isCreated = await prisma?.surveyors.create({
+        const isCreated = await prisma.surveyors.create({
             data: {
-                cSurveyor: body.cSurveyor
+                cSurveyor: body.cSurveyor,
+                cSurveyorNTN: body.cSurveyorNTN,
             }
         })
 

@@ -19,8 +19,9 @@ const AddSurveyor: React.FC<AddSurveyorProps> = ({ setValueSurveyor, isAddSurvey
                 <DrawerContent>
                     <DrawerHeader className="flex items-center flex-col gap-2">
                         <DrawerTitle className="justify-center flex">Add Surveyor?</DrawerTitle>
-                        <DrawerDescription className="justify-center flex">
+                        <DrawerDescription className="justify-center flex gap-2">
                             <Input required form="form2" placeholder="Surveyor Name" onChange={(e) => setValueSurveyor('cSurveyor', e.target.value)} />
+                            <Input required form="form2" placeholder="Surveyor NTN" onChange={(e) => setValueSurveyor('cSurveyorNTN', e.target.value)} />
                         </DrawerDescription>
                     </DrawerHeader>
                     <DrawerFooter className="flex justify-center items-center">
