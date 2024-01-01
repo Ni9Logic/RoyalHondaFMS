@@ -154,7 +154,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* {
+                                        {
                                             Object.keys(data?.EstimateTableData)?.map((key, index) => (
                                                 <tr className="">
                                                     <td className="px-6 whitespace-nowrap text-sm text-gray-900 dark:text-white">
@@ -177,7 +177,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                                     </td>
                                                 </tr>
                                             ))
-                                        } */}
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -200,7 +200,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* {
+                                        {
                                             Object.keys(data?.ServicesDetailsTableData)?.map((key, index) => (
                                                 <tr className="">
                                                     <td className="px-6 text-sm text-gray-900 dark:text-white">
@@ -214,7 +214,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                                     </td>
                                                 </tr>
                                             ))
-                                        } */}
+                                        }
                                     </tbody>
                                 </table>
                             </div>
