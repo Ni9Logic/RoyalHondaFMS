@@ -1,36 +1,48 @@
 'use client'
-import getAllJobCards from "@/app/actions/getAllJobCards";
-import { columns } from "@/app/components/ui/allUserTablesColumns";
-import { DataTable } from "@/app/components/ui/data-table";
-import { EstimateForm } from "@/app/users/Interfaces/Interface";
-import { JOBFormData } from "@/app/users/createJobCard/page";
-
-import { GetServerSideProps, GetStaticProps } from "next";
 import { useEffect, useState } from "react";
+import { columns } from "./allUserTablesColumns";
+import { DataTable } from "./data-table";
+import axios from "axios";
 
-interface ViewAllJobCardProps {
-    jobCards: EstimateForm[];
-}
 
-function ViewAllJobCards() {
-    const [jobCards, setJobCards] = useState<JOBFormData[]>([]);
+// Fetch the data using async function
+const AllTables = () => {
+    const [Data, setData] = useState<any>('');
+    const getAllUsers = async () => {
+        try {
+            const response = await axios.get('/api/getAllJobCards');
+            setData(response?.data?.jobCards);
+        } catch (error: any) {
+            console.log('Error Fetching Data', error)
+        }
+
+    }
+
     useEffect(() => {
-        (async function (){
+        const fetchData = async () => {
+            try {
+                await getAllUsers();
+                // Additional code after the fetch operation if needed
+            } catch (error) {
+                console.error('Error fetching serial number:', error);
+                // Handle the error as needed
+            }
+        };
 
-            const allJobCards = await getAllJobCards();
-            console.log('allJobCards:', allJobCards);
-            // @ts-ignore
-            setJobCards(allJobCards);
-        });
-    }, []);
+        fetchData(); // Call the async function immediately
+
+        // If you have a cleanup function (optional)
+        return () => {
+            // Code to run on unmount (cleanup)
+        };
+    }, [])
     return (
         <>
-            {/* @ts-ignore */}
-            <DataTable columns={columns} data={jobCards} />
+            <div>
+                <DataTable columns={columns} data={Data} />
+            </div>
         </>
     )
 }
 
-
-
-export default ViewAllJobCards;
+export default AllTables;

@@ -4,7 +4,7 @@ import getAllJobCards from "@/app/actions/getAllJobCards";
 export async function GET() {
     try {
         const allJobCards = await getAllJobCards();
-        
+        // @ts-ignore
         if (!allJobCards || allJobCards.length === 0) {
             return NextResponse.json({ Error: "No Job Cards Created Yet!" }, { status: 404 });
         }
