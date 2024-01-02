@@ -50,6 +50,7 @@ export default function PAGE() {
     const [cDriverUser, setcDriverUser] = useState('');
     const [insurance, setInsurance] = useState('');
     const [isRoyal, setIsRoyal] = useState(true);
+    const [estId, setEstId] = useState('');
 
     const [servicesDetailsRows, setServicesDetailsRow] = useState<ServiceRowObject>({})
     const [estimateRows, setEstimateRows] = useState<EstimateRowObject>({});
@@ -160,6 +161,7 @@ export default function PAGE() {
 
     // @ts-ignore
     const data: EstimateForm = {
+        id: parseInt(estId) + 1,
         cName: cName,
         jobId: jobId,
         cMake: cMake,
@@ -294,9 +296,8 @@ export default function PAGE() {
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }
 
-    const [estId, setEstId] = useState('');
     const getLastEstimateId = async () => {
-        axios.post("../../../api/getLastEstimateId", {method: "notStatic"})
+        axios.post("../../../api/getLastEstimateId", { method: "notStatic" })
             .then((response: AxiosResponse) => {
                 setEstId(response?.data?.id);
             })
@@ -308,7 +309,7 @@ export default function PAGE() {
 
     const [allInsurances, setAllInsurances] = useState<InsuranceCompanies[]>();
     const getAllInsurancess = async () => {
-        axios.post("../../../api/getAllInsurance", {method: "notStatic"})
+        axios.post("../../../api/getAllInsurance", { method: "notStatic" })
             .then((response: AxiosResponse) => setAllInsurances(response?.data?.Message))
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }

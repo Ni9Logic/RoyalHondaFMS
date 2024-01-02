@@ -13,8 +13,8 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
 
     const fetchSerialNumber = async () => {
         try {
-            const response = await axios.get('/api/getLasJobId');
-            const serial = response.data.serialNumber;
+            const response = await axios.post('/api/getLasJobId', { method: "notStatic" });
+            const serial = response.data.serialNumber + 1;
             setSerialNumber(serial);
         } catch (error) {
             console.error('Error fetching serial:', error);
