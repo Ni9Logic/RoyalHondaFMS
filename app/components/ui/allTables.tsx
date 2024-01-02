@@ -5,23 +5,25 @@ import { DataTable } from "./data-table";
 import axios from "axios";
 
 
-// Fetch the data using async function
 const AllTables = () => {
     const [Data, setData] = useState<any>('');
-    const getAllUsers = async () => {
+    const [loading, setLoading] = useState(true);
+
+    const getAllJobCards = async () => {
         try {
             const response = await axios.get('/api/getAllJobCards');
             setData(response?.data?.jobCards);
         } catch (error: any) {
-            console.log('Error Fetching Data', error)
+            console.log('Error Fetching Data', error);
+        } finally {
+            setLoading(false);
         }
-
     }
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await getAllUsers();
+                await getAllJobCards();
                 // Additional code after the fetch operation if needed
             } catch (error) {
                 console.error('Error fetching serial number:', error);
@@ -35,14 +37,17 @@ const AllTables = () => {
         return () => {
             // Code to run on unmount (cleanup)
         };
-    }, [])
+    }, []); // Empty dependency array ensures it runs only on mount
+
     return (
-        <>
-            <div className="ml-8 mr-8">
+        <div>
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
                 <DataTable columns={columns} data={Data} />
-            </div>
-        </>
-    )
+            )}
+        </div>
+    );
 }
 
 export default AllTables;

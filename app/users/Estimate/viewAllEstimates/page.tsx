@@ -27,16 +27,11 @@ export default function PAGE() {
         };
 
         fetchData();
-
-        return () => {
-        };
     }, [])
     return (
         <>
             <Navbar />
-            <div className="h-[80vh] items-center justify-center container flex-grow">
-                <DataTable data={Data} columns={columns}/>
-            </div>
+            <DataTable data={Data} columns={columns} />
             <Footer />
         </>
     )
