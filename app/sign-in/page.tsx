@@ -27,8 +27,6 @@ export default function Page() {
         if (session?.status === 'authenticated') {
             router.push('/users');
         }
-
-
     }, [session?.status, router]);
 
     const {

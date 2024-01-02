@@ -39,6 +39,7 @@ export default function PAGE() {
 
     // Convert this to integer later in the api
     const [jobId, setjobId] = useState('');
+    
     const [cMake, setcMake] = useState('');
     const [ckiloMeters, setcKiloMeters] = useState(0);
     const [cModel, setcModel] = useState('');

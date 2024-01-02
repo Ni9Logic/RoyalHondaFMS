@@ -38,7 +38,7 @@ const AllTables = () => {
     }, [])
     return (
         <>
-            <div className="ml-8 mr-8">
+            <div>
                 <DataTable columns={columns} data={Data} />
             </div>
         </>

@@ -126,11 +126,11 @@ export const columns: ColumnDef<JobTable>[] = [
     },
     {
         accessorKey: 'OutTime',
-        header: 'Out Date'
+        header: 'Promise Date'
     },
     {
         accessorKey: 'CreatedAt',
-        header: 'Date'
+        header: 'Created On'
     },
     {
         id: "actions",
