@@ -28,9 +28,6 @@ export default function PAGE() {
         };
 
         fetchData();
-
-        return () => {
-        };
     }, [])
     return (
         <>
