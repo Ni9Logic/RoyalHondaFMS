@@ -33,7 +33,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { duration } from "moment";
 
 export type JOBFormData = {
     SerialNo?: number,
@@ -82,7 +81,7 @@ export default function Page() {
     const [allInsurances, setAllInsurances] = useState<InsuranceCompaniesData[]>();
     const getAllInsurances = async () => {
         try {
-            const response = await axios.get('/api/getAllInsurance');
+            const response = await axios.post('/api/getAllInsurance', { module: "notStatic" });
             setAllInsurances(response?.data?.Message);
         } catch (error: any) {
             console.log('Error Fetching Data', error);

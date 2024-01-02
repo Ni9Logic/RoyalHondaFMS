@@ -39,7 +39,7 @@ export default function PAGE() {
 
     // Convert this to integer later in the api
     const [jobId, setjobId] = useState('');
-    
+
     const [cMake, setcMake] = useState('');
     const [ckiloMeters, setcKiloMeters] = useState(0);
     const [cModel, setcModel] = useState('');
@@ -289,14 +289,14 @@ export default function PAGE() {
     const [Surveyors, setSurveyors] = useState<Surveyor[]>();
 
     const getAllSurveyors = async () => {
-        axios.get("../../../api/getAllSurveyor")
+        axios.post("../../../api/getAllSurveyor", { method: "notStatic" })
             .then((response: AxiosResponse) => setSurveyors(response?.data?.Surveyors))
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }
 
     const [estId, setEstId] = useState('');
     const getLastEstimateId = async () => {
-        axios.get("../../../api/getLastEstimateId")
+        axios.post("../../../api/getLastEstimateId", {method: "notStatic"})
             .then((response: AxiosResponse) => {
                 setEstId(response?.data?.id);
             })
@@ -308,7 +308,7 @@ export default function PAGE() {
 
     const [allInsurances, setAllInsurances] = useState<InsuranceCompanies[]>();
     const getAllInsurancess = async () => {
-        axios.get("../../../api/getAllInsurance")
+        axios.post("../../../api/getAllInsurance", {method: "notStatic"})
             .then((response: AxiosResponse) => setAllInsurances(response?.data?.Message))
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }
