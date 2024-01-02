@@ -1,53 +1,36 @@
 'use client'
+import getAllJobCards from "@/app/actions/getAllJobCards";
+import { columns } from "@/app/components/ui/allUserTablesColumns";
+import { DataTable } from "@/app/components/ui/data-table";
+import { EstimateForm } from "@/app/users/Interfaces/Interface";
+import { JOBFormData } from "@/app/users/createJobCard/page";
+
+import { GetServerSideProps, GetStaticProps } from "next";
 import { useEffect, useState } from "react";
-import { columns } from "./allUserTablesColumns";
-import { DataTable } from "./data-table";
-import axios from "axios";
 
-
-const AllTables = () => {
-    const [Data, setData] = useState<any>('');
-    const [loading, setLoading] = useState(true);
-
-    const getAllJobCards = async () => {
-        try {
-            const response = await axios.get('/api/getAllJobCards');
-            setData(response?.data?.jobCards);
-        } catch (error: any) {
-            console.log('Error Fetching Data', error);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await getAllJobCards();
-                // Additional code after the fetch operation if needed
-            } catch (error) {
-                console.error('Error fetching serial number:', error);
-                // Handle the error as needed
-            }
-        };
-
-        fetchData(); // Call the async function immediately
-
-        // If you have a cleanup function (optional)
-        return () => {
-            // Code to run on unmount (cleanup)
-        };
-    }, []); // Empty dependency array ensures it runs only on mount
-
-    return (
-        <div>
-            {loading ? (
-                <p>Loading...</p>
-            ) : (
-                <DataTable columns={columns} data={Data} />
-            )}
-        </div>
-    );
+interface ViewAllJobCardProps {
+    jobCards: EstimateForm[];
 }
 
-export default AllTables;
+function ViewAllJobCards() {
+    const [jobCards, setJobCards] = useState<JOBFormData[]>([]);
+    useEffect(() => {
+        (async function (){
+
+            const allJobCards = await getAllJobCards();
+            console.log('allJobCards:', allJobCards);
+            // @ts-ignore
+            setJobCards(allJobCards);
+        });
+    }, []);
+    return (
+        <>
+            {/* @ts-ignore */}
+            <DataTable columns={columns} data={jobCards} />
+        </>
+    )
+}
+
+
+
+export default ViewAllJobCards;

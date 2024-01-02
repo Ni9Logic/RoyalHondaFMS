@@ -57,7 +57,7 @@ export type JOBFormData = {
 export default function Page() {
     // Date Time Selection
     const [isLoading, setLoading] = useState(false);
-    const searchParams = useSearchParams();
+    const searchParams = useSearchParams()!;
 
     const {
         register,

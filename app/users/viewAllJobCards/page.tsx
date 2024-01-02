@@ -1,6 +1,7 @@
+"use client";
 import AllTables from "@/app/components/ui/allTables";
-import Footer from "../Footer";
 import Navbar from "../Navbar";
+import Footer from "../Footer";
 
 export default function PAGE() {
     return (

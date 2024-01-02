@@ -12,8 +12,8 @@ import { EstimateRowObject } from "../../Interfaces/Interface";
 export default function PAGE() {
     const [data, setData] = useState<any>();
     const searchParams = useSearchParams();
-    const id = searchParams.get('id')?.toString();
     const [isLoading, setLoading] = useState(false);
+    const id = searchParams?.get('id')?.toString() ? searchParams?.get('id')?.toString() : 'null';
     const [estimateRows, setEstimateRows] = useState([]);
     const [servicesDetailsRows, setServicesDetailsRows] = useState([]);
     const [actualTotalPartsPrice, setActualTotalPartsPrice] = useState(0);
