@@ -295,7 +295,7 @@ export default function PAGE() {
     const [Surveyors, setSurveyors] = useState<Surveyor[]>();
 
     const getAllSurveyors = async () => {
-        axios.get("../../../api/getAllSurveyor")
+        axios.post("../../../api/getAllSurveyor", {method: "notStatic"})
             .then((response: AxiosResponse) => setSurveyors(response?.data?.Surveyors))
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }
@@ -303,7 +303,7 @@ export default function PAGE() {
 
     const [allInsurances, setAllInsurances] = useState<InsuranceCompanies[]>();
     const getAllInsurancess = async () => {
-        axios.get("../../../api/getAllInsurance")
+        axios.post("../../../api/getAllInsurance", {method: "notStatic"})
             .then((response: AxiosResponse) => setAllInsurances(response?.data?.Message))
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }

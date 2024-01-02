@@ -125,7 +125,7 @@ export default function Page() {
     const [outDate, setOutDate] = React.useState<Date>();
     const [allInsurances, setAllInsurances] = useState<InsuranceCompaniesData[]>();
     const getAllInsurances = async () => {
-        axios.get("/api/getAllInsurance")
+        axios.post("/api/getAllInsurance", {method: "notStatic"})
             .then((response: AxiosResponse) => setAllInsurances(response.data.Message))
             .catch((error: AxiosError) => console.log(error));
     }

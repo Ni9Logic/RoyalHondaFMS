@@ -10,7 +10,7 @@ export default function PAGE() {
     const [Data, setData] = useState<any>('');
     const getAllEstimates = async () => {
         try {
-            const response = await axios.get('/api/getAllEstimates');
+            const response = await axios.post('/api/getAllEstimates', {method: "notStatic"});
             setData(response?.data?.Estimates);
         } catch (error: any) {
             console.log('Error Fetching Data', error);
