@@ -22,7 +22,7 @@ export default function PAGE() {
                         Create Job Card
                         <Loader isLoading={isCreateJobCardLoading} />
                     </Button>
-                    <Button disabled={isAllJobCardLoading} onClick={() => {
+                    <Button disabled={isAllJobCardLoading} onClick={async () => {
                         setisAllJobCardLoading(true);
                         router.push('/users/viewAllJobCards')
                     }} className="flex gap-1">
