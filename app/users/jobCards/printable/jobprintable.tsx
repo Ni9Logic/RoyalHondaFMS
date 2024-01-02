@@ -3,7 +3,6 @@ import logo from "@/app/components/images/logo.png";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { JOBFormData } from "../../createJobCard/page";
 import { Button } from "@/components/ui/button";
 interface PrintJobProps {
     data: any;
