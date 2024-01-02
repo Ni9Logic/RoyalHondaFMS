@@ -63,6 +63,37 @@ export default function PAGE() {
 
         return totalPrice;
     }
+
+    // Calculate Parts Price (After Discount)
+    function calculatePartsPrice() {
+        const totalEstimateCost = CalculateTotalEstimateCost();
+        const discountEstimateFigure = data?.DiscountEstimateFigure || 0;
+        const discountEstimatePercentage = data?.DiscountEstimate || 0;
+
+        const discountedPrice = totalEstimateCost - discountEstimateFigure - (totalEstimateCost * discountEstimatePercentage) / 100;
+        return discountedPrice;
+    }
+
+    // Calculate Labor Price (After Discount)
+    function calculateLaborPrice() {
+        const totalServiceCost = CalculateTotalServiceCost();
+        const discountServicesFigure = data?.DiscountServicesFigure || 0;
+        const discountServicesPercentage = data?.DiscountServices || 0;
+
+        const discountedPrice = totalServiceCost - discountServicesFigure - (totalServiceCost * discountServicesPercentage) / 100;
+        return discountedPrice;
+    }
+
+    // Calculate Total Amount
+    function calculateTotalAmount() {
+        const partsPriceAfterDiscount = calculatePartsPrice();
+        const laborPriceAfterDiscount = calculateLaborPrice();
+
+        // Add other components if necessary
+        const totalAmount = partsPriceAfterDiscount + laborPriceAfterDiscount;
+        return totalAmount;
+    }
+
     return (
         <>
             {!data ? <div className="flex h-screen container items-center justify-center"><Loader isLoading={isLoading} /></div> :
@@ -295,40 +326,55 @@ export default function PAGE() {
                                 </Label>
                                 <hr className={"border-t-1 border-black flex"} />
                                 <div>
-                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Parts Cost:</p> {CalculateTotalEstimateCost().toLocaleString()} Rs</p>
-                                    {
-                                        data?.DiscountEstimate !== 0 && !isNaN(data?.DiscountEstimate) &&
-                                        <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Parts:</p> {data?.DiscountEstimate} %</p>
-                                    }
-                                    {
-                                        data?.DiscountEstimateFigure !== 0 && !isNaN(data?.DiscountEstimateFigure) &&
-                                        <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Parts (Figure):</p> -{data?.DiscountEstimateFigure} Rs</p>
-                                    }
-                                    {
-                                        data?.DiscountEstimateFigure !== 0 && !isNaN(data?.DiscountEstimateFigure) ?
-                                            <p className="font-sans text-sm flex flex-row gap-1">Parts Price <p className="font-bold">(After Discount):</p> {(CalculateTotalEstimateCost() - data?.DiscountEstimateFigure - (CalculateTotalEstimateCost() * data?.DiscountEstimate) / 100).toLocaleString()} Rs</p>
-                                            :
-                                            <p className="font-sans text-sm flex flex-row gap-1">Parts Price <p className="font-bold">(After Discount):</p> {(CalculateTotalEstimateCost() - ((CalculateTotalEstimateCost() * data?.DiscountEstimate) / 100)).toLocaleString()} Rs</p>
+                                    <p className="font-sans text-sm flex flex-row gap-1">
+                                        <p className="font-bold">Parts Cost:</p> {CalculateTotalEstimateCost().toLocaleString()} Rs
+                                    </p>
 
+                                    {data?.DiscountEstimate !== 0 && !isNaN(data?.DiscountEstimate) &&
+                                        <p className="font-sans text-sm flex flex-row gap-1">
+                                            <p className="font-bold">Discount on Parts:</p> {data?.DiscountEstimate} %
+                                        </p>
                                     }
-                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Labor Cost:</p> {CalculateTotalServiceCost().toLocaleString()} Rs</p>
-                                    {
-                                        data?.DiscountServices !== 0 && !isNaN(data?.DiscountServices) &&
-                                        <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Labor:</p> {data?.DiscountServices} %</p>
-                                    }
-                                    {
-                                        data?.DiscountServicesFigure !== 0 && !isNaN(data?.DiscountServicesFigure) &&
-                                        <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Discount on Services (Figure):</p> -{data?.DiscountServicesFigure} Rs</p>
-                                    }
-                                    {
-                                        data?.DiscountServicesFigure !== 0 && !isNaN(data?.DiscountServicesFigure) ?
-                                            <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(After Discount):</p> {(CalculateTotalServiceCost() - data.DiscountServicesFigure - (data?.DiscountServices * CalculateTotalServiceCost()) / 100).toLocaleString()} Rs</p>
-                                            :
-                                            <p className="font-sans text-sm flex flex-row gap-1">Labor Price <p className="font-bold">(After Discount):</p> {(CalculateTotalServiceCost() - (data?.DiscountServices * CalculateTotalServiceCost()) / 100).toLocaleString()} Rs</p>
 
+                                    {data?.DiscountEstimateFigure !== 0 && !isNaN(data?.DiscountEstimateFigure) &&
+                                        <p className="font-sans text-sm flex flex-row gap-1">
+                                            <p className="font-bold">Discount on Parts (Figure):</p> -{data?.DiscountEstimateFigure} Rs
+                                        </p>
                                     }
-                                    <p className="font-sans text-sm flex flex-row gap-1"><p className="font-bold">Total Amount:</p> {data?.OverAllAmount.toLocaleString()} Rs</p>
+
+                                    {/* Calculate Parts Price (After Discount) */}
+                                    <p className="font-sans text-sm flex flex-row gap-1">
+                                        Parts Price <p className="font-bold">(After Discount):</p> {calculatePartsPrice().toLocaleString()} Rs
+                                    </p>
+
+                                    {/* Labor Cost */}
+                                    <p className="font-sans text-sm flex flex-row gap-1">
+                                        <p className="font-bold">Labor Cost:</p> {CalculateTotalServiceCost().toLocaleString()} Rs
+                                    </p>
+
+                                    {data?.DiscountServices !== 0 && !isNaN(data?.DiscountServices) &&
+                                        <p className="font-sans text-sm flex flex-row gap-1">
+                                            <p className="font-bold">Discount on Labor:</p> {data?.DiscountServices} %
+                                        </p>
+                                    }
+
+                                    {data?.DiscountServicesFigure !== 0 && !isNaN(data?.DiscountServicesFigure) &&
+                                        <p className="font-sans text-sm flex flex-row gap-1">
+                                            <p className="font-bold">Discount on Services (Figure):</p> -{data?.DiscountServicesFigure} Rs
+                                        </p>
+                                    }
+
+                                    {/* Calculate Labor Price (After Discount) */}
+                                    <p className="font-sans text-sm flex flex-row gap-1">
+                                        Labor Price <p className="font-bold">(After Discount):</p> {calculateLaborPrice().toLocaleString()} Rs
+                                    </p>
+
+                                    {/* Calculate Total Amount */}
+                                    <p className="font-sans text-sm flex flex-row gap-1">
+                                        <p className="font-bold">Total Amount:</p> {(calculateLaborPrice() - calculatePartsPrice()).toLocaleString()} Rs
+                                    </p>
                                 </div>
+
                             </div>
                         </div>
                     </div>
