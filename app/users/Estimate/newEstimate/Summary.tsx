@@ -1,5 +1,5 @@
 import { Label } from "@/components/ui/label";
-import { EstimateForm } from "../../Interfaces/Interface";
+import { EstimateForm } from "@/types";
 
 const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
     function handleEstimateTotalPrice(EstimateArray: any) {
@@ -53,7 +53,7 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
         if (isNaN(data?.DiscountServicesFigure))
             data.DiscountServicesFigure = 0;
 
-        
+
         return handleOverAllBill() - data?.DiscountEstimateFigure - data?.DiscountServicesFigure;
     }
 

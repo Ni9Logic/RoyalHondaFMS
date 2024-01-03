@@ -22,7 +22,7 @@ import { InsuranceCompanies } from "@prisma/client";
 import AddSurveyor from "../Components/AddSurveyor";
 import EstimateSheetForm from "../Components/EstimateSheetForm";
 import { useSearchParams } from "next/navigation";
-import { EstimateForm, EstimateRowObject, SearchEstimate, ServiceRowObject, Surveyor } from "../../Interfaces/Interface";
+import { EstimateForm, EstimateRowObject, SearchEstimate, ServiceRowObject, Surveyor } from "@/types";
 
 
 export default function PAGE() {
@@ -260,7 +260,6 @@ export default function PAGE() {
     } = useForm<Surveyor>({
         defaultValues: {
             cSurveyor: cSurveyor,
-            cSurveyorNTN: cSurveyorNTN,
         }
     })
 
@@ -295,7 +294,7 @@ export default function PAGE() {
     const [Surveyors, setSurveyors] = useState<Surveyor[]>();
 
     const getAllSurveyors = async () => {
-        axios.post("../../../api/getAllSurveyor", {method: "notStatic"})
+        axios.post("../../../api/getAllSurveyor", { method: "notStatic" })
             .then((response: AxiosResponse) => setSurveyors(response?.data?.Surveyors))
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }
@@ -303,7 +302,7 @@ export default function PAGE() {
 
     const [allInsurances, setAllInsurances] = useState<InsuranceCompanies[]>();
     const getAllInsurancess = async () => {
-        axios.post("../../../api/getAllInsurance", {method: "notStatic"})
+        axios.post("../../../api/getAllInsurance", { method: "notStatic" })
             .then((response: AxiosResponse) => setAllInsurances(response?.data?.Message))
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }
@@ -426,7 +425,7 @@ export default function PAGE() {
                                         {
                                             Surveyors?.map((surveyor) => (
                                                 <SelectItem key={uuidv4()} value={
-                                                    JSON.stringify({ surveyorName: surveyor.cSurveyor, surveyorNTN: surveyor.cSurveyorNTN })
+                                                    JSON.stringify({ surveyorName: surveyor.cSurveyor })
                                                 }>
                                                     {surveyor.cSurveyor}
                                                 </SelectItem>

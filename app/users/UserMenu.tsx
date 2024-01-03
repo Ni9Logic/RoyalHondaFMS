@@ -15,6 +15,7 @@ export default function UserMenu() {
     return (
         <section className="flex flex-col text-gray-600 body-font h-[75vh] justify-center items-center">
             <div className="gap-2 pt-5">
+                {/* Tabs */}
                 <Tabs defaultValue="Jobcard" className="w-full">
                     <TabsList>
                         <TabsTrigger value="Jobcard">Jobcard</TabsTrigger>
