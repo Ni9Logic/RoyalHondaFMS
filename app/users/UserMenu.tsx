@@ -10,7 +10,7 @@ export default function UserMenu() {
     const [isCreateJobCardLoading, setisCreateJobCardLoading] = useState(false);
     const [isCreateEstimateLoading, setCreateEstimateLoading] = useState(false);
     const [isViewAllEstimatesLoading, setisViewAllEstimatesLoading] = useState(false);
-
+    const [isSalesInvoicesLoading, setisSalesInvoicesLoading] = useState(false);
     const router = useRouter();
     return (
         <section className="flex flex-col text-gray-600 body-font h-[75vh] justify-center items-center">
@@ -40,7 +40,7 @@ export default function UserMenu() {
                             <Loader isLoading={isAllJobCardLoading} />
                         </Button>
                     </TabsContent>
-                    <TabsContent value="Estimate" className='w-full flex items-center justify-center gap-2'>
+                    <TabsContent value="Estimate" className='w-full flex items-center justify-center gap-2 m-0'>
                         <Button disabled={isCreateEstimateLoading} className="flex gap-1" onClick={() => {
                             setCreateEstimateLoading(true);
                             router.push('/users/Estimate/newEstimate');
@@ -48,7 +48,7 @@ export default function UserMenu() {
                             Create Estimate
                             <Loader isLoading={isCreateEstimateLoading} />
                         </Button>
-                        <Button disabled={isViewAllEstimatesLoading} className="flex gap-1" onClick={() => {
+                        <Button disabled={isViewAllEstimatesLoading} className="flex flex-row gap-1" onClick={() => {
                             setisViewAllEstimatesLoading(true);
                             router.push('/users/Estimate/viewAllEstimates');
                         }}>
@@ -57,8 +57,12 @@ export default function UserMenu() {
                         </Button>
                     </TabsContent>
                     <TabsContent value="Invoice" className='w-full flex items-center justify-center'>
-                        <Button variant={'secondary'}>
-                            In Progress
+                        <Button onClick={() => {
+                            setisSalesInvoicesLoading(true);
+                            router.push('/users/Invoice/SalesInvoice/newSalesInvoice');
+                        }} className='flex flex-row gap-1' disabled={isSalesInvoicesLoading}>
+                            Sales Invoice
+                            <Loader isLoading={isSalesInvoicesLoading} />
                         </Button>
                     </TabsContent>
                     <TabsContent value="Ledger" className='w-full flex items-center justify-center'>

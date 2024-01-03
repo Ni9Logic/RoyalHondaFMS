@@ -129,7 +129,7 @@ model Invoice {
   TAmountGST      Float // TAmountParts + GSTCost
   DepPercent      Float
   TAmountDep      Float // TAmountDep - TAmountGST
-  EstimateNum     String // With Help of Estimate Number you can Put TLaborAmount from that Estimate 
+  EstimateNum     Int // With Help of Estimate Number you can Put TLaborAmount from that Estimate 
   TLaborAmount    Float
   PSTPercent      Float
   PSTCost         Float // PSTPercent of TLaborAmount
