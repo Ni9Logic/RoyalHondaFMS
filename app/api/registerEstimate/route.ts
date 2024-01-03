@@ -1,4 +1,4 @@
-import { EstimateForm, EstimateRowType } from "@/app/users/Interfaces/Interface";
+import { EstimateForm } from "@/types";
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prismadb";
 

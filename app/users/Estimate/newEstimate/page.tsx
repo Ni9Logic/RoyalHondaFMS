@@ -20,9 +20,9 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { InsuranceCompanies } from "@prisma/client";
-import AddSurveyor from "../Components/AddSurveyor";
 import EstimateSheetForm from "../Components/EstimateSheetForm";
-import { EstimateForm, EstimateRowObject, SearchEstimate, ServiceRowObject, Surveyor } from "../../Interfaces/Interface";
+import { EstimateForm, EstimateRowObject, SearchEstimate, ServiceRowObject, Surveyor } from "@/types";
+import AddSurveyor from "../Components/AddSurveyor";
 
 export default function PAGE() {
     // Get the current date
@@ -46,11 +46,13 @@ export default function PAGE() {
     const [cRegistration, setcRegistration] = useState('');
     const [PaymentMode, setPaymentMode] = useState('');
     const [cSurveyor, setcSurveyor] = useState('');
-    const [cSurveyorNTN, setcSurveyorNTN] = useState('');
+    const [NTN, setNTN] = useState('');
+    const [GSTR, setGSTR] = useState('');
     const [cDriverUser, setcDriverUser] = useState('');
     const [insurance, setInsurance] = useState('');
     const [isRoyal, setIsRoyal] = useState(true);
     const [estId, setEstId] = useState('');
+
 
     const [servicesDetailsRows, setServicesDetailsRow] = useState<ServiceRowObject>({})
     const [estimateRows, setEstimateRows] = useState<EstimateRowObject>({});
@@ -167,7 +169,8 @@ export default function PAGE() {
         cMake: cMake,
         cModel: cModel,
         cSurveyor: cSurveyor,
-        cSurveyorNTN: cSurveyorNTN,
+        NTN: NTN,
+        GSTR: GSTR,
         cDriverUser: cDriverUser,
         Insurance: insurance,
         EstimateTableData: estimateRows,
@@ -197,7 +200,8 @@ export default function PAGE() {
             cMake: cMake,
             cModel: cModel,
             cSurveyor: cSurveyor,
-            cSurveyorNTN: cSurveyorNTN,
+            NTN: NTN,
+            GSTR: GSTR,
             cDriverUser: cDriverUser,
             Insurance: insurance,
             EstimateTableData: {},
@@ -256,7 +260,6 @@ export default function PAGE() {
     } = useForm<Surveyor>({
         defaultValues: {
             cSurveyor: cSurveyor,
-            cSurveyorNTN: cSurveyorNTN,
         }
     })
 
@@ -363,15 +366,11 @@ export default function PAGE() {
 
                                 {/* Surveyors, Payment Mode & Insurances */}
                                 <div className="flex flex-row mt-4 items-center justify-center gap-12">
-                                    <Input placeholder="Surveyor NTN" className="w-1/6" disabled value={cSurveyorNTN} />
                                     <div className="flex flex-row gap-1">
-
                                         <Select onValueChange={(e) => {
                                             let values = JSON.parse(e);
                                             setValue('cSurveyor', values.surveyorName);
                                             setcSurveyor(values.surveyorName);
-                                            setValue('cSurveyorNTN', values.surveyorNTN);
-                                            setcSurveyorNTN(values.surveyorNTN);
                                         }} defaultValue={cSurveyor}>
                                             <SelectTrigger className="w-[180px]">
                                                 <SelectValue placeholder="Select Surveyor" />
@@ -380,7 +379,7 @@ export default function PAGE() {
                                                 {
                                                     Surveyors?.map((surveyor) => (
                                                         <SelectItem key={uuidv4()} value={
-                                                            JSON.stringify({ surveyorName: surveyor.cSurveyor, surveyorNTN: surveyor.cSurveyorNTN })
+                                                            JSON.stringify({ surveyorName: surveyor.cSurveyor })
                                                         }>
                                                             {surveyor.cSurveyor}
                                                         </SelectItem>
@@ -388,7 +387,7 @@ export default function PAGE() {
                                                 }
                                             </SelectContent>
                                         </Select>
-                                        <AddSurveyor setValueSurveyor={setValueSurveyor} isAddSurveyorLoading={isAddSurveyorLoading} />
+                                        <AddSurveyor isAddSurveyorLoading={isAddSurveyorLoading} setValueSurveyor={setValueSurveyor} />
                                     </div>
                                     <Select onValueChange={(e) => {
                                         setValue('PaymentMode', e);
@@ -403,8 +402,13 @@ export default function PAGE() {
                                         </SelectContent>
                                     </Select>
                                     <Select onValueChange={(e) => {
-                                        setValue('Insurance', e);
-                                        setInsurance(e);
+                                        let values = JSON.parse(e);
+                                        setValue('Insurance', values.insuranceName);
+                                        setValue('NTN', values.insuranceNTN);
+                                        setValue('GSTR', values.insuranceGSTR)
+                                        setInsurance(values.insuranceName);
+                                        setNTN(values.insuranceNTN);
+                                        setGSTR(values.insuranceGSTR);
                                     }} defaultValue={insurance}>
                                         <SelectTrigger className="w-[180px]">
                                             <SelectValue placeholder="Select Insurance" />
@@ -413,13 +417,17 @@ export default function PAGE() {
                                             {
                                                 allInsurances?.map((insurance) => (
 
-                                                    <SelectItem key={uuidv4()} value={insurance.name ? insurance.name : 'NULL'}>
+                                                    <SelectItem key={uuidv4()} value={
+                                                        JSON.stringify({ insuranceName: insurance.name, insuranceNTN: insurance.NTN, insuranceGSTR: insurance.GSTR })
+                                                    }>
                                                         {insurance.name}
                                                     </SelectItem>
                                                 ))
                                             }
                                         </SelectContent>
                                     </Select>
+                                    <Input placeholder="Insurance NTN" className="w-1/6" disabled value={NTN} />
+                                    <Input placeholder="Insurance GSTR" className="w-1/6" disabled value={GSTR ? GSTR : 'Not Defined'} />
                                 </div>
 
                                 {/* Print with Royal Honda Title or Mehr Motors Title */}

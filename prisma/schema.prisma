@@ -31,6 +31,8 @@ model JobCard {
   JobCheckedBy             String?
   WorkType                 String?
   Insurance                String?
+  NTN                      String?
+  GSTR                     String?
   Status                   String?
   carRegistration          String?
   RequiredWorkDetails      String?
@@ -71,6 +73,8 @@ model EstimatedCostWork {
   cDriverUser            String?
   cSurveyorNTN           String?
   Insurance              String?
+  NTN                    String?
+  GSTR                   String?
   cKiloMeters            Float?
   TotalServiceFee        Float?
   TotalEstimateFee       Float?
@@ -109,10 +113,11 @@ model Invoice {
 model InsuranceCompanies {
   id   Int     @id @default(autoincrement())
   name String? @unique
+  NTN  String? @unique
+  GSTR String?
 }
 
 model Surveyors {
-  id           Int     @id @default(autoincrement())
-  cSurveyor    String? @unique
-  cSurveyorNTN String? @unique
+  id        Int     @id @default(autoincrement())
+  cSurveyor String? @unique
 }

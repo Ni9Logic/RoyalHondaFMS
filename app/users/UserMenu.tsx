@@ -2,44 +2,74 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../components/ui/button';
 import Loader from '../components/ui/loader';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 
 export default function UserMenu() {
-    const [isJobCardLoading, setIsJobCardLoading] = useState(false);
-    const [isEstimateLoading, setIsEstimateLoading] = useState(false);
-    const [isInvoiceLoading, setIsInvoiceLoading] = useState(false);
-    const [isLedgerLoading, setIsLedgerLoading] = useState(false);
+    const [isAllJobCardLoading, setisAllJobCardLoading] = useState(false);
+    const [isCreateJobCardLoading, setisCreateJobCardLoading] = useState(false);
+    const [isCreateEstimateLoading, setCreateEstimateLoading] = useState(false);
+    const [isViewAllEstimatesLoading, setisViewAllEstimatesLoading] = useState(false);
+
     const router = useRouter();
     return (
         <section className="flex flex-col text-gray-600 body-font h-[75vh] justify-center items-center">
-            <div className="gap-2 flex flex-col pt-5 w-60">
-                <Button className='flex gap-1' disabled={isJobCardLoading} onClick={() => {
-                    setIsJobCardLoading(true);
-                    router.push('/users/jobCards');
-                }}>
-                    Job Card
-                    <Loader isLoading={isJobCardLoading} />
-                </Button>
-                <Button className='flex gap-1' disabled={isEstimateLoading} onClick={() => {
-                    setIsEstimateLoading(true);
-                    router.push('/users/Estimate');
-                }}>
-                    Estimates
-                    <Loader isLoading={isEstimateLoading} />
-                </Button>
-                <Button className='flex gap-1' disabled={isInvoiceLoading} onClick={() => {
-                    setIsInvoiceLoading(true);
-                    router.push('/users/Estimate/newEstimate');
-                }}>
-                    Invoices
-                    <Loader isLoading={isInvoiceLoading} />
-                </Button>
-                <Button className='flex gap-1' disabled={isLedgerLoading} onClick={() => {
-                    setIsLedgerLoading(true);
-                    router.push('/users/Estimate/newEstimate');
-                }}>
-                    Ledgers
-                    <Loader isLoading={isLedgerLoading} />
-                </Button>
+            <div className="gap-2 pt-5">
+                <Tabs defaultValue="Jobcard" className="w-full">
+                    <TabsList>
+                        <TabsTrigger value="Jobcard">Jobcard</TabsTrigger>
+                        <TabsTrigger value="Estimate">Estimate</TabsTrigger>
+                        <TabsTrigger value="Invoice">Invoice</TabsTrigger>
+                        <TabsTrigger value="Ledger">Ledger</TabsTrigger>
+                        <TabsTrigger value="Summary Sheet">Summary Sheet</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="Jobcard" className='w-full flex items-center justify-center gap-2'>
+                        <Button disabled={isCreateJobCardLoading} onClick={() => {
+                            setisCreateJobCardLoading(true);
+                            router.push('/users/jobCards/createJobCard');
+                        }} className="flex gap-1">
+                            Create Job Card
+                            <Loader isLoading={isCreateJobCardLoading} />
+                        </Button>
+                        <Button disabled={isAllJobCardLoading} onClick={async () => {
+                            setisAllJobCardLoading(true);
+                            router.push('/users/jobCards/viewAllJobCards')
+                        }} className="flex gap-1">
+                            All Job Cards
+                            <Loader isLoading={isAllJobCardLoading} />
+                        </Button>
+                    </TabsContent>
+                    <TabsContent value="Estimate" className='w-full flex items-center justify-center gap-2'>
+                        <Button disabled={isCreateEstimateLoading} className="flex gap-1" onClick={() => {
+                            setCreateEstimateLoading(true);
+                            router.push('/users/Estimate/newEstimate');
+                        }}>
+                            Create Estimate
+                            <Loader isLoading={isCreateEstimateLoading} />
+                        </Button>
+                        <Button disabled={isViewAllEstimatesLoading} className="flex gap-1" onClick={() => {
+                            setisViewAllEstimatesLoading(true);
+                            router.push('/users/Estimate/viewAllEstimates');
+                        }}>
+                            View All Estimates
+                            <Loader isLoading={isViewAllEstimatesLoading} />
+                        </Button>
+                    </TabsContent>
+                    <TabsContent value="Invoice" className='w-full flex items-center justify-center'>
+                        <Button variant={'secondary'}>
+                            In Progress
+                        </Button>
+                    </TabsContent>
+                    <TabsContent value="Ledger" className='w-full flex items-center justify-center'>
+                        <Button variant={'secondary'}>
+                            In Progress
+                        </Button></TabsContent>
+                    <TabsContent value="Summary Sheet" className='w-full flex items-center justify-center'>
+                        <Button variant={'secondary'}>
+                            In Progress
+                        </Button>
+                    </TabsContent>
+                </Tabs>
             </div>
         </section >
     )

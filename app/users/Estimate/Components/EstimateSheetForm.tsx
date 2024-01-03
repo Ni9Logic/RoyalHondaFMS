@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Surveyor } from "../../Interfaces/Interface";
+import { Surveyor } from "@/types";
 
 interface EstimateSheetFormProps {
     estId: string;
