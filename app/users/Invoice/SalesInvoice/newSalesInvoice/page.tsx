@@ -37,9 +37,8 @@ export default function PAGE() {
                             Submit
                             <Loader isLoading={isLoading} />
                         </Button>
-                        <Button variant={"secondary"} type="button" disabled={isLoading} className="flex flex-row gap-1 w-2/6">
+                        <Button variant={"secondary"} type="button">
                             Preview
-                            <Loader isLoading={isLoading} />
                         </Button>
                     </div>
                 </form>
