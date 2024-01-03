@@ -1,14 +1,3 @@
-export interface EstimateRowType {
-  partNo: string;
-  partDesc: string;
-  partQty: number;
-  partPrice: number;
-  partTotalPrice: number;
-}
-export interface EstimateRowObject {
-  [key: string]: EstimateRowType;
-}
-
 export interface ServicesDetailsType {
   details: string;
   charges: number;
@@ -98,3 +87,43 @@ export type InsuranceCompaniesData = {
   NTN: string?;
   GSTR: string;
 };
+
+export type Invoice = {
+  id?: number,
+  InvoiceType: string,
+  InsuranceName: string,
+  InsuranceNTN: string,
+  InsuranceGSTR: string,
+  SurveyorName: string,
+  DriverUser: string,
+  CarMake: string,
+  CarModel: string,
+  CarRegNum: string,
+  PaymentMode: string,
+  PartsTable: EstimateRowObject,
+  TAmountPart: number,
+  GSTPercent: number,
+  GSTCost: number,
+  TAmountGST: number, // TAmountParts + GSTCost
+  DepPercent: number,
+  TAmountDep: number, // TAmountDep - TAmountGST
+  EstimateNum: number, // With Help of Estimate Number you can Put TLaborAmount from that Estimate 
+  TLaborAmount: number,
+  PSTPercent: number,
+  PSTCost: number, // PSTPercent of TLaborAmount
+  TLaborAmountPST: number // TLaborAmount + PSTCost
+  GrandTAmount: number // TAmountDep + TLaborAmountPST
+  LossNumber?: string,
+  CreatedAt: string,
+}
+
+export interface EstimateRowType {
+  partNo: string;
+  partDesc: string;
+  partQty: number;
+  partPrice: number;
+  partTotalPrice: number;
+}
+export interface EstimateRowObject {
+  [key: string]: EstimateRowType;
+}

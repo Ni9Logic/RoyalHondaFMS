@@ -1,0 +1,1 @@
+DELETE FROM Surveyors Where id = 43;
