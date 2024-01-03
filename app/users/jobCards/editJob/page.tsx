@@ -10,7 +10,7 @@ import { useSearchParams } from 'next/navigation'
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Loader from "@/app/components/ui/loader";
-import { InsuranceCompaniesData } from "../../createJobCard/page";
+import { InsuranceCompaniesData } from "@/types";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";

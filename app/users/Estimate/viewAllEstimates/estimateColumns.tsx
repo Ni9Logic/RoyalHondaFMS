@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useState } from "react";
 
-import { EstimateForm } from "../../Interfaces/Interface";
+import { EstimateForm } from "@/types";
 
 
 export const columns: ColumnDef<EstimateForm>[] = [
