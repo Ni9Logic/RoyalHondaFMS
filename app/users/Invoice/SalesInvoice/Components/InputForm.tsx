@@ -1,11 +1,12 @@
 'use client'
 import { InvoiceData } from "@/app/lib/Resources";
 import { Input } from "@/components/ui/input";
-import { InsuranceCompaniesData, Invoice } from "@/types";
+import { InsuranceCompaniesData, Invoice, Surveyor } from "@/types";
 import { Label } from "@radix-ui/react-label";
 import React, { useEffect, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { SelectCustomer } from "./SelectAbleInsurance";
+import SelectSurveyor from "./SelectAbleSurveyor";
 
 interface InputFormProps {
     setValue: UseFormSetValue<Invoice>
@@ -14,6 +15,7 @@ interface InputFormProps {
 
 const InputForm: React.FC<InputFormProps> = ({ setValue, register }: InputFormProps) => {
     const [insurance, setInsurance] = useState<InsuranceCompaniesData>();
+    const [surveyor, setSurveyor] = useState<Surveyor>();
     const currentDate = new Date();
 
     // Extract the year, month, and day
@@ -86,11 +88,8 @@ const InputForm: React.FC<InputFormProps> = ({ setValue, register }: InputFormPr
                     </Label>
                     <Input type="text" placeholder="Username" {...register('DriverUser')} />
                 </div>
-                <div>
-                    <Label className="text-sm">
-                        Surveyor
-                    </Label>
-                    <Input type="text" placeholder="Selectable Soon" disabled={true} />
+                <div className="mt-[1.5rem]">
+                    <SelectSurveyor setSurveyor={setSurveyor} setValueForm={setValue} />
                 </div>
                 <div>
                     <Label className="text-sm">

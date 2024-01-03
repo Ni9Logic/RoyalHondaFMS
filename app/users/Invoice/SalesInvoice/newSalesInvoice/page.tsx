@@ -20,6 +20,7 @@ export default function PAGE() {
     })
 
     const onSubmit: SubmitHandler<Invoice> = (Data: Invoice) => {
+        console.log(Data);
     }
 
     return (
