@@ -224,7 +224,6 @@ export default function PAGE() {
             OverAllAmount: 0,
         }
     })
-    const [isPrinting, setIsPrinting] = useState(false);
 
     const [isLoading, setLoading] = useState(false);
     const onSubmit: SubmitHandler<EstimateForm> = async (data: EstimateForm) => {

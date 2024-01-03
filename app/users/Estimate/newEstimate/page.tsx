@@ -551,13 +551,13 @@ export default function PAGE() {
                                                     setDiscountEstimate(parseFloat(e.target.value));
                                                     setValue('DiscountEstimate', parseInt(e.target.value));
                                                 }}
-                                                className={"mt-2 flex justify-end ml-auto w-[2/6]"} />
+                                                className={"mt-2 flex justify-end ml-auto w-[2/6]"} defaultValue={DiscountEstimate}/>
                                         </div>
                                         <Input onChange={(e) => {
                                             setDiscountEstimateFigure(parseInt(e.target.value));
                                             setValue('DiscountEstimateFigure', parseInt(e.target.value));
                                         }}
-                                            className={"mt-2 flex w-3/12 ml-auto"} type="number" placeholder={"Discount Parts (Figure)"} />
+                                            className={"mt-2 flex w-3/12 ml-auto"} type="number" placeholder={"Discount Parts (Figure)"} defaultValue={DiscountEstimateFigure}/>
                                     </div>
 
                                     {/* Labor Charges */}
@@ -608,7 +608,7 @@ export default function PAGE() {
                                                                         setServicesDetailsRow(updatedRows);
                                                                         setValue('ServicesDetailsTableData', updatedRows);
                                                                     }}
-                                                                    className={"border-none outline-none w-full"} />
+                                                                    className={"border-none outline-none w-full"}/>
                                                             </td>
                                                             <td className="px-6 py-4">
                                                                 <div className={"gap-2 flex"}>
@@ -645,14 +645,14 @@ export default function PAGE() {
                                                 setDiscountServices(parseInt(e.target.value));
                                                 setValue('DiscountServices', parseInt(e.target.value));
                                             }}
-                                                className={"mt-2 flex w-1/6 ml-auto"} type="number" placeholder={"Discount Services %"} />
+                                                className={"mt-2 flex w-1/6 ml-auto"} type="number" placeholder={"Discount Services %"} defaultValue={DiscountServices}/>
 
                                         </div>
                                         <Input onChange={(e) => {
                                             setDiscountServicesFigure(parseInt(e.target.value));
                                             setValue('DiscountServicesFigure', parseInt(e.target.value));
                                         }}
-                                            className={"mt-2 flex w-3/12 ml-auto"} type="number" placeholder={"Discount Services (Figure)"} />
+                                            className={"mt-2 flex w-3/12 ml-auto"} type="number" placeholder={"Discount Services (Figure)"} defaultValue={DiscountServicesFigure}/>
                                     </div>
 
                                     {/* Summary Table */}
