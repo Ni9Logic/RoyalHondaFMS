@@ -53,6 +53,8 @@ export default function PAGE() {
     const [insurance, setInsurance] = useState('');
     const [isRoyal, setIsRoyal] = useState(true);
     const [estId, setEstId] = useState('');
+    const [NTN, setNTN] = useState('');
+    const [GSTR, setGSTR] = useState('');
 
 
     const [servicesDetailsRows, setServicesDetailsRow] = useState<ServiceRowObject>({})
@@ -170,9 +172,10 @@ export default function PAGE() {
         cMake: cMake,
         cModel: cModel,
         cSurveyor: cSurveyor,
-        cSurveyorNTN: cSurveyorNTN,
         cDriverUser: cDriverUser,
         Insurance: insurance,
+        GSTR: GSTR,
+        NTN: NTN,
         EstimateTableData: estimateRows,
         ServicesDetailsTableData: servicesDetailsRows,
         DiscountServices: DiscountServices,
@@ -201,9 +204,10 @@ export default function PAGE() {
             cMake: cMake,
             cModel: cModel,
             cSurveyor: cSurveyor,
-            cSurveyorNTN: cSurveyorNTN,
             cDriverUser: cDriverUser,
             Insurance: insurance,
+            GSTR: GSTR,
+            NTN: NTN,
             EstimateTableData: {},
             ServicesDetailsTableData: {},
             DiscountServices: 0,
@@ -314,15 +318,19 @@ export default function PAGE() {
         // @ts-ignore
         axios.post('/api/getEstimate', { id: parseInt(searchPararms.get('id')?.toString()) })
             .then((response: AxiosResponse) => {
-                let myData = response?.data?.Message;
+                let myData: EstimateForm = response?.data?.Message;
+
+                // @ts-ignore
                 let EstimateRows: EstimateRowObject = JSON.parse(myData?.EstimateTableData);
+
+                // @ts-ignore
                 let ServicesRows: ServiceRowObject = JSON.parse(myData?.ServicesTableData);
+
                 setValue('cName', myData?.cName);
                 setValue('jobId', myData?.jobId);
                 setValue('cMake', myData?.cMake);
                 setValue('cModel', myData?.cModel);
                 setValue('cSurveyor', myData?.cSurveyor);
-                setValue('cSurveyorNTN', myData?.cSurveyorNTN);
                 setValue('cDriverUser', myData?.cDriverUser);
                 setValue('Insurance', myData?.Insurance);
                 setValue('cRegistration', myData?.cRegistration);
@@ -338,15 +346,23 @@ export default function PAGE() {
                 setValue('TotalEstimateFee', myData?.TotalEstimateFee);
                 setValue('EstimateTableData', EstimateRows);
                 setValue('ServicesDetailsTableData', ServicesRows);
+                setValue('GSTR', myData?.GSTR);
+                setValue('NTN', myData?.NTN);
+                setValue('id', myData?.id);
+
+
+                // @ts-ignore
                 setEstId(myData?.id);
+
                 setcName(myData?.cName);
                 setjobId(myData?.jobId);
                 setcMake(myData?.cMake);
                 setcModel(myData?.cModel);
                 setcSurveyor(myData?.cSurveyor);
-                setcSurveyorNTN(myData?.cSurveyorNTN);
                 setcDriverUser(myData?.cDriverUser);
                 setInsurance(myData?.Insurance);
+                setGSTR(myData?.GSTR);
+                setNTN(myData?.NTN);
                 setcRegistration(myData?.cRegistration);
                 setPaymentMode(myData?.PaymentMode);
                 setIsRoyal(myData?.isRoyal);
@@ -357,7 +373,6 @@ export default function PAGE() {
                 setDiscountEstimateFigure(myData?.DiscountEstimateFigure);
                 setEstimateRows(EstimateRows);
                 setServicesDetailsRow(ServicesRows);
-                setValue('id', myData?.id);
             })
     }
     useEffect(() => {
@@ -408,18 +423,14 @@ export default function PAGE() {
 
                         {/* Surveyors, Payment Mode & Insurances */}
                         <div className="flex flex-row mt-4 items-center justify-center gap-12">
-                            <Input placeholder="Surveyor NTN" className="w-1/6" disabled value={cSurveyorNTN} />
                             <div className="flex flex-row gap-1">
-
                                 <Select onValueChange={(e) => {
                                     let values = JSON.parse(e);
                                     setValue('cSurveyor', values.surveyorName);
                                     setcSurveyor(values.surveyorName);
-                                    setValue('cSurveyorNTN', values.surveyorNTN);
-                                    setcSurveyorNTN(values.surveyorNTN);
                                 }} defaultValue={cSurveyor}>
                                     <SelectTrigger className="w-[180px]">
-                                        <SelectValue placeholder="Select Surveyor" />
+                                        <SelectValue placeholder={`${cSurveyor ? cSurveyor : 'Select Surveyor'}`} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {
@@ -440,7 +451,7 @@ export default function PAGE() {
                                 setPaymentMode(e);
                             }} defaultValue={PaymentMode}>
                                 <SelectTrigger className="w-[180px]">
-                                    <SelectValue placeholder="Payment Mode" />
+                                    <SelectValue placeholder={`${PaymentMode ? PaymentMode : 'Payment Mode'}`} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="CASH">CASH</SelectItem>
@@ -448,23 +459,32 @@ export default function PAGE() {
                                 </SelectContent>
                             </Select>
                             <Select onValueChange={(e) => {
-                                setValue('Insurance', e);
-                                setInsurance(e);
+                                let values = JSON.parse(e);
+                                setValue('Insurance', values.insuranceName);
+                                setValue('NTN', values.insuranceNTN);
+                                setValue('GSTR', values.insuranceGSTR)
+                                setInsurance(values.insuranceName);
+                                setNTN(values.insuranceNTN);
+                                setGSTR(values.insuranceGSTR);
                             }} defaultValue={insurance}>
                                 <SelectTrigger className="w-[180px]">
-                                    <SelectValue placeholder="Select Insurance" />
+                                    <SelectValue placeholder={`${insurance ? insurance : 'Select Insurance'}`} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {
                                         allInsurances?.map((insurance) => (
 
-                                            <SelectItem key={uuidv4()} value={insurance.name ? insurance.name : 'NULL'}>
+                                            <SelectItem key={uuidv4()} value={
+                                                JSON.stringify({ insuranceName: insurance.name, insuranceNTN: insurance.NTN, insuranceGSTR: insurance.GSTR })
+                                            }>
                                                 {insurance.name}
                                             </SelectItem>
                                         ))
                                     }
                                 </SelectContent>
                             </Select>
+                            <Input placeholder="Insurance NTN" className="w-1/6" disabled value={NTN} />
+                            <Input placeholder="Insurance GSTR" className="w-1/6" disabled value={GSTR ? GSTR : 'NULL'} />
                         </div>
 
                         {/* Print with Royal Honda Title or Mehr Motors Title */}

@@ -22,7 +22,8 @@ export async function POST(request: Request) {
                     isRoyal: body.isRoyal ? 'Royal Honda' : 'Mehr Motors',
                     Insurance: body.Insurance,
                     cSurveyor: body.cSurveyor,
-                    cSurveyorNTN: body.cSurveyorNTN,
+                    GSTR: body.GSTR,
+                    NTN: body.NTN,
                     cRegistration: body.cRegistration,
                     DiscountEstimate: body.DiscountEstimate,
                     DiscountServices: body.DiscountServices,
@@ -68,7 +69,8 @@ export async function POST(request: Request) {
                     isRoyal: body.isRoyal ? 'Royal Honda' : 'Mehr Motors',
                     Insurance: body.Insurance,
                     cSurveyor: body.cSurveyor,
-                    cSurveyorNTN: body.cSurveyorNTN,
+                    GSTR: body.GSTR,
+                    NTN: body.NTN,
                     cRegistration: body.cRegistration,
                     DiscountEstimate: body.DiscountEstimate,
                     DiscountServices: body.DiscountServices,
@@ -117,6 +119,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ Message: "Job Card Created" }, { status: 200 })
         }
     } catch (error: any) {
+        console.log(error);
         return NextResponse.json({ Message: 'Internal Server Error' }, { status: 500 });
     }
 }
