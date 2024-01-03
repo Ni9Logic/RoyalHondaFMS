@@ -25,7 +25,6 @@ export interface EstimateForm {
   cMake: string;
   cModel: string;
   cSurveyor: string;
-  cSurveyorNTN: string;
   cDriverUser: string;
   Insurance: string;
   NTN: string;

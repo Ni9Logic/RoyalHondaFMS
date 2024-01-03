@@ -10,49 +10,13 @@ import { useSearchParams } from 'next/navigation'
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Loader from "@/app/components/ui/loader";
-import { InsuranceCompaniesData } from "@/types";
+import { InsuranceCompaniesData, JOBFormData } from "@/types";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns/format";
 import { Calendar } from "@/components/ui/calendar";
 
-export type JOBFormData = {
-    SerialNo: string,
-    CustomerName: string,
-    DriverUser: string,
-    CellNo: string,
-    JobCheckedBy: string,
-    WorkType: string,
-    Make: string,
-    Model: string,
-    Insurance: string,
-    Status: string,
-    RegistrationNumber: string,
-    RequiredWorkDetails: string,
-    OtherAdditionalWorkDetails: string,
-    Fuel: string,
-    Mileage: string,
-    Lighter: boolean,
-    Ashtray: boolean,
-    FloorMats: boolean,
-    OriginalBook: boolean,
-    SeatCovers: boolean,
-    RadioAntena: boolean,
-    SpareWheel: boolean,
-    WheelRod: boolean,
-    JackHandle: boolean,
-    Tools: boolean,
-    ExtraThings: boolean,
-    FrameNo: string,
-    BatteryNumber: string,
-    InReceivedBy: string,
-    InReceivedFrom: string,
-    InTime: string,
-    OutReceivedBy: string,
-    OutReceivedFrom: string,
-    OutTime: string,
-};
 
 export default function Page() {
     // Date Time Selection
@@ -67,7 +31,8 @@ export default function Page() {
         setValue,
     } = useForm<JOBFormData>({
         defaultValues: {
-            SerialNo: searchParams.get('SerialNo')?.toString(),
+            // @ts-ignore
+            SerialNo: parseInt(searchParams.get('SerialNo')?.toString()),
             CustomerName: searchParams.get('CustomerName')?.toString(),
             DriverUser: searchParams.get('DriverUser')?.toString(),
             CellNo: searchParams.get('CustomerContact')?.toString(),
@@ -79,7 +44,6 @@ export default function Page() {
             Status: searchParams.get('Status')?.toString(),
             RegistrationNumber: searchParams.get('RegistrationNumber')?.toString(),
             RequiredWorkDetails: searchParams.get('RequiredWorkDetails')?.toString(),
-            OtherAdditionalWorkDetails: searchParams.get('OtherAdditionalWork')?.toString(),
             Fuel: searchParams.get('Fuel')?.toString(),
             Mileage: searchParams.get('Mileage')?.toString(),
             Lighter: searchParams.get('Lighter') ? true : false,
@@ -527,7 +491,7 @@ export default function Page() {
                                 }} defaultValue={searchParams.get('RequiredWorkDetails')?.toString()} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                                 <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Addtional Work Details (If Required)</label>
                                 <textarea defaultValue={searchParams.get('AdditionalWorkDetails')?.toString()} onChange={(e) => {
-                                    setValue('OtherAdditionalWorkDetails', e.target.value);
+                                    setValue('OtherAdditionalWork', e.target.value);
                                 }} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                                 <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
                                     <thead className="text-xs text-white uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
