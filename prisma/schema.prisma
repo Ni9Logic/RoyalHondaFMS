@@ -98,18 +98,6 @@ model PriceSheet {
   partPrice       String?
 }
 
-model Invoice {
-  id               Int     @id @default(autoincrement())
-  customerName     String?
-  customerContact  String?
-  NTN              String?
-  carColor         String?
-  carRegistration  String?
-  Mileage          String?
-  dateTime         String?
-  descriptionPrice Json?
-}
-
 model InsuranceCompanies {
   id   Int     @id @default(autoincrement())
   name String? @unique
@@ -120,4 +108,33 @@ model InsuranceCompanies {
 model Surveyors {
   id        Int     @id @default(autoincrement())
   cSurveyor String? @unique
+}
+
+model Invoice {
+  id              Int     @id @default(autoincrement())
+  InvoiceType     String
+  InsuranceName   String
+  InsuranceNTN    String
+  InsuranceGSTR   String
+  SurveyorName    String
+  DriverUser      String
+  CarMake         String
+  CarModel        String
+  CarRegNum       String
+  PaymentMode     String
+  PartsTable      Json
+  TAmountPart     Float
+  GSTPercent      Float
+  GSTCost         Float
+  TAmountGST      Float // TAmountParts + GSTCost
+  DepPercent      Float
+  TAmountDep      Float // TAmountDep - TAmountGST
+  EstimateNum     String // With Help of Estimate Number you can Put TLaborAmount from that Estimate 
+  TLaborAmount    Float
+  PSTPercent      Float
+  PSTCost         Float // PSTPercent of TLaborAmount
+  TLaborAmountPST Float // TLaborAmount + PSTCost
+  GrandTAmount    Float // TAmountDep + TLaborAmountPST
+  LossNumber      String?
+  CreatedAt       String
 }
