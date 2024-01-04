@@ -11,9 +11,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { EstimateRowObject, Invoice } from "@/types";
+import { EstimateRowObject, Invoice, PriceSheet } from "@/types";
 import { Label } from "@radix-ui/react-label";
-import React, { Dispatch, SetStateAction } from "react";
+import axios, { Axios, AxiosResponse } from "axios";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 interface InvoiceTableProps {
@@ -68,6 +69,22 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
         InvoiceData.PartsTable = invoiceRows;
         setGenerateSummary(true);
     }
+
+    async function fetchPart(partNo: string, key: string) {
+        axios.post('/api/getPartNo', { partNo })
+            .then((res: AxiosResponse) => {
+                const myData: PriceSheet = res?.data?.Message;
+                const updatedRows = { ...invoiceRows };
+                updatedRows[key].partDesc = myData?.partDescription;
+                updatedRows[key].partPrice = parseInt(myData?.partPrice);
+                setInvoiceRows(updatedRows);
+            })
+            .catch((error: any) => {
+                console.log(error);
+            })
+    }
+
+
     return (
         <>
             <div className="items-center justify-center flex flex-col">
@@ -93,10 +110,12 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                     </TableCell>
                                     {/* Part No */}
                                     <TableCell className="w-1/5">
-                                        <Input type="text" onChange={(e) => {
+                                        <Input type="text" onChange={async (e) => {
                                             const updatedRows = { ...invoiceRows };
                                             updatedRows[key].partNo = e.target.value;
                                             setInvoiceRows(updatedRows);
+                                            await fetchPart(e.target.value, key);
+
                                         }} />
                                     </TableCell>
                                     {/* Part Description */}
@@ -106,8 +125,9 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                                 const updatedRows = { ...invoiceRows }
                                                 updatedRows[key].partDesc = e.target.value
                                                 setInvoiceRows(updatedRows)
-                                            }} type="text" />
+                                            }} type="text" defaultValue={invoiceRows[key].partDesc} />
                                     </TableCell>
+                                    {/* Part Price */}
                                     <TableCell className="w-1/5">
                                         <Input type="number"
                                             onChange={(e) => {
@@ -115,8 +135,9 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                                 updatedRows[key].partPrice = parseInt(e.target.value);
                                                 updatedRows[key].partTotalPrice = updatedRows[key].partQty * updatedRows[key].partPrice;
                                                 setInvoiceRows(updatedRows);
-                                            }} />
+                                            }} defaultValue={invoiceRows[key].partPrice} />
                                     </TableCell>
+                                    {/* Part Qty */}
                                     <TableCell className="w-3">
                                         <Input type="number" onChange={(e) => {
                                             const updatedRows = { ...invoiceRows };

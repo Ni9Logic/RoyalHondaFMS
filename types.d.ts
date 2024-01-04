@@ -127,3 +127,11 @@ export interface EstimateRowType {
 export interface EstimateRowObject {
   [key: string]: EstimateRowType;
 }
+
+export interface PriceSheet {
+  id?: number;
+  partNo: string;
+  partDescription: string;
+  partModel: string;
+  partPrice: string;
+}
