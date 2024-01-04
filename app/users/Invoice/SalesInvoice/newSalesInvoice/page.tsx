@@ -5,11 +5,15 @@ import InputForm from "../Components/InputForm";
 import { InvoiceData } from "@/app/lib/Resources";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Invoice } from "@/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Loader from "@/app/components/ui/loader";
+import InvoiceTable from "../Components/InvoiceTable";
 
 export default function PAGE() {
+    useEffect(() => {
+        console.log(InvoiceData.PartsTable);
+    })
     const [isLoading, setIsLoading] = useState(false)
     const {
         register,
@@ -20,7 +24,7 @@ export default function PAGE() {
     })
 
     const onSubmit: SubmitHandler<Invoice> = (Data: Invoice) => {
-        console.log(Data);
+        console.log(InvoiceData.PartsTable);
     }
 
     return (
@@ -33,6 +37,11 @@ export default function PAGE() {
                 <form id="searchEstimateForm"></form>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <InputForm setValue={setValue} register={register} />
+
+                    {/* Table For Invoice */}
+                    <div className="w-full flex flex-row mt-20">
+                        <InvoiceTable setValue={setValue} />
+                    </div>
                     <div className="w-full flex justify-center gap-4 mt-10 flex-row">
                         <Button type="submit" disabled={isLoading} className="flex flex-row gap-1 w-2/6">
                             Submit
