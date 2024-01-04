@@ -9,12 +9,12 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Loader from "@/app/components/ui/loader";
 import InvoiceTable from "../Components/InvoiceTable";
+import InvoiceSummary from "../Components/InvoiceSummary";
 
 export default function PAGE() {
-    useEffect(() => {
-        console.log(InvoiceData.PartsTable);
-    })
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [isGenerateSummary, setGenerateSummary] = useState(false);
+
     const {
         register,
         handleSubmit,
@@ -40,8 +40,14 @@ export default function PAGE() {
 
                     {/* Table For Invoice */}
                     <div className="w-full flex flex-row mt-20">
-                        <InvoiceTable setValue={setValue} />
+                        <InvoiceTable setValue={setValue} setGenerateSummary={setGenerateSummary}/>
                     </div>
+                    {
+                        isGenerateSummary &&
+                        <div className="w-full flex flex-row mt-20">
+                            <InvoiceSummary />
+                        </div>
+                    }
                     <div className="w-full flex justify-center gap-4 mt-10 flex-row">
                         <Button type="submit" disabled={isLoading} className="flex flex-row gap-1 w-2/6">
                             Submit

@@ -13,13 +13,14 @@ import {
 } from "@/components/ui/table"
 import { EstimateRowObject, Invoice } from "@/types";
 import { Label } from "@radix-ui/react-label";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 interface InvoiceTableProps {
     setValue: UseFormSetValue<Invoice>,
+    setGenerateSummary: Dispatch<SetStateAction<boolean>>
 }
-export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue }: InvoiceTableProps) => {
+export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerateSummary }: InvoiceTableProps) => {
     const [invoiceRows, setInvoiceRows] = React.useState<EstimateRowObject>({
         [uuidv4()]: {
             partNo: "",
@@ -65,6 +66,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue }: InvoiceT
     const handleGenerateSummary = () => {
         setValue('PartsTable', invoiceRows);
         InvoiceData.PartsTable = invoiceRows;
+        setGenerateSummary(true);
     }
     return (
         <>
@@ -111,6 +113,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue }: InvoiceT
                                             onChange={(e) => {
                                                 const updatedRows = { ...invoiceRows };
                                                 updatedRows[key].partPrice = parseInt(e.target.value);
+                                                updatedRows[key].partTotalPrice = updatedRows[key].partQty * updatedRows[key].partPrice;
                                                 setInvoiceRows(updatedRows);
                                             }} />
                                     </TableCell>
@@ -118,10 +121,13 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue }: InvoiceT
                                         <Input type="number" onChange={(e) => {
                                             const updatedRows = { ...invoiceRows };
                                             updatedRows[key].partQty = parseInt(e.target.value);
+                                            updatedRows[key].partTotalPrice = updatedRows[key].partQty * updatedRows[key].partPrice;
                                             setInvoiceRows(updatedRows);
                                         }} />
                                     </TableCell>
-                                    <TableCell>{(invoiceRows[key].partQty * invoiceRows[key].partPrice).toLocaleString() + ' Rs'}</TableCell>
+                                    <TableCell>{
+                                        (invoiceRows[key].partQty * invoiceRows[key].partPrice).toLocaleString() + ' Rs'}
+                                    </TableCell>
                                     <TableCell>
                                         <Button type="button" variant={"ghost"} onClick={
                                             () => handleRemoveInvoiceRow(key)
