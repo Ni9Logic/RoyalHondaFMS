@@ -17,6 +17,7 @@ export const InvoiceData: Invoice = {
     GSTCost: 0,
     TAmountGST: 0, // TAmountParts + GSTCost
     DepPercent: 0,
+    DepCost: 0, // DepPercent of TLaborAmount
     TAmountDep: 0, // TAmountDep - TAmountGST
     EstimateNum: 0, // With Help of Estimate Number you can Put TLaborAmount from that Estimate 
     TLaborAmount: 0,
