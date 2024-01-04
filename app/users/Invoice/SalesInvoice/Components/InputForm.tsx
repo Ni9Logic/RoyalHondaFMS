@@ -7,6 +7,8 @@ import React, { useEffect, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { SelectCustomer } from "./SelectAbleInsurance";
 import SelectSurveyor from "./SelectAbleSurveyor";
+import SelectPayment from "./SelectAblePayment";
+import { Button } from "@/components/ui/button";
 
 interface InputFormProps {
     setValue: UseFormSetValue<Invoice>
@@ -16,6 +18,8 @@ interface InputFormProps {
 const InputForm: React.FC<InputFormProps> = ({ setValue, register }: InputFormProps) => {
     const [insurance, setInsurance] = useState<InsuranceCompaniesData>();
     const [surveyor, setSurveyor] = useState<Surveyor>();
+    const [payment, setPayment] = useState<string>('');
+
     const currentDate = new Date();
 
     // Extract the year, month, and day
@@ -68,25 +72,25 @@ const InputForm: React.FC<InputFormProps> = ({ setValue, register }: InputFormPr
                     <Label className="text-sm">
                         Reigstration Number
                     </Label>
-                    <Input type="text" placeholder="Car Registration Number" {...register('CarRegNum')} />
+                    <Input type="text" placeholder="Car Registration Number" {...register('CarRegNum')} required />
                 </div>
                 <div>
                     <Label className="text-sm">
                         Make
                     </Label>
-                    <Input type="text" placeholder="Car Make" {...register('CarMake')} />
+                    <Input type="text" placeholder="Car Make" {...register('CarMake')} required />
                 </div>
                 <div>
                     <Label className="text-sm">
                         Model
                     </Label>
-                    <Input type="text" placeholder="Car Model" {...register('CarModel')} />
+                    <Input type="text" placeholder="Car Model" {...register('CarModel')} required />
                 </div>
                 <div>
                     <Label className="text-sm">
                         Driver User
                     </Label>
-                    <Input type="text" placeholder="Username" {...register('DriverUser')} />
+                    <Input type="text" placeholder="Username" {...register('DriverUser')} required />
                 </div>
                 <div className="mt-[1.5rem]">
                     <SelectSurveyor setSurveyor={setSurveyor} setValueForm={setValue} />
@@ -95,15 +99,27 @@ const InputForm: React.FC<InputFormProps> = ({ setValue, register }: InputFormPr
                     <Label className="text-sm">
                         Payment Mode
                     </Label>
-                    <Input type="text" placeholder="Selectable Soon" disabled={true} />
+                    <SelectPayment setPayment={setPayment} setValueForm={setValue} />
+                </div>
+                <div>
+                    <Label className="text-sm">
+                        Loss Number
+                    </Label>
+                    <Input type="text" placeholder="Loss Number" {...register('LossNumber')} required />
+                </div>
+                <div>
+                    <Label className="text-sm">
+                        Estimate Number
+                    </Label>
+                    <Input type="text" placeholder="Username" {...register('EstimateNum')} required />
+                </div>
+                <div>
+                    <Button className="mt-[1.5rem] w-full" variant={'outline'} type="button">
+                        Search Estimate
+                    </Button>
                 </div>
             </div>
-            <div className="w-2/6 flex flex-col justify-center mt-5">
-                <Label className="text-sm">
-                    Loss Number
-                </Label>
-                <Input type="text" placeholder="Loss Number" {...register('LossNumber')} />
-            </div>
+
         </div>
     )
 }

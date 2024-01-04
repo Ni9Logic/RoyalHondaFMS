@@ -106,6 +106,7 @@ export type Invoice = {
   GSTCost: number,
   TAmountGST: number, // TAmountParts + GSTCost
   DepPercent: number,
+  DepCost: number,
   TAmountDep: number, // TAmountDep - TAmountGST
   EstimateNum: number, // With Help of Estimate Number you can Put TLaborAmount from that Estimate 
   TLaborAmount: number,
@@ -126,4 +127,12 @@ export interface EstimateRowType {
 }
 export interface EstimateRowObject {
   [key: string]: EstimateRowType;
+}
+
+export interface PriceSheet {
+  id?: number;
+  partNo: string;
+  partDescription: string;
+  partModel: string;
+  partPrice: string;
 }

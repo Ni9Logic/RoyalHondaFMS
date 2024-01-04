@@ -4,13 +4,18 @@ import Navbar from "@/app/users/Navbar";
 import InputForm from "../Components/InputForm";
 import { InvoiceData } from "@/app/lib/Resources";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Invoice } from "@/types";
-import { useState } from "react";
+import { EstimateRowObject, Invoice } from "@/types";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Loader from "@/app/components/ui/loader";
+import InvoiceTable from "../Components/InvoiceTable";
+import InvoiceSummary from "../Components/SalesInvoiceSummary";
 
 export default function PAGE() {
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [isGenerateSummary, setGenerateSummary] = useState(false);
+    const [invoiceRows, setInvoiceRows] = useState<EstimateRowObject>({});
+
     const {
         register,
         handleSubmit,
@@ -33,8 +38,19 @@ export default function PAGE() {
                 <form id="searchEstimateForm"></form>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <InputForm setValue={setValue} register={register} />
+
+                    {/* Table For Invoice */}
+                    <div className="w-full flex flex-row mt-20">
+                        <InvoiceTable setValue={setValue} setGenerateSummary={setGenerateSummary} setRows={setInvoiceRows}/>
+                    </div>
+                    {
+                        isGenerateSummary &&
+                        <div className="w-full flex flex-row mt-20">
+                            <InvoiceSummary invoiceRows={invoiceRows} setValue={setValue}/>
+                        </div>
+                    }
                     <div className="w-full flex justify-center gap-4 mt-10 flex-row">
-                        <Button type="submit" disabled={isLoading} className="flex flex-row gap-1 w-2/6">
+                        <Button type="submit" disabled={(isLoading || !isGenerateSummary) ? true : false} className="flex flex-row gap-1 w-2/6">
                             Submit
                             <Loader isLoading={isLoading} />
                         </Button>
