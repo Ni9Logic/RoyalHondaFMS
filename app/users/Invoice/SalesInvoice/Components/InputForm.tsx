@@ -20,17 +20,6 @@ const InputForm: React.FC<InputFormProps> = ({ setValue, register }: InputFormPr
     const [surveyor, setSurveyor] = useState<Surveyor>();
     const [payment, setPayment] = useState<string>('');
 
-    const currentDate = new Date();
-
-    // Extract the year, month, and day
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth() + 1; // Months are zero-based
-    const day = currentDate.getDate();
-
-    // Format the date as a string (e.g., "2023-12-23")
-    const formattedDate = `${year}/${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
-
-
 
     return (
         <div className="w-full items-center flex flex-col">
@@ -72,13 +61,13 @@ const InputForm: React.FC<InputFormProps> = ({ setValue, register }: InputFormPr
                     <Label className="text-sm">
                         Reigstration Number
                     </Label>
-                    <Input type="text" placeholder="Car Registration Number" {...register('CarRegNum')} required />
+                    <Input id="regno" type="text" placeholder="Car Registration Number" {...register('CarRegNum')} required />
                 </div>
                 <div>
                     <Label className="text-sm">
                         Make
                     </Label>
-                    <Input type="text" placeholder="Car Make" {...register('CarMake')} required />
+                    <Input id="make" type="text" placeholder="Car Make" {...register('CarMake')} required />
                 </div>
                 <div>
                     <Label className="text-sm">
@@ -111,10 +100,10 @@ const InputForm: React.FC<InputFormProps> = ({ setValue, register }: InputFormPr
                     <Label className="text-sm">
                         Estimate Number
                     </Label>
-                    <Input type="text" placeholder="Username" {...register('EstimateNum')} required />
+                    <Input form="searchEstimateForm" type="number" placeholder="Estimate Number" {...register('EstimateNum')} required />
                 </div>
                 <div>
-                    <Button className="mt-[1.5rem] w-full" variant={'outline'} type="button">
+                    <Button form="searchEstimateForm" className="mt-[1.5rem] w-full" variant={'outline'} type="button">
                         Search Estimate
                     </Button>
                 </div>

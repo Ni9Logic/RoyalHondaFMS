@@ -4,7 +4,7 @@ import Navbar from "@/app/users/Navbar";
 import InputForm from "../Components/InputForm";
 import { InvoiceData } from "@/app/lib/Resources";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { EstimateRowObject, Invoice } from "@/types";
+import { EstimateRowObject, Invoice, SearchEstimate } from "@/types";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Loader from "@/app/components/ui/loader";
@@ -28,6 +28,17 @@ export default function PAGE() {
         console.log(Data);
     }
 
+    const {
+        handleSubmit: handleSearchEstimate,
+    } = useForm<SearchEstimate>({
+        defaultValues: {
+            id: InvoiceData.EstimateNum,
+        }
+    })
+    const onSubmitSearchEstimate: SubmitHandler<SearchEstimate> = (Data: SearchEstimate) => {
+        console.log("Hello");
+    }
+
     return (
         <div>
             <Navbar />
@@ -35,18 +46,18 @@ export default function PAGE() {
                 <div className="flex justify-center flex-col">
                     <h1 className="font-bold text-3xl">Sales Tax Invoice</h1>
                 </div>
-                <form id="searchEstimateForm"></form>
+                <form onClick={handleSearchEstimate(onSubmitSearchEstimate)} id="searchEstimateForm"></form>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <InputForm setValue={setValue} register={register} />
 
                     {/* Table For Invoice */}
                     <div className="w-full flex flex-row mt-20">
-                        <InvoiceTable setValue={setValue} setGenerateSummary={setGenerateSummary} setRows={setInvoiceRows}/>
+                        <InvoiceTable setValue={setValue} setGenerateSummary={setGenerateSummary} setRows={setInvoiceRows} />
                     </div>
                     {
                         isGenerateSummary &&
                         <div className="w-full flex flex-row mt-20">
-                            <InvoiceSummary invoiceRows={invoiceRows} setValue={setValue}/>
+                            <InvoiceSummary invoiceRows={invoiceRows} setValue={setValue} />
                         </div>
                     }
                     <div className="w-full flex justify-center gap-4 mt-10 flex-row">
