@@ -3,7 +3,6 @@ import logo from "@/app/components/images/logo.png";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { JOBFormData } from "../../createJobCard/page";
 import { Button } from "@/components/ui/button";
 interface PrintJobProps {
     data: any;
@@ -14,8 +13,8 @@ const AnotherPrintJobs: React.FC<PrintJobProps> = ({ data, onClose }: PrintJobPr
 
     const fetchSerialNumber = async () => {
         try {
-            const response = await axios.get('/api/getLasJobId');
-            const serial = response.data.serialNumber;
+            const response = await axios.post('/api/getLasJobId', { method: "notStatic" });
+            const serial = response.data.serialNumber + 1;
             setSerialNumber(serial);
         } catch (error) {
             console.error('Error fetching serial:', error);

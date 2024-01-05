@@ -28,6 +28,7 @@ import React, { useEffect, useState } from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
+import {v4 as uuidv4} from 'uuid';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -87,7 +88,7 @@ export function DataTable<TData, TValue>({
                         {columns.map((column) => (
                             <DropdownMenuItem
                                 //@ts-ignore
-                                key={column?.accessorKey}
+                                key={uuidv4()}
 
                                 //@ts-ignore
                                 onClick={() => setFilterColumn(column.accessorKey)}
@@ -124,7 +125,7 @@ export function DataTable<TData, TValue>({
                         {table.getRowModel()?.rows?.length ? (
                             table.getRowModel().rows.map((row, index) => (
                                 <TableRow
-                                    key={row.id}
+                                    key={uuidv4()}
                                     data-state={row.getIsSelected() && "selected"}
                                 >
                                     {row.getVisibleCells().map((cell) => (

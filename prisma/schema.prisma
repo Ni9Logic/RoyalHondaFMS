@@ -31,6 +31,8 @@ model JobCard {
   JobCheckedBy             String?
   WorkType                 String?
   Insurance                String?
+  NTN                      String?
+  GSTR                     String?
   Status                   String?
   carRegistration          String?
   RequiredWorkDetails      String?
@@ -71,6 +73,8 @@ model EstimatedCostWork {
   cDriverUser            String?
   cSurveyorNTN           String?
   Insurance              String?
+  NTN                    String?
+  GSTR                   String?
   cKiloMeters            Float?
   TotalServiceFee        Float?
   TotalEstimateFee       Float?
@@ -94,25 +98,44 @@ model PriceSheet {
   partPrice       String?
 }
 
-model Invoice {
-  id               Int     @id @default(autoincrement())
-  customerName     String?
-  customerContact  String?
-  NTN              String?
-  carColor         String?
-  carRegistration  String?
-  Mileage          String?
-  dateTime         String?
-  descriptionPrice Json?
-}
-
 model InsuranceCompanies {
   id   Int     @id @default(autoincrement())
   name String? @unique
+  NTN  String? @unique
+  GSTR String?
 }
 
 model Surveyors {
-  id           Int     @id @default(autoincrement())
-  cSurveyor    String? @unique
-  cSurveyorNTN String? @unique
+  id        Int     @id @default(autoincrement())
+  cSurveyor String? @unique
+}
+
+model Invoice {
+  id              Int     @id @default(autoincrement())
+  InvoiceType     String
+  InsuranceName   String
+  InsuranceNTN    String
+  InsuranceGSTR   String
+  SurveyorName    String
+  DriverUser      String
+  CarMake         String
+  CarModel        String
+  CarRegNum       String
+  PaymentMode     String
+  PartsTable      Json
+  TAmountPart     Float
+  GSTPercent      Float
+  GSTCost         Float
+  TAmountGST      Float // TAmountParts + GSTCost
+  DepPercent      Float
+  DepCost         Float // DepPercent of TAmountGST
+  TAmountDep      Float // TAmountDep - TAmountGST
+  EstimateNum     Int // With Help of Estimate Number you can Put TLaborAmount from that Estimate 
+  TLaborAmount    Float
+  PSTPercent      Float
+  PSTCost         Float // PSTPercent of TLaborAmount
+  TLaborAmountPST Float // TLaborAmount + PSTCost
+  GrandTAmount    Float // TAmountDep + TLaborAmountPST
+  LossNumber      String?
+  CreatedAt       String
 }

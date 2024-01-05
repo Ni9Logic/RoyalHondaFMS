@@ -1,4 +1,4 @@
-import { EstimateForm } from "../../Interfaces/Interface";
+import { EstimateForm } from "@/types";
 import { Label } from "@/components/ui/label";
 import TitleMehrMotors from "./Titles/MehrMotors";
 import TitleRoyalHonda from "./Titles/RoyalHonda";
@@ -27,7 +27,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
 
                                     <p className="text-sm flex flex-row gap-1">Surveyor:
                                         <p className="border border-black w-auto h-auto text-sm">
-                                            <p className="px-2 font-sans flex flex-row gap-1">{data?.cSurveyor} <p className="text-sm font-bold text-red-500">{data?.cSurveyorNTN}</p></p>
+                                            <p className="px-2 font-sans flex flex-row gap-1">{data?.cSurveyor}</p>
                                         </p>
                                     </p>
                                 </div>
@@ -40,7 +40,14 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
 
                                     <p className="text-sm flex flex-row gap-1">Insurance:
                                         <p className="border border-black w-auto h-auto text-sm">
-                                            <p className="px-2 font-sans">{data?.Insurance}</p>
+                                            <p className="px-2 font-sans flex flex-row gap-1 items-center">{data?.Insurance}
+                                                <p className="text-xs text-red-500">
+                                                    NTN: {data?.NTN}
+                                                </p>
+                                                <p className="text-xs text-red-500">
+                                                    GSTR: {data?.GSTR}
+                                                </p>
+                                            </p>
                                         </p>
                                     </p>
                                 </div>
@@ -63,7 +70,7 @@ const PrintEstimate: React.FC<{ data: EstimateForm }> = ({ data }) => {
                                 </div>
                                 <div className="h-full flex justify-end">
                                     <p className="font-sans flex flex-row gap-1">
-                                        <p className="font-bold">EST #:</p> {data?.id}
+                                        <p className="font-bold">EST #:</p> {data?.id ? data.id : 'null'}
                                     </p>
                                 </div>
                             </div>

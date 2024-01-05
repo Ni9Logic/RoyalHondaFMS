@@ -1,4 +1,4 @@
-import { EstimateForm, EstimateRowType } from "@/app/users/Interfaces/Interface";
+import { EstimateForm } from "@/types";
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prismadb";
 
@@ -24,7 +24,6 @@ export async function POST(request: Request) {
                     isRoyal: body.isRoyal ? 'Royal Honda' : 'Mehr Motors',
                     Insurance: body.Insurance,
                     cSurveyor: body.cSurveyor,
-                    cSurveyorNTN: body.cSurveyorNTN,
                     cRegistration: body.cRegistration,
                     DiscountEstimate: body.DiscountEstimate,
                     DiscountServices: body.DiscountServices,
@@ -73,7 +72,8 @@ export async function POST(request: Request) {
                     isRoyal: body.isRoyal ? 'Royal Honda' : 'Mehr Motors',
                     Insurance: body.Insurance,
                     cSurveyor: body.cSurveyor,
-                    cSurveyorNTN: body.cSurveyorNTN,
+                    GSTR: body.GSTR,
+                    NTN: body.NTN,
                     cRegistration: body.cRegistration,
                     DiscountEstimate: body.DiscountEstimate,
                     DiscountServices: body.DiscountServices,

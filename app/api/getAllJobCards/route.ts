@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import getAllJobCards from "@/app/actions/getAllJobCards";
 
-export async function GET() {
+export async function POST() {
     try {
         const allJobCards = await getAllJobCards();
-        
         if (!allJobCards || allJobCards.length === 0) {
             return NextResponse.json({ Error: "No Job Cards Created Yet!" }, { status: 404 });
         }

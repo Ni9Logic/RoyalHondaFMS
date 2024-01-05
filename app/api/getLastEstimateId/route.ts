@@ -1,7 +1,7 @@
 import prisma from "@/app/lib/prismadb";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function POST() {
     try {
         const lastEstimate = await prisma.estimatedCostWork.findFirst({
             orderBy: {

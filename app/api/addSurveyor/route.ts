@@ -1,4 +1,4 @@
-import { Surveyor } from "@/app/users/Interfaces/Interface";
+import { Surveyor } from "@/types";
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prismadb";
 
@@ -18,7 +18,6 @@ export async function POST(req: Request) {
         const isCreated = await prisma.surveyors.create({
             data: {
                 cSurveyor: body.cSurveyor,
-                cSurveyorNTN: body.cSurveyorNTN,
             }
         })
 

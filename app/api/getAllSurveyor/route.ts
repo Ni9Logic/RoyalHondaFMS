@@ -1,7 +1,7 @@
 import getAllSurveyor from "@/app/actions/getAllSurveyor";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function POST() {
     try {
         const surveyors = await getAllSurveyor();
 

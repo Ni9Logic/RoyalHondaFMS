@@ -7,13 +7,13 @@ import { useSearchParams } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import Loader from "@/app/components/ui/loader";
-import { EstimateRowObject } from "../../Interfaces/Interface";
+import { EstimateForm } from "@/types";
 
 export default function PAGE() {
-    const [data, setData] = useState<any>();
+    const [data, setData] = useState<EstimateForm>();
     const searchParams = useSearchParams();
-    const id = searchParams.get('id')?.toString();
     const [isLoading, setLoading] = useState(false);
+    const id = searchParams?.get('id')?.toString() ? searchParams?.get('id')?.toString() : 'null';
     const [estimateRows, setEstimateRows] = useState([]);
     const [servicesDetailsRows, setServicesDetailsRows] = useState([]);
     const [actualTotalPartsPrice, setActualTotalPartsPrice] = useState(0);
@@ -23,10 +23,13 @@ export default function PAGE() {
         setLoading(true);
         axios.post('/api/getEstimate', { id })
             .then((response: AxiosResponse) => {
-                let mydata = response?.data?.Message;
+                let mydata: EstimateForm = response?.data?.Message;
                 setData(response?.data?.Message)
+                // @ts-ignore
                 setEstimateRows(JSON.parse(mydata.EstimateTableData))
+                // @ts-ignore
                 setServicesDetailsRows(JSON.parse(mydata.ServicesTableData))
+
                 setActualTotalPartsPrice(CalculateTotalEstimateCost());
             })
             .catch((error: AxiosResponse) => {
@@ -117,7 +120,7 @@ export default function PAGE() {
 
                                         <p className="text-sm flex flex-row gap-1">Surveyor:
                                             <p className="border border-black w-auto h-auto text-sm">
-                                                <p className="px-2 font-sans flex flex-row gap-1">{data?.cSurveyor} <p className="text-sm font-bold text-red-500">{data?.cSurveyorNTN}</p></p>
+                                                <p className="px-2 font-sans flex flex-row gap-1">{data?.cSurveyor}</p>
                                             </p>
                                         </p>
                                     </div>
@@ -130,7 +133,11 @@ export default function PAGE() {
 
                                         <p className="text-sm flex flex-row gap-1">Insurance:
                                             <p className="border border-black w-auto h-auto text-sm">
-                                                <p className="px-2 font-sans">{data?.Insurance}</p>
+                                                <p className="px-2 font-sans flex flex-row gap-1 items-center">
+                                                    {data?.Insurance}
+                                                    <p className="text-xs font-bold text-red-500">NTN: {data?.NTN}</p>
+                                                    <p className="text-xs font-bold text-red-500">GSTR: {data?.GSTR}</p>
+                                                </p>
                                             </p>
                                         </p>
                                     </div>
@@ -371,7 +378,8 @@ export default function PAGE() {
 
                                     {/* Calculate Total Amount */}
                                     <p className="font-sans text-sm flex flex-row gap-1">
-                                        <p className="font-bold">Total Amount:</p> {(calculateLaborPrice() - calculatePartsPrice()).toLocaleString()} Rs
+                                        <p className="font-bold">Total Amount:</p>
+                                        {Math.max((calculateLaborPrice(), calculatePartsPrice()) + Math.min(calculateLaborPrice(), calculatePartsPrice())).toLocaleString()} Rs
                                     </p>
                                 </div>
 

@@ -20,9 +20,9 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { InsuranceCompanies } from "@prisma/client";
-import AddSurveyor from "../Components/AddSurveyor";
 import EstimateSheetForm from "../Components/EstimateSheetForm";
-import { EstimateForm, EstimateRowObject, SearchEstimate, ServiceRowObject, Surveyor } from "../../Interfaces/Interface";
+import { EstimateForm, EstimateRowObject, SearchEstimate, ServiceRowObject, Surveyor } from "@/types";
+import AddSurveyor from "../Components/AddSurveyor";
 
 export default function PAGE() {
     // Get the current date
@@ -39,17 +39,20 @@ export default function PAGE() {
 
     // Convert this to integer later in the api
     const [jobId, setjobId] = useState('');
-    
+
     const [cMake, setcMake] = useState('');
     const [ckiloMeters, setcKiloMeters] = useState(0);
     const [cModel, setcModel] = useState('');
     const [cRegistration, setcRegistration] = useState('');
     const [PaymentMode, setPaymentMode] = useState('');
     const [cSurveyor, setcSurveyor] = useState('');
-    const [cSurveyorNTN, setcSurveyorNTN] = useState('');
+    const [NTN, setNTN] = useState('');
+    const [GSTR, setGSTR] = useState('');
     const [cDriverUser, setcDriverUser] = useState('');
     const [insurance, setInsurance] = useState('');
     const [isRoyal, setIsRoyal] = useState(true);
+    const [estId, setEstId] = useState('');
+
 
     const [servicesDetailsRows, setServicesDetailsRow] = useState<ServiceRowObject>({})
     const [estimateRows, setEstimateRows] = useState<EstimateRowObject>({});
@@ -160,12 +163,14 @@ export default function PAGE() {
 
     // @ts-ignore
     const data: EstimateForm = {
+        id: parseInt(estId) + 1,
         cName: cName,
         jobId: jobId,
         cMake: cMake,
         cModel: cModel,
         cSurveyor: cSurveyor,
-        cSurveyorNTN: cSurveyorNTN,
+        NTN: NTN,
+        GSTR: GSTR,
         cDriverUser: cDriverUser,
         Insurance: insurance,
         EstimateTableData: estimateRows,
@@ -195,7 +200,8 @@ export default function PAGE() {
             cMake: cMake,
             cModel: cModel,
             cSurveyor: cSurveyor,
-            cSurveyorNTN: cSurveyorNTN,
+            NTN: NTN,
+            GSTR: GSTR,
             cDriverUser: cDriverUser,
             Insurance: insurance,
             EstimateTableData: {},
@@ -254,7 +260,6 @@ export default function PAGE() {
     } = useForm<Surveyor>({
         defaultValues: {
             cSurveyor: cSurveyor,
-            cSurveyorNTN: cSurveyorNTN,
         }
     })
 
@@ -289,14 +294,13 @@ export default function PAGE() {
     const [Surveyors, setSurveyors] = useState<Surveyor[]>();
 
     const getAllSurveyors = async () => {
-        axios.get("../../../api/getAllSurveyor")
+        axios.post("../../../api/getAllSurveyor", { method: "notStatic" })
             .then((response: AxiosResponse) => setSurveyors(response?.data?.Surveyors))
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }
 
-    const [estId, setEstId] = useState('');
     const getLastEstimateId = async () => {
-        axios.get("../../../api/getLastEstimateId")
+        axios.post("../../../api/getLastEstimateId", { method: "notStatic" })
             .then((response: AxiosResponse) => {
                 setEstId(response?.data?.id);
             })
@@ -308,7 +312,7 @@ export default function PAGE() {
 
     const [allInsurances, setAllInsurances] = useState<InsuranceCompanies[]>();
     const getAllInsurancess = async () => {
-        axios.get("../../../api/getAllInsurance")
+        axios.post("../../../api/getAllInsurance", { method: "notStatic" })
             .then((response: AxiosResponse) => setAllInsurances(response?.data?.Message))
             .catch((error: any) => toast.error(error?.response?.data?.Message));
     }
@@ -362,15 +366,11 @@ export default function PAGE() {
 
                                 {/* Surveyors, Payment Mode & Insurances */}
                                 <div className="flex flex-row mt-4 items-center justify-center gap-12">
-                                    <Input placeholder="Surveyor NTN" className="w-1/6" disabled value={cSurveyorNTN} />
                                     <div className="flex flex-row gap-1">
-
                                         <Select onValueChange={(e) => {
                                             let values = JSON.parse(e);
                                             setValue('cSurveyor', values.surveyorName);
                                             setcSurveyor(values.surveyorName);
-                                            setValue('cSurveyorNTN', values.surveyorNTN);
-                                            setcSurveyorNTN(values.surveyorNTN);
                                         }} defaultValue={cSurveyor}>
                                             <SelectTrigger className="w-[180px]">
                                                 <SelectValue placeholder="Select Surveyor" />
@@ -379,7 +379,7 @@ export default function PAGE() {
                                                 {
                                                     Surveyors?.map((surveyor) => (
                                                         <SelectItem key={uuidv4()} value={
-                                                            JSON.stringify({ surveyorName: surveyor.cSurveyor, surveyorNTN: surveyor.cSurveyorNTN })
+                                                            JSON.stringify({ surveyorName: surveyor.cSurveyor })
                                                         }>
                                                             {surveyor.cSurveyor}
                                                         </SelectItem>
@@ -387,7 +387,7 @@ export default function PAGE() {
                                                 }
                                             </SelectContent>
                                         </Select>
-                                        <AddSurveyor setValueSurveyor={setValueSurveyor} isAddSurveyorLoading={isAddSurveyorLoading} />
+                                        <AddSurveyor isAddSurveyorLoading={isAddSurveyorLoading} setValueSurveyor={setValueSurveyor} />
                                     </div>
                                     <Select onValueChange={(e) => {
                                         setValue('PaymentMode', e);
@@ -402,8 +402,13 @@ export default function PAGE() {
                                         </SelectContent>
                                     </Select>
                                     <Select onValueChange={(e) => {
-                                        setValue('Insurance', e);
-                                        setInsurance(e);
+                                        let values = JSON.parse(e);
+                                        setValue('Insurance', values.insuranceName);
+                                        setValue('NTN', values.insuranceNTN);
+                                        setValue('GSTR', values.insuranceGSTR)
+                                        setInsurance(values.insuranceName);
+                                        setNTN(values.insuranceNTN);
+                                        setGSTR(values.insuranceGSTR);
                                     }} defaultValue={insurance}>
                                         <SelectTrigger className="w-[180px]">
                                             <SelectValue placeholder="Select Insurance" />
@@ -412,13 +417,17 @@ export default function PAGE() {
                                             {
                                                 allInsurances?.map((insurance) => (
 
-                                                    <SelectItem key={uuidv4()} value={insurance.name ? insurance.name : 'NULL'}>
+                                                    <SelectItem key={uuidv4()} value={
+                                                        JSON.stringify({ insuranceName: insurance.name, insuranceNTN: insurance.NTN, insuranceGSTR: insurance.GSTR })
+                                                    }>
                                                         {insurance.name}
                                                     </SelectItem>
                                                 ))
                                             }
                                         </SelectContent>
                                     </Select>
+                                    <Input placeholder="Insurance NTN" className="w-1/6" disabled value={NTN} />
+                                    <Input placeholder="Insurance GSTR" className="w-1/6" disabled value={GSTR ? GSTR : 'Not Defined'} />
                                 </div>
 
                                 {/* Print with Royal Honda Title or Mehr Motors Title */}
@@ -542,13 +551,13 @@ export default function PAGE() {
                                                     setDiscountEstimate(parseFloat(e.target.value));
                                                     setValue('DiscountEstimate', parseInt(e.target.value));
                                                 }}
-                                                className={"mt-2 flex justify-end ml-auto w-[2/6]"} />
+                                                className={"mt-2 flex justify-end ml-auto w-[2/6]"} defaultValue={DiscountEstimate}/>
                                         </div>
                                         <Input onChange={(e) => {
                                             setDiscountEstimateFigure(parseInt(e.target.value));
                                             setValue('DiscountEstimateFigure', parseInt(e.target.value));
                                         }}
-                                            className={"mt-2 flex w-3/12 ml-auto"} type="number" placeholder={"Discount Parts (Figure)"} />
+                                            className={"mt-2 flex w-3/12 ml-auto"} type="number" placeholder={"Discount Parts (Figure)"} defaultValue={DiscountEstimateFigure}/>
                                     </div>
 
                                     {/* Labor Charges */}
@@ -599,7 +608,7 @@ export default function PAGE() {
                                                                         setServicesDetailsRow(updatedRows);
                                                                         setValue('ServicesDetailsTableData', updatedRows);
                                                                     }}
-                                                                    className={"border-none outline-none w-full"} />
+                                                                    className={"border-none outline-none w-full"}/>
                                                             </td>
                                                             <td className="px-6 py-4">
                                                                 <div className={"gap-2 flex"}>
@@ -636,14 +645,14 @@ export default function PAGE() {
                                                 setDiscountServices(parseInt(e.target.value));
                                                 setValue('DiscountServices', parseInt(e.target.value));
                                             }}
-                                                className={"mt-2 flex w-1/6 ml-auto"} type="number" placeholder={"Discount Services %"} />
+                                                className={"mt-2 flex w-1/6 ml-auto"} type="number" placeholder={"Discount Services %"} defaultValue={DiscountServices}/>
 
                                         </div>
                                         <Input onChange={(e) => {
                                             setDiscountServicesFigure(parseInt(e.target.value));
                                             setValue('DiscountServicesFigure', parseInt(e.target.value));
                                         }}
-                                            className={"mt-2 flex w-3/12 ml-auto"} type="number" placeholder={"Discount Services (Figure)"} />
+                                            className={"mt-2 flex w-3/12 ml-auto"} type="number" placeholder={"Discount Services (Figure)"} defaultValue={DiscountServicesFigure}/>
                                     </div>
 
                                     {/* Summary Table */}

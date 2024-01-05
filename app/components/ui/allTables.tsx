@@ -1,7 +1,7 @@
 'use client'
-import { useEffect, useState } from "react";
-import { columns } from "./allUserTablesColumns";
-import { DataTable } from "./data-table";
+import {useEffect, useState} from "react";
+import {columns} from "./allUserTablesColumns";
+import {DataTable} from "./data-table";
 import axios from "axios";
 
 
@@ -9,8 +9,9 @@ import axios from "axios";
 const AllTables = () => {
     const [Data, setData] = useState<any>('');
     const getAllUsers = async () => {
+        // Sending post request so that our data doesn't get stale, and we get fresh data on each request
         try {
-            const response = await axios.get('/api/getAllJobCards');
+            const response = await axios.post('/api/getAllJobCards', {method: 'notStatic'});
             setData(response?.data?.jobCards);
         } catch (error: any) {
             console.log('Error Fetching Data', error)
@@ -29,17 +30,12 @@ const AllTables = () => {
             }
         };
 
-        fetchData(); // Call the async function immediately
-
-        // If you have a cleanup function (optional)
-        return () => {
-            // Code to run on unmount (cleanup)
-        };
+        fetchData();
     }, [])
     return (
         <>
             <div>
-                <DataTable columns={columns} data={Data} />
+                <DataTable columns={columns} data={Data}/>
             </div>
         </>
     )

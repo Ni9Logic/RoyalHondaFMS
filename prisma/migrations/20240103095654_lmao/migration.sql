@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `JobCard` ADD COLUMN `GSTR` VARCHAR(191) NULL;
