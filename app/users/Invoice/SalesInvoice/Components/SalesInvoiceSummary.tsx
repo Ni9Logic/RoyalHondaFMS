@@ -44,7 +44,7 @@ export const InvoiceSummary: React.FC<InvoiceSummaryProps> = ({ invoiceRows, set
     InvoiceData.DepCost = percentageOfValue(InvoiceData.DepPercent, InvoiceData.TAmountGST);
     InvoiceData.TAmountDep = Math.max(InvoiceData.DepCost, InvoiceData.TAmountGST) - Math.min(InvoiceData.DepCost, InvoiceData.TAmountGST);
     InvoiceData.PSTCost = percentageOfValue(InvoiceData.PSTPercent, InvoiceData.TLaborAmount);
-    InvoiceData.TLaborAmountPST = InvoiceData.TLaborAmount - InvoiceData.PSTCost;
+    InvoiceData.TLaborAmountPST = InvoiceData.TLaborAmount + InvoiceData.PSTCost;
     InvoiceData.GrandTAmount = InvoiceData.TLaborAmountPST + InvoiceData.TAmountDep;
     InvoiceData.CreatedAt = formattedDate;
 
