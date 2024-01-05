@@ -191,14 +191,20 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                     <Input onChange={(e) => {
                         setValue('TLaborAmount', parseFloat(e.target.value));
                         InvoiceData.TLaborAmount = parseFloat(e.target.value);
+                        if (isNaN(InvoiceData.TLaborAmount))
+                            InvoiceData.TLaborAmount = 0;
                     }} className="mt-2 ml-[10rem]" placeholder="Labor Cost" />
                     <Input onChange={(e) => {
                         setValue('DepPercent', parseFloat(e.target.value));
                         InvoiceData.DepPercent = parseFloat(e.target.value);
+                        if (isNaN(InvoiceData.DepPercent))
+                            InvoiceData.DepPercent = 0;
                     }} className="mt-2" placeholder="Deposition On Parts" />
                     <Input onChange={(e) => {
                         setValue('PSTPercent', parseFloat(e.target.value));
                         InvoiceData.PSTPercent = parseFloat(e.target.value);
+                        if (isNaN(InvoiceData.PSTPercent))
+                            InvoiceData.PSTPercent = 0;
                     }} className="mt-2" placeholder="PST" />
                 </div>
             </div >
