@@ -1,15 +1,15 @@
 'use client'
 import { InvoiceData } from "@/app/lib/Resources";
 import { Input } from "@/components/ui/input";
-import { EstimateForm, EstimateRowObject, InsuranceCompaniesData, Invoice, ServiceRowObject, ServicesDetailsType, Surveyor } from "@/types";
+import { EstimateForm, EstimateRowObject, InsuranceCompaniesData, Invoice, ServiceRowObject, Surveyor } from "@/types";
 import { Label } from "@radix-ui/react-label";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { SelectCustomer } from "./SelectAbleInsurance";
 import SelectSurveyor from "./SelectAbleSurveyor";
 import SelectPayment from "./SelectAblePayment";
 import { Button } from "@/components/ui/button";
-import axios, { Axios, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import Loader from "@/app/components/ui/loader";
 import toast from "react-hot-toast";
 import { percentageOfValue } from "./SalesInvoiceSummary";

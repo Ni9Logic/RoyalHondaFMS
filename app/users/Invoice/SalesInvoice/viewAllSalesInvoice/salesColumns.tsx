@@ -63,15 +63,27 @@ export const columns: ColumnDef<Invoice>[] = [
     },
     {
         accessorKey: 'TAmountPart',
-        header: 'Parts Cost'
+        header: 'Parts Cost',
+        cell({ row }) {
+            const invoice = row.original;
+            return invoice.TAmountPart.toLocaleString('en-US', { style: 'currency', currency: 'PKR' });
+        },
     },
     {
         accessorKey: 'GSTCost',
-        header: 'GST Cost'
+        header: 'GST Cost',
+        cell({ row }) {
+            const invoice = row.original;
+            return invoice.GSTCost.toLocaleString('en-US', { style: 'currency', currency: 'PKR' });
+        },
     },
     {
         accessorKey: 'TAmountGST',
-        header: 'Parts After GST'
+        header: 'Parts After GST',
+        cell({ row }) {
+            const invoice = row.original;
+            return invoice.TAmountGST.toLocaleString('en-US', { style: 'currency', currency: 'PKR' });
+        },
     },
     {
         accessorKey: 'DepPercent',
@@ -79,15 +91,27 @@ export const columns: ColumnDef<Invoice>[] = [
     },
     {
         accessorKey: 'DepCost',
-        header: 'Depreciation Cost'
+        header: 'Depreciation Cost',
+        cell({ row }) {
+            const invoice = row.original;
+            return invoice.DepCost.toLocaleString('en-US', { style: 'currency', currency: 'PKR' });
+        },
     },
     {
         accessorKey: 'TAmountDep',
-        header: 'Parts After Depreciation'
+        header: 'Parts After Depreciation',
+        cell({ row }) {
+            const invoice = row.original;
+            return invoice.TAmountDep.toLocaleString('en-US', { style: 'currency', currency: 'PKR' });
+        },
     },
     {
         accessorKey: 'TLaborAmount',
-        header: 'Labor Cost'
+        header: 'Labor Cost',
+        cell({ row }) {
+            const invoice = row.original;
+            return invoice.TLaborAmount.toLocaleString('en-US', { style: 'currency', currency: 'PKR' });
+        },
     },
     {
         accessorKey: 'PSTPercent',
@@ -95,21 +119,33 @@ export const columns: ColumnDef<Invoice>[] = [
     },
     {
         accessorKey: 'PSTCost',
-        header: 'PST Cost'
+        header: 'PST Cost',
+        cell({ row }) {
+            const invoice = row.original;
+            return invoice.PSTCost.toLocaleString('en-US', { style: 'currency', currency: 'PKR' });
+        },
     },
     {
         accessorKey: 'TLaborAmountPST',
-        header: 'Labor Cost After PST'
+        header: 'Labor Cost After PST',
+        cell({ row }) {
+            const invoice = row.original;
+            return invoice.TLaborAmountPST.toLocaleString('en-US', { style: 'currency', currency: 'PKR' });
+        },
     },
     {
         accessorKey: 'GrandTAmount',
-        header: 'Grand Total'
+        header: 'Grand Total',
+        cell({ row }) {
+            const invoice = row.original;
+            return invoice.GrandTAmount.toLocaleString('en-US', { style: 'currency', currency: 'PKR' });
+        },
     },
     {
         accessorKey: 'CreatedAt',
         header: 'Date'
     },
-   
+
     {
         id: "actions",
         cell: ({ row }) => {
@@ -134,23 +170,16 @@ export const columns: ColumnDef<Invoice>[] = [
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <Link href={{
-                                pathname: '/users/Estimate/EditEstimate',
+                                pathname: '/users/Invoice/SalesInvoice/editSalesInvoice',
                                 query: {
                                     id: invoice.id
                                 }
                             }}>
                                 <DropdownMenuItem>Edit Invoice</DropdownMenuItem>
                             </Link>
-                            <Link href={{
-                                pathname: '/users/Estimate/printableEstimate',
-                                query: {
-                                    id: invoice.id
-                                }
-                            }}>
-                                <DropdownMenuItem>Print Invoice</DropdownMenuItem>
-                            </Link>
+                            <DropdownMenuItem>Print Invoice</DropdownMenuItem>
                         </DropdownMenuContent>
-                    </DropdownMenu>x``
+                    </DropdownMenu>
 
                 </div >
             )

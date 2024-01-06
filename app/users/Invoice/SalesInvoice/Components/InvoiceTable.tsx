@@ -110,7 +110,8 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                                 setRows(updatedRows);
                                                 InvoiceData.PartsTable = invoiceRows;
                                             }
-                                        }} />
+                                        }}
+                                        defaultValue={InvoiceData.PartsTable[key]?.partNo} />
                                     </TableCell>
                                     {/* Part Description */}
                                     <TableCell className="w-1/5">
