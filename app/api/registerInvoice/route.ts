@@ -40,7 +40,6 @@ export async function POST(req: Request) {
 
         if (!isCreated) return NextResponse.json({ Message: "Error While Creating Invoice" }, { status: 400 });
 
-        console.log(isCreated);
         return NextResponse.json({ Message: "Invoice Registered!" }, { status: 200 });
     } catch (error: any) {
         console.log(error);
