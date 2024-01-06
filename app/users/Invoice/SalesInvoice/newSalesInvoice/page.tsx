@@ -11,6 +11,8 @@ import Loader from "@/app/components/ui/loader";
 import InvoiceTable from "../Components/InvoiceTable";
 import InvoiceSummary from "../Components/SalesInvoiceSummary";
 import { v4 as uuidv4 } from "uuid";
+import axios, { AxiosResponse } from "axios";
+import toast from "react-hot-toast";
 export default function PAGE() {
     const [isLoading, setIsLoading] = useState(false);
     const [isGenerateSummary, setGenerateSummary] = useState(false);
@@ -47,8 +49,12 @@ export default function PAGE() {
         defaultValues: InvoiceData,
     })
 
-    const onSubmit: SubmitHandler<Invoice> = (Data: Invoice) => {
-        console.log(Data);
+    const onSubmit: SubmitHandler<Invoice> = async (Data: Invoice) => {
+        setIsLoading(true);
+        axios.post('/api/registerInvoice', { Data })
+            .then((response: AxiosResponse) => toast.success(response?.data?.Message))
+            .catch((error: AxiosResponse) => toast.error(error?.data?.Message))
+            .finally(() => setIsLoading(false));
     }
 
 
@@ -60,7 +66,7 @@ export default function PAGE() {
                     <h1 className="font-bold text-3xl">Sales Tax Invoice</h1>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <InputForm setValue={setValue} register={register} setRows={setInvoiceRows}/>
+                    <InputForm setValue={setValue} register={register} setRows={setInvoiceRows} />
 
                     {/* Table For Invoice */}
                     <div className="w-full flex flex-row mt-20">

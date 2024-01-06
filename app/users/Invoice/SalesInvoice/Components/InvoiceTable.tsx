@@ -51,6 +51,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
     const handleGenerateSummary = () => {
         setValue('PartsTable', invoiceRows);
         InvoiceData.PartsTable = invoiceRows;
+        InvoiceData.InvoiceType = "Sales Tax";
         const updatedRows = { ...invoiceRows };
         setRows(updatedRows);
         setGenerateSummary((prevValue) => !prevValue);

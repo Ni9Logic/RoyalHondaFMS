@@ -58,6 +58,8 @@ const InputForm: React.FC<InputFormProps> = ({ setValue, register, setRows }: In
                 // Setting Insurance
                 setInsurance({ name: myData?.Insurance, NTN: myData?.NTN, GSTR: myData?.GSTR });
                 InvoiceData.InsuranceName = myData?.Insurance;
+                InvoiceData.InsuranceNTN = myData?.NTN;
+                InvoiceData.InsuranceGSTR = myData?.GSTR;
                 setValue("InsuranceName", InvoiceData.InsuranceName);
                 setValue("InsuranceNTN", myData?.NTN);
                 setValue("InsuranceGSTR", myData?.GSTR);
