@@ -11,6 +11,7 @@ export default function UserMenu() {
     const [isCreateEstimateLoading, setCreateEstimateLoading] = useState(false);
     const [isViewAllEstimatesLoading, setisViewAllEstimatesLoading] = useState(false);
     const [isSalesInvoicesLoading, setisSalesInvoicesLoading] = useState(false);
+    const [IsShowAllInvoices, setIsShowAllInvoices] = useState(false);
     const router = useRouter();
     return (
         <section className="flex flex-col text-gray-600 body-font h-[75vh] justify-center items-center">
@@ -56,13 +57,20 @@ export default function UserMenu() {
                             <Loader isLoading={isViewAllEstimatesLoading} />
                         </Button>
                     </TabsContent>
-                    <TabsContent value="Invoice" className='w-full flex items-center justify-center'>
+                    <TabsContent value="Invoice" className='w-full flex items-center justify-center flex-row gap-1'>
                         <Button onClick={() => {
                             setisSalesInvoicesLoading(true);
                             router.push('/users/Invoice/SalesInvoice/newSalesInvoice');
                         }} className='flex flex-row gap-1' disabled={isSalesInvoicesLoading}>
                             Sales Invoice
                             <Loader isLoading={isSalesInvoicesLoading} />
+                        </Button>
+                        <Button onClick={() => {
+                            setIsShowAllInvoices(true);
+                            router.push('/users/Invoice/SalesInvoice/viewAllSalesInvoice');
+                        }} className='flex flex-row gap-1' disabled={IsShowAllInvoices}>
+                            View All Invoices
+                            <Loader isLoading={IsShowAllInvoices} />
                         </Button>
                     </TabsContent>
                     <TabsContent value="Ledger" className='w-full flex items-center justify-center'>

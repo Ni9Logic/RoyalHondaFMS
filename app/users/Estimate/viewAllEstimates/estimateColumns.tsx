@@ -12,7 +12,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useState } from "react";
 
 import { EstimateForm } from "@/types";
 
@@ -102,7 +101,6 @@ export const columns: ColumnDef<EstimateForm>[] = [
         id: "actions",
         cell: ({ row }) => {
             const estimate = row.original
-            const [printing, setIsPrinting] = useState(false);
 
 
             return (
