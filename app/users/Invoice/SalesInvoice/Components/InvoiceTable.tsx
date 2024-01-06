@@ -17,6 +17,10 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
+// TODO REFRESH BUTTON INSTEAD OF REGENERATING INVOICE SUMMARY EACH TIME
+// TODO A WAY TO DEBOUNCE VALUES IN PARTNO
+// TODO A WAY TO USE INVOICEDATA.PARTSTABLE WHEN WE GET ESTIMATETABLEDATA.
+
 interface InvoiceTableProps {
     setValue: UseFormSetValue<Invoice>,
     setGenerateSummary: Dispatch<SetStateAction<boolean>>,
