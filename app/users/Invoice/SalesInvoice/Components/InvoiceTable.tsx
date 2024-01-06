@@ -13,9 +13,10 @@ import {
 import { EstimateRowObject, Invoice, PriceSheet } from "@/types";
 import { Label } from "@radix-ui/react-label";
 import axios, { Axios, AxiosResponse } from "axios";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
+
 interface InvoiceTableProps {
     setValue: UseFormSetValue<Invoice>,
     setGenerateSummary: Dispatch<SetStateAction<boolean>>,
@@ -58,6 +59,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
         };
         setInvoiceRows(obj);
         setRows(obj);
+        InvoiceData.PartsTable = invoiceRows;
     }
 
     const handleRemoveInvoiceRow = (key: string) => {
@@ -65,6 +67,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
         delete updatedRows[key]
         setInvoiceRows(updatedRows)
         setRows(updatedRows);
+        InvoiceData.PartsTable = updatedRows;
     }
 
     const handleGenerateSummary = () => {
@@ -76,14 +79,16 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
         setGenerateSummary((prevValue) => !prevValue);
     }
 
+    const [isFetched, setIsFetched] = useState(false);
     async function fetchPart(partNo: string, key: string) {
+        setIsFetched(true);
         try {
             const res: AxiosResponse = await axios.post('/api/getPartNo', { partNo });
             const myData: PriceSheet = res?.data?.Message;
 
             const updatedRows = { ...invoiceRows };
             updatedRows[key].partDesc = myData?.partDescription;
-            updatedRows[key].partPrice = parseInt(myData?.partPrice);
+            updatedRows[key].partPrice = parseFloat(myData?.partPrice);
             updatedRows[key].partTotalPrice = updatedRows[key].partQty * updatedRows[key].partPrice;
 
             setInvoiceRows(updatedRows);
@@ -92,9 +97,9 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
 
         } catch (error) {
             console.log(error);
+            setIsFetched(false);
         }
     }
-
 
 
     return (
@@ -146,7 +151,8 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                     </TableCell>
                                     {/* Part Price */}
                                     <TableCell className="w-1/5">
-                                        <Input type="number"
+                                        <Input type="text"
+
                                             onChange={(e) => {
                                                 const updatedRows = { ...invoiceRows };
                                                 updatedRows[key].partPrice = parseInt(e.target.value);
@@ -154,7 +160,8 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                                 setInvoiceRows(updatedRows);
                                                 setRows(updatedRows);
                                                 InvoiceData.PartsTable = invoiceRows;
-                                            }} defaultValue={invoiceRows[key].partTotalPrice} />
+                                                console.log(invoiceRows[key].partPrice);
+                                            }} defaultValue={InvoiceData.PartsTable[key]?.partPrice} />
                                     </TableCell>
                                     {/* Part Qty */}
                                     <TableCell className="w-3">
@@ -173,7 +180,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                         <Button type="button" variant={"ghost"} onClick={
                                             () => handleRemoveInvoiceRow(key)
                                         }>
-                                            <p className="text-red-500 underline">Delete</p>
+                                            <p className="text-blue-500 underline">Delete</p>
                                         </Button>
                                     </TableCell>
                                 </TableRow>
@@ -193,19 +200,19 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                         InvoiceData.TLaborAmount = parseFloat(e.target.value);
                         if (isNaN(InvoiceData.TLaborAmount))
                             InvoiceData.TLaborAmount = 0;
-                    }} className="mt-2 ml-[10rem]" placeholder="Labor Cost" type="number"/>
+                    }} className="mt-2 ml-[10rem]" placeholder="Labor Cost" type="number" defaultValue={InvoiceData.TLaborAmount} />
                     <Input onChange={(e) => {
                         setValue('DepPercent', parseFloat(e.target.value));
                         InvoiceData.DepPercent = parseFloat(e.target.value);
                         if (isNaN(InvoiceData.DepPercent))
                             InvoiceData.DepPercent = 0;
-                    }} defaultValue={60} className="mt-2" placeholder="Deposition On Parts" type="number"/>
+                    }} defaultValue={60} className="mt-2" placeholder="Deposition On Parts" type="number" />
                     <Input onChange={(e) => {
                         setValue('PSTPercent', parseFloat(e.target.value));
                         InvoiceData.PSTPercent = parseFloat(e.target.value);
                         if (isNaN(InvoiceData.PSTPercent))
                             InvoiceData.PSTPercent = 0;
-                    }} defaultValue={16} className="mt-2" placeholder="PST" type="number"/>
+                    }} defaultValue={16} className="mt-2" placeholder="PST" type="number" />
                 </div>
             </div >
         </>

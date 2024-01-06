@@ -5,6 +5,9 @@ import prisma from "@/app/lib/prismadb";
 export async function POST(req: Request) {
     try {
         const { partNo } = await req.json();
+        if (!partNo || partNo.length <= 4) {
+            return NextResponse.json({ Message: 'Part Number Not Provided' }, { status: 404 })
+        }
         const partFound = await prisma.priceSheet.findFirst({
             where: {
                 partNo: {

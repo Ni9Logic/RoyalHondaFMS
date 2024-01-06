@@ -12,7 +12,7 @@ function totalPartsPrice(invoiceRows: EstimateRowObject) {
     return totalPartsPrice;
 }
 
-function percentageOfValue(Percentvalue: number, total: number) {
+export function percentageOfValue(Percentvalue: number, total: number) {
     return (Percentvalue * total) / 100;
 }
 

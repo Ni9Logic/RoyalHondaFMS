@@ -61,9 +61,9 @@ export const SelectSurveyor: React.FC<SelectCustomerProps> = ({ setSurveyor: set
                     className="w-full justify-between"
                 >
                     {
-                        Surveyor?.cSurveyor ?
-                            Surveyor?.cSurveyor
-                            : "Select Surveyor"
+                        Surveyor?.cSurveyor || InvoiceData?.SurveyorName ?
+                        Surveyor?.cSurveyor ? Surveyor?.cSurveyor : InvoiceData?.SurveyorName
+                        : "Select Customer"
                     }
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>

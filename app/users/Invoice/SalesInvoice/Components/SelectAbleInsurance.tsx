@@ -21,6 +21,7 @@ import { InsuranceCompaniesData, Invoice } from "@/types"
 import axios, { AxiosError, AxiosResponse } from "axios"
 import { v4 as uuidv4 } from "uuid";
 import { UseFormSetValue } from "react-hook-form"
+import { InvoiceData } from "@/app/lib/Resources"
 
 
 interface SelectCustomerProps {
@@ -60,8 +61,8 @@ export const SelectCustomer: React.FC<SelectCustomerProps> = ({ setInsurance, se
                     className="w-full justify-between"
                 >
                     {
-                        Customer?.name ?
-                            Customer?.name
+                        Customer?.name || InvoiceData?.InsuranceName ?
+                            Customer?.name ? Customer.name : InvoiceData?.InsuranceName
                             : "Select Customer"
                     }
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />

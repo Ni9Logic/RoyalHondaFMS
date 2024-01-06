@@ -5,7 +5,6 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
         const { id } = body;
-
         if (!id)
             return NextResponse.json({ Message: 'Id Not Provided' }, { status: 404 })
 

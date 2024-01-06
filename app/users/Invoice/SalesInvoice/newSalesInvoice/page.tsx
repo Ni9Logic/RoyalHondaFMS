@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import Loader from "@/app/components/ui/loader";
 import InvoiceTable from "../Components/InvoiceTable";
 import InvoiceSummary from "../Components/SalesInvoiceSummary";
+import { eventNames } from "process";
 
 export default function PAGE() {
     const [isLoading, setIsLoading] = useState(false);
@@ -28,16 +29,6 @@ export default function PAGE() {
         console.log(Data);
     }
 
-    const {
-        handleSubmit: handleSearchEstimate,
-    } = useForm<SearchEstimate>({
-        defaultValues: {
-            id: InvoiceData.EstimateNum,
-        }
-    })
-    const onSubmitSearchEstimate: SubmitHandler<SearchEstimate> = (Data: SearchEstimate) => {
-        console.log("Hello");
-    }
 
     return (
         <div>
@@ -46,7 +37,6 @@ export default function PAGE() {
                 <div className="flex justify-center flex-col">
                     <h1 className="font-bold text-3xl">Sales Tax Invoice</h1>
                 </div>
-                <form onClick={handleSearchEstimate(onSubmitSearchEstimate)} id="searchEstimateForm"></form>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <InputForm setValue={setValue} register={register} />
 
