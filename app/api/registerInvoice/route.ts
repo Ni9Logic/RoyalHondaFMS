@@ -4,9 +4,9 @@ import prisma from "@/app/lib/prismadb";
 
 export async function POST(req: Request) {
     try {
-        const body: Invoice = await req.json();
+        const getData = await req.json();
+        const body: Invoice = getData.Data;
         let partsTable = JSON.stringify(body.PartsTable);
-
         const isCreated = await prisma.invoice.create({
             data: {
                 CarMake: body.CarMake,
@@ -20,11 +20,30 @@ export async function POST(req: Request) {
                 GrandTAmount: body.GrandTAmount,
                 GSTCost: body.GSTCost,
                 GSTPercent: body.GSTPercent,
+                InvoiceType: body.InvoiceType,
+                InsuranceName: body.InsuranceName,
+                InsuranceGSTR: body.InsuranceGSTR,
+                InsuranceNTN: body.InsuranceNTN,
+                PartsTable: partsTable,
+                PaymentMode: body.PaymentMode,
+                PSTCost: body.PSTCost,
+                PSTPercent: body.PSTPercent,
+                SurveyorName: body.SurveyorName,
+                TAmountDep: body.TAmountDep,
+                TAmountGST: body.TAmountGST,
+                TAmountPart: body.TAmountPart,
+                TLaborAmount: body.TLaborAmount,
+                TLaborAmountPST: body.TLaborAmountPST,
+                LossNumber: body.LossNumber,
             }
         })
 
-        return NextResponse.json({ Message: "Invoice registered" }, { status: 200 });
+        if (!isCreated) return NextResponse.json({ Message: "Error While Creating Invoice" }, { status: 400 });
+
+        console.log(isCreated);
+        return NextResponse.json({ Message: "Invoice Registered!" }, { status: 200 });
     } catch (error: any) {
+        console.log(error);
         return NextResponse.json({ Message: "Internal Server Error" }, { status: 500 });
     }
 }

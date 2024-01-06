@@ -187,7 +187,7 @@ const InputForm: React.FC<InputFormProps> = ({ setValue, register, setRows }: In
                     <Input type="number" placeholder="Estimate Number" onChange={(e) => {
                         setValue('EstimateNum', parseInt(e.target.value));
                         InvoiceData.EstimateNum = parseInt(e.target.value);
-                    }} required />
+                    }} />
                 </div>
                 <div>
                     <Button

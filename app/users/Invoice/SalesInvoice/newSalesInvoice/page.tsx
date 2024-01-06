@@ -1,7 +1,7 @@
 'use client'
 import Footer from "@/app/users/Footer";
 import Navbar from "@/app/users/Navbar";
-import InputForm from "../Components/InputForm";
+import InputForm from "../Components/InvoiceInputForm";
 import { InvoiceData } from "@/app/lib/Resources";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { EstimateRowObject, Invoice, SearchEstimate } from "@/types";

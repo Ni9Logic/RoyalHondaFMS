@@ -17,8 +17,6 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
-// TODO REFRESH BUTTON INSTEAD OF REGENERATING INVOICE SUMMARY EACH TIME
-// TODO A WAY TO DEBOUNCE VALUES IN PARTNO
 
 interface InvoiceTableProps {
     setValue: UseFormSetValue<Invoice>,
@@ -105,12 +103,13 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                     {/* Part No */}
                                     <TableCell className="w-1/5">
                                         <Input type="text" onChange={async (e) => {
-                                            await fetchPart(e.target.value, key);
-                                            const updatedRows = { ...invoiceRows };
-                                            updatedRows[key].partNo = e.target.value;
-                                            setRows(updatedRows);
-                                            InvoiceData.PartsTable = invoiceRows;
-
+                                            if (e.target.value.length > 9) {
+                                                await fetchPart(e.target.value, key);
+                                                const updatedRows = { ...invoiceRows };
+                                                updatedRows[key].partNo = e.target.value;
+                                                setRows(updatedRows);
+                                                InvoiceData.PartsTable = invoiceRows;
+                                            }
                                         }} />
                                     </TableCell>
                                     {/* Part Description */}
