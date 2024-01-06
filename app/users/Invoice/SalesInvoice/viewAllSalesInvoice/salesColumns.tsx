@@ -139,7 +139,7 @@ export const columns: ColumnDef<Invoice>[] = [
                                     id: invoice.id
                                 }
                             }}>
-                                <DropdownMenuItem>Edit Estimate</DropdownMenuItem>
+                                <DropdownMenuItem>Edit Invoice</DropdownMenuItem>
                             </Link>
                             <Link href={{
                                 pathname: '/users/Estimate/printableEstimate',
@@ -147,10 +147,10 @@ export const columns: ColumnDef<Invoice>[] = [
                                     id: invoice.id
                                 }
                             }}>
-                                <DropdownMenuItem>Print Estimate</DropdownMenuItem>
+                                <DropdownMenuItem>Print Invoice</DropdownMenuItem>
                             </Link>
                         </DropdownMenuContent>
-                    </DropdownMenu>
+                    </DropdownMenu>x``
 
                 </div >
             )

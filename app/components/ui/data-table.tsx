@@ -87,10 +87,8 @@ export function DataTable<TData, TValue>({
                         <DropdownMenuSeparator />
                         {columns.map((column) => (
                             <DropdownMenuItem
-                                //@ts-ignore
                                 key={uuidv4()}
-
-                                //@ts-ignore
+                                // @ts-ignore
                                 onClick={() => setFilterColumn(column.accessorKey)}
                             >
                                 {/* @ts-ignore */}
