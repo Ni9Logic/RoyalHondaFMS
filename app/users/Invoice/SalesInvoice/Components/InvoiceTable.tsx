@@ -19,38 +19,14 @@ import { v4 as uuidv4 } from "uuid";
 
 // TODO REFRESH BUTTON INSTEAD OF REGENERATING INVOICE SUMMARY EACH TIME
 // TODO A WAY TO DEBOUNCE VALUES IN PARTNO
-// TODO A WAY TO USE INVOICEDATA.PARTSTABLE WHEN WE GET ESTIMATETABLEDATA.
 
 interface InvoiceTableProps {
     setValue: UseFormSetValue<Invoice>,
     setGenerateSummary: Dispatch<SetStateAction<boolean>>,
     setRows: Dispatch<SetStateAction<EstimateRowObject>>,
-
+    invoiceRows: EstimateRowObject,
 }
-export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerateSummary, setRows }: InvoiceTableProps) => {
-    const [invoiceRows, setInvoiceRows] = React.useState<EstimateRowObject>({
-        [uuidv4()]: {
-            partNo: "",
-            partDesc: "",
-            partPrice: 0,
-            partQty: 1,
-            partTotalPrice: 0,
-        },
-        [uuidv4()]: {
-            partNo: "",
-            partDesc: "",
-            partPrice: 0,
-            partQty: 1,
-            partTotalPrice: 0,
-        },
-        [uuidv4()]: {
-            partNo: "",
-            partDesc: "",
-            partPrice: 0,
-            partQty: 1,
-            partTotalPrice: 0,
-        },
-    })
+export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerateSummary, setRows, invoiceRows }: InvoiceTableProps) => {
 
     const handleAddInvoiceRow = () => {
         const obj = { ...invoiceRows };
@@ -61,7 +37,6 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
             partPrice: 0,
             partTotalPrice: 0
         };
-        setInvoiceRows(obj);
         setRows(obj);
         InvoiceData.PartsTable = invoiceRows;
     }
@@ -69,8 +44,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
     const handleRemoveInvoiceRow = (key: string) => {
         const updatedRows = { ...invoiceRows }
         delete updatedRows[key]
-        setInvoiceRows(updatedRows)
-        setRows(updatedRows);
+        setRows(updatedRows)
         InvoiceData.PartsTable = updatedRows;
     }
 
@@ -78,7 +52,6 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
         setValue('PartsTable', invoiceRows);
         InvoiceData.PartsTable = invoiceRows;
         const updatedRows = { ...invoiceRows };
-        setInvoiceRows(updatedRows);
         setRows(updatedRows);
         setGenerateSummary((prevValue) => !prevValue);
     }
@@ -95,7 +68,6 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
             updatedRows[key].partPrice = parseFloat(myData?.partPrice);
             updatedRows[key].partTotalPrice = updatedRows[key].partQty * updatedRows[key].partPrice;
 
-            setInvoiceRows(updatedRows);
             setRows(updatedRows);
             InvoiceData.PartsTable = updatedRows;
 
@@ -135,7 +107,6 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                             await fetchPart(e.target.value, key);
                                             const updatedRows = { ...invoiceRows };
                                             updatedRows[key].partNo = e.target.value;
-                                            setInvoiceRows(updatedRows);
                                             setRows(updatedRows);
                                             InvoiceData.PartsTable = invoiceRows;
 
@@ -147,11 +118,11 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                             onChange={(e) => {
                                                 const updatedRows = { ...invoiceRows }
                                                 updatedRows[key].partDesc = e.target.value
-                                                setInvoiceRows(updatedRows)
+                                                setRows(updatedRows)
                                                 setRows(updatedRows);
                                                 InvoiceData.PartsTable = invoiceRows;
 
-                                            }} type="text" defaultValue={invoiceRows[key].partDesc} />
+                                            }} type="text" defaultValue={InvoiceData.PartsTable[key]?.partDesc} />
                                     </TableCell>
                                     {/* Part Price */}
                                     <TableCell className="w-1/5">
@@ -161,7 +132,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                                 const updatedRows = { ...invoiceRows };
                                                 updatedRows[key].partPrice = parseInt(e.target.value);
                                                 updatedRows[key].partTotalPrice = updatedRows[key].partQty * updatedRows[key].partPrice;
-                                                setInvoiceRows(updatedRows);
+                                                setRows(updatedRows);
                                                 setRows(updatedRows);
                                                 InvoiceData.PartsTable = invoiceRows;
                                                 console.log(invoiceRows[key].partPrice);

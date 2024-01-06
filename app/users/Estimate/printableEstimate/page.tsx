@@ -82,8 +82,10 @@ export default function PAGE() {
         const totalServiceCost = CalculateTotalServiceCost();
         const discountServicesFigure = data?.DiscountServicesFigure || 0;
         const discountServicesPercentage = data?.DiscountServices || 0;
+        let costAfterDiscountPercentage = totalServiceCost - ((discountServicesPercentage / 100) * totalServiceCost);
+        let costAfterDiscountFigure = Math.max(totalServiceCost, discountServicesFigure) - Math.min(totalServiceCost, discountServicesFigure);
 
-        const discountedPrice = totalServiceCost - discountServicesFigure - (totalServiceCost * discountServicesPercentage) / 100;
+        const discountedPrice = Math.max(costAfterDiscountPercentage, costAfterDiscountFigure) - Math.min(costAfterDiscountPercentage, costAfterDiscountFigure);
         return discountedPrice;
     }
 
@@ -379,7 +381,7 @@ export default function PAGE() {
                                     {/* Calculate Total Amount */}
                                     <p className="font-sans text-sm flex flex-row gap-1">
                                         <p className="font-bold">Total Amount:</p>
-                                        {Math.max((calculateLaborPrice(), calculatePartsPrice()) + Math.min(calculateLaborPrice(), calculatePartsPrice())).toLocaleString()} Rs
+                                        {calculateTotalAmount().toLocaleString()} Rs
                                     </p>
                                 </div>
 

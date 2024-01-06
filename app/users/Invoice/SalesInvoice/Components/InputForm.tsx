@@ -3,7 +3,7 @@ import { InvoiceData } from "@/app/lib/Resources";
 import { Input } from "@/components/ui/input";
 import { EstimateForm, EstimateRowObject, InsuranceCompaniesData, Invoice, ServiceRowObject, ServicesDetailsType, Surveyor } from "@/types";
 import { Label } from "@radix-ui/react-label";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { SelectCustomer } from "./SelectAbleInsurance";
 import SelectSurveyor from "./SelectAbleSurveyor";
@@ -17,10 +17,11 @@ import { percentageOfValue } from "./SalesInvoiceSummary";
 interface InputFormProps {
     setValue: UseFormSetValue<Invoice>
     register: UseFormRegister<Invoice>
+    setRows: Dispatch<SetStateAction<EstimateRowObject>>,
 }
 
 
-const InputForm: React.FC<InputFormProps> = ({ setValue, register }: InputFormProps) => {
+const InputForm: React.FC<InputFormProps> = ({ setValue, register, setRows }: InputFormProps) => {
     const [insurance, setInsurance] = useState<InsuranceCompaniesData>();
     const [isSearchLoading, setIsSearchLoading] = useState(false);
 
@@ -91,6 +92,7 @@ const InputForm: React.FC<InputFormProps> = ({ setValue, register }: InputFormPr
                 // @ts-ignore
                 let partRows = JSON.parse(myData?.EstimateTableData);
                 setValue("PartsTable", partRows);
+                setRows(partRows);
                 InvoiceData.PartsTable = partRows;
 
                 console.log(partRows)

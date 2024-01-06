@@ -10,12 +10,34 @@ import { Button } from "@/components/ui/button";
 import Loader from "@/app/components/ui/loader";
 import InvoiceTable from "../Components/InvoiceTable";
 import InvoiceSummary from "../Components/SalesInvoiceSummary";
-import { eventNames } from "process";
-
+import { v4 as uuidv4 } from "uuid";
 export default function PAGE() {
     const [isLoading, setIsLoading] = useState(false);
     const [isGenerateSummary, setGenerateSummary] = useState(false);
-    const [invoiceRows, setInvoiceRows] = useState<EstimateRowObject>({});
+
+    const [invoiceRows, setInvoiceRows] = useState<EstimateRowObject>({
+        [uuidv4()]: {
+            partNo: "",
+            partDesc: "",
+            partPrice: 0,
+            partQty: 1,
+            partTotalPrice: 0,
+        },
+        [uuidv4()]: {
+            partNo: "",
+            partDesc: "",
+            partPrice: 0,
+            partQty: 1,
+            partTotalPrice: 0,
+        },
+        [uuidv4()]: {
+            partNo: "",
+            partDesc: "",
+            partPrice: 0,
+            partQty: 1,
+            partTotalPrice: 0,
+        },
+    });
 
     const {
         register,
@@ -38,11 +60,16 @@ export default function PAGE() {
                     <h1 className="font-bold text-3xl">Sales Tax Invoice</h1>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <InputForm setValue={setValue} register={register} />
+                    <InputForm setValue={setValue} register={register} setRows={setInvoiceRows}/>
 
                     {/* Table For Invoice */}
                     <div className="w-full flex flex-row mt-20">
-                        <InvoiceTable setValue={setValue} setGenerateSummary={setGenerateSummary} setRows={setInvoiceRows} />
+                        <InvoiceTable
+                            setValue={setValue}
+                            setGenerateSummary={setGenerateSummary}
+                            setRows={setInvoiceRows}
+                            invoiceRows={invoiceRows}
+                        />
                     </div>
                     {
                         isGenerateSummary &&
