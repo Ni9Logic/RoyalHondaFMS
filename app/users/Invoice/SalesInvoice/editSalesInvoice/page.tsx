@@ -250,10 +250,15 @@ export default function PAGE() {
                         </div>
                     </div>
                     <div className="mt-40">
-                        <InvoiceTable invoiceRows={invoiceRows} setRows={setInvoiceRows} setGenerateSummary={setIsGenerateSummary} setValue={setValue} />
+                        <InvoiceTable
+                            invoiceRows={invoiceRows}
+                            setRows={setInvoiceRows}
+                            setGenerateSummary={setIsGenerateSummary}
+                            setValue={setValue}
+                            invoice={invoice} />
                         <div className="mt-20">
                             {isGenerateSummary &&
-                                <InvoiceSummary invoiceRows={invoiceRows} setValue={setValue} />
+                                <InvoiceSummary invoiceRows={invoiceRows} setValue={setValue} invoice={invoice}/>
                             }
                         </div>
                     </div>

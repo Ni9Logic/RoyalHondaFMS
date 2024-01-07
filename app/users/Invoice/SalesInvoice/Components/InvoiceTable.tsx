@@ -23,8 +23,9 @@ interface InvoiceTableProps {
     setGenerateSummary: Dispatch<SetStateAction<boolean>>,
     setRows: Dispatch<SetStateAction<EstimateRowObject>>,
     invoiceRows: EstimateRowObject,
+    invoice?: Invoice,
 }
-export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerateSummary, setRows, invoiceRows }: InvoiceTableProps) => {
+export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerateSummary, setRows, invoiceRows, invoice }: InvoiceTableProps) => {
 
     const handleAddInvoiceRow = () => {
         const obj = { ...invoiceRows };
@@ -111,7 +112,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                                 InvoiceData.PartsTable = invoiceRows;
                                             }
                                         }}
-                                        defaultValue={InvoiceData.PartsTable[key]?.partNo} />
+                                            defaultValue={InvoiceData.PartsTable[key]?.partNo} />
                                     </TableCell>
                                     {/* Part Description */}
                                     <TableCell className="w-1/5">
@@ -147,7 +148,9 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                                             updatedRows[key].partTotalPrice = updatedRows[key].partQty * updatedRows[key].partPrice;
                                             setRows(updatedRows);
                                             InvoiceData.PartsTable = invoiceRows;
-                                        }} defaultValue={1} />
+                                            console.log(invoice)
+                                            // @ts-ignore
+                                        }} defaultValue={invoice ? JSON.parse(invoice.PartsTable)[key].partQty : 1} />
                                     </TableCell>
                                     <TableCell>{
                                         (invoiceRows[key].partQty * invoiceRows[key].partPrice).toLocaleString() + ' Rs'}
@@ -173,22 +176,43 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
                     </Button>
                     <Input onChange={(e) => {
                         setValue('TLaborAmount', parseFloat(e.target.value));
-                        InvoiceData.TLaborAmount = parseFloat(e.target.value);
-                        if (isNaN(InvoiceData.TLaborAmount))
-                            InvoiceData.TLaborAmount = 0;
-                    }} className="mt-2 ml-[10rem]" placeholder="Labor Cost" type="number" defaultValue={InvoiceData.TLaborAmount} />
+                        if (invoice) {
+                            invoice.TLaborAmount = parseFloat(e.target.value);
+                            if (isNaN(invoice.TLaborAmount))
+                                invoice.TLaborAmount = 0;
+                        }
+                        else {
+                            InvoiceData.TLaborAmount = parseFloat(e.target.value);
+                            if (isNaN(InvoiceData.TLaborAmount))
+                                InvoiceData.TLaborAmount = 0;
+                        }
+                    }} className="mt-2 ml-[10rem]" placeholder="Labor Cost" type="number" defaultValue={invoice ? invoice.TLaborAmount : InvoiceData.TLaborAmount} />
                     <Input onChange={(e) => {
                         setValue('DepPercent', parseFloat(e.target.value));
-                        InvoiceData.DepPercent = parseFloat(e.target.value);
-                        if (isNaN(InvoiceData.DepPercent))
-                            InvoiceData.DepPercent = 0;
-                    }} defaultValue={60} className="mt-2" placeholder="Deposition On Parts" type="number" />
+                        if (invoice) {
+                            invoice.DepPercent = parseFloat(e.target.value);
+                            if (isNaN(invoice.DepPercent))
+                                invoice.DepPercent = 0;
+                        }
+                        else {
+                            InvoiceData.DepPercent = parseFloat(e.target.value);
+                            if (isNaN(InvoiceData.DepPercent))
+                                InvoiceData.DepPercent = 0;
+                        }
+                    }} defaultValue={invoice ? invoice.DepPercent : 60} className="mt-2" placeholder="Deposition On Parts" type="number" />
                     <Input onChange={(e) => {
                         setValue('PSTPercent', parseFloat(e.target.value));
-                        InvoiceData.PSTPercent = parseFloat(e.target.value);
-                        if (isNaN(InvoiceData.PSTPercent))
-                            InvoiceData.PSTPercent = 0;
-                    }} defaultValue={16} className="mt-2" placeholder="PST" type="number" />
+                        if (invoice) {
+                            invoice.PSTPercent = parseFloat(e.target.value);
+                            if (isNaN(invoice.PSTPercent))
+                                invoice.PSTPercent = 0;
+                        }
+                        else {
+                            InvoiceData.PSTPercent = parseFloat(e.target.value);
+                            if (isNaN(InvoiceData.PSTPercent))
+                                InvoiceData.PSTPercent = 0;
+                        }
+                    }} defaultValue={invoice ? invoice.PSTPercent : 16} className="mt-2" placeholder="PST" type="number" />
                 </div>
             </div >
         </>

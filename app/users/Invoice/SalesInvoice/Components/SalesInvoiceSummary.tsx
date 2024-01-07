@@ -23,9 +23,10 @@ function totalPartsCostGST(invoiceRows: EstimateRowObject) {
 interface InvoiceSummaryProps {
     invoiceRows: EstimateRowObject,
     setValue: UseFormSetValue<Invoice>,
+    invoice?: Invoice,
 }
 
-export const InvoiceSummary: React.FC<InvoiceSummaryProps> = ({ invoiceRows, setValue }: InvoiceSummaryProps) => {
+export const InvoiceSummary: React.FC<InvoiceSummaryProps> = ({ invoiceRows, setValue, invoice }: InvoiceSummaryProps) => {
     // Get the current date
     const currentDate = new Date();
 
@@ -36,33 +37,60 @@ export const InvoiceSummary: React.FC<InvoiceSummaryProps> = ({ invoiceRows, set
 
     // Format the date as a string (e.g., "2023-12-23")
     const formattedDate = `${year}/${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
+    if (invoice) {
+        InvoiceData.TAmountPart = totalPartsPrice(invoiceRows);
+        InvoiceData.GSTPercent = 18;
+        InvoiceData.GSTCost = percentageOfValue(18, totalPartsPrice(invoiceRows));
+        InvoiceData.TAmountGST = totalPartsCostGST(invoiceRows);
+        InvoiceData.DepCost = percentageOfValue(invoice.DepPercent, invoice.TAmountGST);
+        InvoiceData.TAmountDep = Math.max(InvoiceData.DepCost, invoice.TAmountGST) - Math.min(InvoiceData.DepCost, invoice.TAmountGST);
+        InvoiceData.PSTCost = percentageOfValue(invoice.PSTPercent, invoice.TLaborAmount);
+        InvoiceData.TLaborAmountPST = invoice.TLaborAmount + InvoiceData.PSTCost;
+        InvoiceData.GrandTAmount = InvoiceData.TLaborAmountPST + InvoiceData.TAmountDep;
+        InvoiceData.CreatedAt = formattedDate;
 
-    InvoiceData.TAmountPart = totalPartsPrice(invoiceRows);
-    InvoiceData.GSTPercent = 18;
-    InvoiceData.GSTCost = percentageOfValue(18, totalPartsPrice(invoiceRows));
-    InvoiceData.TAmountGST = totalPartsCostGST(invoiceRows);
-    InvoiceData.DepCost = percentageOfValue(InvoiceData.DepPercent, InvoiceData.TAmountGST);
-    InvoiceData.TAmountDep = Math.max(InvoiceData.DepCost, InvoiceData.TAmountGST) - Math.min(InvoiceData.DepCost, InvoiceData.TAmountGST);
-    InvoiceData.PSTCost = percentageOfValue(InvoiceData.PSTPercent, InvoiceData.TLaborAmount);
-    InvoiceData.TLaborAmountPST = InvoiceData.TLaborAmount + InvoiceData.PSTCost;
-    InvoiceData.GrandTAmount = InvoiceData.TLaborAmountPST + InvoiceData.TAmountDep;
-    InvoiceData.CreatedAt = formattedDate;
+        setValue('TAmountPart', InvoiceData.TAmountPart);
+        setValue('GSTPercent', InvoiceData.GSTPercent);
+        setValue('GSTCost', InvoiceData.GSTCost);
+        setValue('TAmountGST', invoice.TAmountGST);
+        setValue('DepPercent', invoice.DepPercent);
+        setValue('DepCost', InvoiceData.DepCost);
+        setValue('TLaborAmount', invoice.TLaborAmount);
+        setValue('TAmountDep', InvoiceData.TAmountDep);
+        setValue('PSTPercent', invoice.PSTPercent);
+        setValue('PSTCost', InvoiceData.PSTCost);
+        setValue('TLaborAmountPST', InvoiceData.TLaborAmountPST);
+        setValue('GrandTAmount', InvoiceData.GrandTAmount);
+        setValue('InvoiceType', "Sales Tax");
+        setValue('CreatedAt', InvoiceData.CreatedAt);
+    }
+    else {
+        InvoiceData.TAmountPart = totalPartsPrice(invoiceRows);
+        InvoiceData.GSTPercent = 18;
+        InvoiceData.GSTCost = percentageOfValue(18, totalPartsPrice(invoiceRows));
+        InvoiceData.TAmountGST = totalPartsCostGST(invoiceRows);
+        InvoiceData.DepCost = percentageOfValue(InvoiceData.DepPercent, InvoiceData.TAmountGST);
+        InvoiceData.TAmountDep = Math.max(InvoiceData.DepCost, InvoiceData.TAmountGST) - Math.min(InvoiceData.DepCost, InvoiceData.TAmountGST);
+        InvoiceData.PSTCost = percentageOfValue(InvoiceData.PSTPercent, InvoiceData.TLaborAmount);
+        InvoiceData.TLaborAmountPST = InvoiceData.TLaborAmount + InvoiceData.PSTCost;
+        InvoiceData.GrandTAmount = InvoiceData.TLaborAmountPST + InvoiceData.TAmountDep;
+        InvoiceData.CreatedAt = formattedDate;
 
-    setValue('TAmountPart', InvoiceData.TAmountPart);
-    setValue('GSTPercent', InvoiceData.GSTPercent);
-    setValue('GSTCost', InvoiceData.GSTCost);
-    setValue('TAmountGST', InvoiceData.TAmountGST);
-    setValue('DepPercent', InvoiceData.DepPercent);
-    setValue('DepCost', InvoiceData.DepCost);
-    setValue('TLaborAmount', InvoiceData.TLaborAmount);
-    setValue('TAmountDep', InvoiceData.TAmountDep);
-    setValue('PSTPercent', InvoiceData.PSTPercent);
-    setValue('PSTCost', InvoiceData.PSTCost);
-    setValue('TLaborAmountPST', InvoiceData.TLaborAmountPST);
-    setValue('GrandTAmount', InvoiceData.GrandTAmount);
-    setValue('InvoiceType', "Sales Tax");
-    setValue('CreatedAt', InvoiceData.CreatedAt);
-
+        setValue('TAmountPart', InvoiceData.TAmountPart);
+        setValue('GSTPercent', InvoiceData.GSTPercent);
+        setValue('GSTCost', InvoiceData.GSTCost);
+        setValue('TAmountGST', InvoiceData.TAmountGST);
+        setValue('DepPercent', InvoiceData.DepPercent);
+        setValue('DepCost', InvoiceData.DepCost);
+        setValue('TLaborAmount', InvoiceData.TLaborAmount);
+        setValue('TAmountDep', InvoiceData.TAmountDep);
+        setValue('PSTPercent', InvoiceData.PSTPercent);
+        setValue('PSTCost', InvoiceData.PSTCost);
+        setValue('TLaborAmountPST', InvoiceData.TLaborAmountPST);
+        setValue('GrandTAmount', InvoiceData.GrandTAmount);
+        setValue('InvoiceType', "Sales Tax");
+        setValue('CreatedAt', InvoiceData.CreatedAt);
+    }
 
     return (
         <div className="ml-auto w-1/4">
@@ -86,16 +114,16 @@ export const InvoiceSummary: React.FC<InvoiceSummaryProps> = ({ invoiceRows, set
                 <b>Total Parts Cost:</b> {InvoiceData.TAmountGST.toLocaleString()} Rs
             </p>
             <p className="text-sm flex flex-row gap-1">
-                <b>{InvoiceData?.DepPercent}% Dep On Parts:</b> {InvoiceData.DepCost.toLocaleString()} Rs
+                <b>{invoice ? invoice.DepPercent : InvoiceData?.DepPercent}% Dep On Parts:</b> {InvoiceData.DepCost.toLocaleString()} Rs
             </p>
             <p className="text-sm flex flex-row gap-1">
                 <b>Parts after Dep:</b> {InvoiceData.TAmountDep.toLocaleString()} Rs
             </p>
             <p className="text-sm flex flex-row gap-1">
-                <b>Labor Cost:</b> {InvoiceData.TLaborAmount.toLocaleString()} Rs
+                <b>Labor Cost:</b> {InvoiceData.TLaborAmount ? InvoiceData.TLaborAmount.toLocaleString() : invoice?.TLaborAmount.toLocaleString()} Rs
             </p>
             <p className="text-sm flex flex-row gap-1">
-                <b>{InvoiceData?.PSTPercent}% PST On Labor:</b> {InvoiceData.PSTCost.toLocaleString()} Rs
+                <b>{invoice ? invoice.PSTPercent : InvoiceData?.PSTPercent}% PST On Labor:</b> {InvoiceData.PSTCost.toLocaleString()} Rs
             </p>
             <p className="text-sm flex flex-row gap-1">
                 <b>Labor after PST:</b> {InvoiceData.TLaborAmountPST.toLocaleString()} Rs
