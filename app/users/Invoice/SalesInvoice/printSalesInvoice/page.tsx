@@ -84,6 +84,10 @@ export default function PAGE() {
                                 <span className="border border-black border-t-0 border-r-0 border-b-0"><span className="ml-1 mr-1">{invoice.InsuranceNTN}</span></span>
                                 <span className="border border-black border-t-0 border-r-0 border-b-0"><span className="ml-1 mr-1">{invoice.InsuranceGSTR}</span></span>
                             </span>
+                            <span className="grid grid-row-2 p-0 m-0">
+                                <span className="ml-1 mr-1"><b>Sales Tax No: </b>3277876138009</span>
+                                <span className="ml-1 mr-1 bg-red-500/30"><b>Loss No: </b>{invoice.LossNumber}</span>
+                            </span>
                         </div>
                     </div>
                     <div className="container mt-2 border border-black">
@@ -134,9 +138,10 @@ export default function PAGE() {
                             </TableBody>
                         </Table>
                     </div>
-                    <div className="items-center w-auto justify-center flex flex-col mt-5">
+                    <div className="w-auto flex flex-col mt-5 ml-2">
+
                         {/* Heading */}
-                        <div className="border border-black border-l-0 border-r-0">
+                        <div className="border border-black border-l-0 border-r-0 w-80">
 
                             <div className="flex items-center flex-col">
                                 Invoice Summary
@@ -174,6 +179,10 @@ export default function PAGE() {
                             <b>Grand Total:</b> {invoice.GrandTAmount.toLocaleString()} Rs
                         </p>
                     </div>
+                    <span className="ml-2 font-bold flex flex-row gap-1 justify-end relative bottom-[9%]">
+                        Authorized Signatures
+                        <span className="border border-black border-t-0 border-l-0 border-r-0 w-[200px]" />
+                    </span>
                 </div>
             }
         </>
