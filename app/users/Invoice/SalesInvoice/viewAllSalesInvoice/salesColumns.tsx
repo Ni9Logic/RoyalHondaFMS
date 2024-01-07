@@ -173,7 +173,14 @@ export const columns: ColumnDef<Invoice>[] = [
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DialogEditInvoice invoice={invoice} />
-                            <DropdownMenuItem>Print Invoice</DropdownMenuItem>
+                            <Link href={{
+                                pathname: './printSalesInvoice',
+                                query: {
+                                    id: invoice.id,
+                                }
+                            }}>
+                                <DropdownMenuItem>Print Invoice</DropdownMenuItem>
+                            </Link>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div >
