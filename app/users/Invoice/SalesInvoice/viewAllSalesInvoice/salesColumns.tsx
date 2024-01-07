@@ -14,6 +14,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { Invoice } from "@/types";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DialogEditInvoice } from "../Components/CustomerDetailsEditInvoice";
 
 
 export const columns: ColumnDef<Invoice>[] = [
@@ -150,7 +153,7 @@ export const columns: ColumnDef<Invoice>[] = [
         id: "actions",
         cell: ({ row }) => {
             const invoice = row.original
-
+            const [isEdit, setEdit] = useState(false);
 
             return (
                 <div className="flex items-center justify-center">
@@ -169,18 +172,10 @@ export const columns: ColumnDef<Invoice>[] = [
                                 Copy Serial Number
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <Link href={{
-                                pathname: '/users/Invoice/SalesInvoice/editSalesInvoice',
-                                query: {
-                                    id: invoice.id
-                                }
-                            }}>
-                                <DropdownMenuItem>Edit Invoice</DropdownMenuItem>
-                            </Link>
+                            <DialogEditInvoice invoice={invoice} />
                             <DropdownMenuItem>Print Invoice</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-
                 </div >
             )
         },

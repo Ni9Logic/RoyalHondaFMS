@@ -77,7 +77,13 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({ setValue, setGenerat
         }
     }
 
-
+    useEffect(() => {
+        setValue('PartsTable', invoiceRows);
+        InvoiceData.PartsTable = invoiceRows;
+        InvoiceData.InvoiceType = "Sales Tax";
+        const updatedRows = { ...invoiceRows };
+        setRows(updatedRows);
+    }, [])
     return (
         <>
             <div className="items-center justify-center flex flex-col">
