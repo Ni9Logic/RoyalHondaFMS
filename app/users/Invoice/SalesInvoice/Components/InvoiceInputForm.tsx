@@ -187,7 +187,7 @@ const InputForm: React.FC<InputFormProps> = ({ setValue, register, setRows }: In
                     <Input type="number" placeholder="Estimate Number" onChange={(e) => {
                         setValue('EstimateNum', parseInt(e.target.value));
                         InvoiceData.EstimateNum = parseInt(e.target.value);
-                    }} />
+                    }} required />
                 </div>
                 <div>
                     <Button
@@ -196,9 +196,10 @@ const InputForm: React.FC<InputFormProps> = ({ setValue, register, setRows }: In
                         type="button"
                         disabled={isSearchLoading}
                         onClick={async () => {
-                            await fetchEstimate(InvoiceData.EstimateNum);
+                            if (InvoiceData.EstimateNum)
+                                await fetchEstimate(InvoiceData.EstimateNum);
                         }}>
-                        Search Estimate
+                        Copy Estimate
                         <Loader isLoading={isSearchLoading} />
                     </Button>
                 </div>

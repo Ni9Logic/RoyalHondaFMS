@@ -109,6 +109,8 @@ export async function POST(request: Request) {
         CreatedAt: new Date().toLocaleDateString(),
       },
     });
+
+    
     return NextResponse.json({ Message: "Job Card Created!" }, { status: 200 });
   } catch (error: any) {
     console.log(error, "Error in registration");

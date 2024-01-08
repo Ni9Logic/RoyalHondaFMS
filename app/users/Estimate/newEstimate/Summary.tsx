@@ -220,7 +220,7 @@ const TableSummaries: React.FC<{ data: EstimateForm }> = ({ data }) => {
 
                                 <hr className={"border-t-1 border-black flex w-auto h-auto mt-3"} />
                                 <Label className={"mt-1 flex justify-center mb-1 font-bold"}>
-                                    Overall Bill
+                                    Overall Amount
                                 </Label>
                                 <hr className={"border-t-1 border-black flex"} />
                                 <Label className={"flex flex-row gap-1"}>

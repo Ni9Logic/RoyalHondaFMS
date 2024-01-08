@@ -87,7 +87,7 @@ model EstimatedCostWork {
   DiscountEstimateFigure Float?
   OverAllAmount          Float?
   isRoyal                String?
-  CreatedAt              String?
+  CreatedAt              String
 }
 
 model PriceSheet {
@@ -138,4 +138,19 @@ model Invoice {
   GrandTAmount    Float // TAmountDep + TLaborAmountPST
   LossNumber      String?
   CreatedAt       String
+}
+
+model summarySheet {
+  id                  Int     @id @default(autoincrement())
+  jobid               Int
+  InvoiceId           Int?
+  InvoiceGrandAmount  Float?
+  CarRegNum           String
+  CarMake             String
+  CarModel            String
+  UserDriver          String
+  ParkedStatus        String
+  LossNum             String?
+  ExpectedPromiseTime String?
+  CreatedAt           String
 }

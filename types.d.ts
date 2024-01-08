@@ -136,3 +136,18 @@ export interface PriceSheet {
   partModel: string;
   partPrice: string;
 }
+
+export interface SummarySheet {
+  id?: number;
+  jobid: number;
+  InvoiceId?: number | "pending";
+  InvoiceGrandAmount?: number;
+  CarRegNum: string;
+  CarMake: string;
+  CarModel: string;
+  UserDriver: string;
+  ParkedStatus: "Delivered" | "Parked" | "Come Back Later";
+  LossNum?: string;
+  ExpectedPromiseTime: string;
+  CreatedAt: string;
+}
