@@ -77,7 +77,7 @@ export async function POST(request: Request) {
         WorkType,
         Make,
         Model,
-        Status,
+        Status: body.Status,
         Insurance,
         NTN,
         GSTR,
@@ -116,7 +116,7 @@ export async function POST(request: Request) {
         CarModel: jobcard.Model!,
         CarRegNum: jobcard.carRegistration!,
         CreatedAt: jobcard.CreatedAt!,
-        ParkedStatus: jobcard.Status!,
+        ParkedStatus: jobcard.Status,
         jobid: jobcard.SerialNo,
         UserDriver: jobcard.DriverUser!,
         ExpectedPromiseTime: jobcard.OutTime!,
@@ -126,7 +126,7 @@ export async function POST(request: Request) {
     if (!isSummary || !jobcard)
       return NextResponse.json({ Message: "Job Card Id Already Assigned To Another Estimate." }, { status: 400 })
 
-      if (!jobcard)
+    if (!jobcard)
       return NextResponse.json({ Message: "An Error Occured (JobCard)" }, { status: 400 });
 
     return NextResponse.json({ Message: "Job Card Created!" }, { status: 200 });

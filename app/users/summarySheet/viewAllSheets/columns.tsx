@@ -102,7 +102,7 @@ export const columns: ColumnDef<summarySheet>[] = [
                                     id: invoice.id,
                                 }
                             }}>
-                                <DropdownMenuItem>Print Invoice</DropdownMenuItem>
+                                <DropdownMenuItem>Print Selected</DropdownMenuItem>
                             </Link>
                         </DropdownMenuContent>
                     </DropdownMenu>
