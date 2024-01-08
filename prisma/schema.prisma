@@ -64,7 +64,7 @@ model JobCard {
 
 model EstimatedCostWork {
   id                     Int     @id @default(autoincrement())
-  jobId                  Int? // If this job id exists it means this estimate can be shown if a user opens job card with this id 
+  jobId                  Int?     @unique @default(0) // If this job id exists it means this estimate can be shown if a user opens job card with this id 
   cName                  String?
   cMake                  String?
   cModel                 String?
@@ -111,7 +111,7 @@ model Surveyors {
 }
 
 model Invoice {
-  id              Int     @id @default(autoincrement())
+  id              Int    @id @default(autoincrement())
   InvoiceType     String
   InsuranceName   String
   InsuranceNTN    String
@@ -136,21 +136,21 @@ model Invoice {
   PSTCost         Float // PSTPercent of TLaborAmount
   TLaborAmountPST Float // TLaborAmount + PSTCost
   GrandTAmount    Float // TAmountDep + TLaborAmountPST
-  LossNumber      String?
+  LossNumber      String @default("Pending")
   CreatedAt       String
 }
 
 model summarySheet {
-  id                  Int     @id @default(autoincrement())
-  jobid               Int
-  InvoiceId           Int?
-  InvoiceGrandAmount  Float?
+  id                  Int    @id @default(autoincrement())
+  jobid               Int?    @unique
+  InvoiceId           String? @default("Pending")
+  InvoiceGrandAmount  Float?  @default(0)
   CarRegNum           String
   CarMake             String
   CarModel            String
   UserDriver          String
-  ParkedStatus        String
-  LossNum             String?
-  ExpectedPromiseTime String?
+  ParkedStatus        String? @default("Pending")
+  LossNum             String? @default("Pending")
+  ExpectedPromiseTime String
   CreatedAt           String
 }

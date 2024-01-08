@@ -12,6 +12,7 @@ export default function UserMenu() {
     const [isViewAllEstimatesLoading, setisViewAllEstimatesLoading] = useState(false);
     const [isSalesInvoicesLoading, setisSalesInvoicesLoading] = useState(false);
     const [IsShowAllInvoices, setIsShowAllInvoices] = useState(false);
+    const [isShowAllSheets, setIsShowAllSheets] = useState(false);
     const router = useRouter();
     return (
         <section className="flex flex-col text-gray-600 body-font h-[75vh] justify-center items-center">
@@ -76,10 +77,15 @@ export default function UserMenu() {
                     <TabsContent value="Ledger" className='w-full flex items-center justify-center'>
                         <Button variant={'secondary'}>
                             In Progress
-                        </Button></TabsContent>
+                        </Button>
+                    </TabsContent>
                     <TabsContent value="Summary Sheet" className='w-full flex items-center justify-center'>
-                        <Button variant={'secondary'}>
-                            In Progress
+                        <Button className='flex flex-row gap-1' disabled={isShowAllSheets} onClick={() => {
+                            setIsShowAllSheets(true);
+                            router.push('/users/summarySheet/viewAllSheets');
+                        }}>
+                            Summary Sheet
+                            <Loader isLoading={isShowAllSheets} />
                         </Button>
                     </TabsContent>
                 </Tabs>

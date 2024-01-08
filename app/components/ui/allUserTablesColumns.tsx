@@ -101,6 +101,14 @@ export const columns: ColumnDef<JobTable>[] = [
         header: 'Model'
     },
     {
+        accessorKey: 'Fuel',
+        header: 'Fuel'
+    },
+    {
+        accessorKey: 'Mileage',
+        header: 'Mileage'
+    },
+    {
         accessorKey: 'JobCheckedBy',
         header: 'Job Checked By'
     },

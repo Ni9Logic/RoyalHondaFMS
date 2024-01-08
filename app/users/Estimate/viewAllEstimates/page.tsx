@@ -30,6 +30,7 @@ export default function PAGE() {
     }, [])
     return (
         <>
+                    
             <Navbar />
             <DataTable data={Data} columns={columns} />
             <Footer />

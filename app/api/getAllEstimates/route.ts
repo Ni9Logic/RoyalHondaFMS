@@ -1,10 +1,14 @@
 import getAllEstimates from "@/app/actions/getAllEstimate";
 import { NextResponse } from "next/server";
+import prisma from "@/app/lib/prismadb";
 
 export async function POST() {
     try {
-        const allEstimates = await getAllEstimates();
-    
+        const allEstimates = await prisma.estimatedCostWork.findMany({
+            orderBy: {
+                id: 'desc',
+            }
+        });
         if (!allEstimates)
             return NextResponse.json({ Message: 'Some Error Occurred' }, { status: 500 });
 

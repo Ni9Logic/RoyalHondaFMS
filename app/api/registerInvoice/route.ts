@@ -38,6 +38,27 @@ export async function POST(req: Request) {
             }
         })
 
+        // Now We Need to find Estimate With Given Id
+        const isFindEstimate = await prisma.estimatedCostWork.findUnique({
+            where: {
+                id: isCreated.EstimateNum,
+            }
+        })
+
+        const isUpdateSummarySheet = await prisma.summarySheet.update({
+            where: {
+                jobid: isFindEstimate?.jobId!,
+            },
+            data: {
+                InvoiceGrandAmount: isCreated.GrandTAmount,
+                InvoiceId: isCreated?.id.toString(),
+                LossNum: isCreated.LossNumber,
+            }
+        })
+
+        if (!isUpdateSummarySheet)
+            return NextResponse.json({ Message: "Error While Updating Summary Sheet" }, { status: 400 });
+        if (!isFindEstimate) return NextResponse.json({ Message: "Invalid Estimate Id" }, { status: 400 });
         if (!isCreated) return NextResponse.json({ Message: "Error While Creating Invoice" }, { status: 400 });
 
         return NextResponse.json({ Message: "Invoice Registered!" }, { status: 200 });

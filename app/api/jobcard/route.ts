@@ -110,7 +110,25 @@ export async function POST(request: Request) {
       },
     });
 
-    
+    const isSummary = await prisma.summarySheet.create({
+      data: {
+        CarMake: jobcard.Make!,
+        CarModel: jobcard.Model!,
+        CarRegNum: jobcard.carRegistration!,
+        CreatedAt: jobcard.CreatedAt!,
+        ParkedStatus: jobcard.Status!,
+        jobid: jobcard.SerialNo,
+        UserDriver: jobcard.DriverUser!,
+        ExpectedPromiseTime: jobcard.OutTime!,
+      }
+    })
+
+    if (!isSummary || !jobcard)
+      return NextResponse.json({ Message: "Job Card Id Already Assigned To Another Estimate." }, { status: 400 })
+
+      if (!jobcard)
+      return NextResponse.json({ Message: "An Error Occured (JobCard)" }, { status: 400 });
+
     return NextResponse.json({ Message: "Job Card Created!" }, { status: 200 });
   } catch (error: any) {
     console.log(error, "Error in registration");
